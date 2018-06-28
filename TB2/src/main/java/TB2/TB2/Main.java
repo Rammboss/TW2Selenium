@@ -20,8 +20,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class Main {
 
 	static {
-		// System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla
-		// Firefox\\firefox.exe");
+		// System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
 		System.setProperty("webdriver.firefox.bin", "C:\\Users\\thoma\\AppData\\Local\\Mozilla Firefox\\firefox.exe");
