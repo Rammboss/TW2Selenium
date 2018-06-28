@@ -17,7 +17,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class Main {
 
 	static {
-		// System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+		// System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla
+		// Firefox\\firefox.exe");
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
 		System.setProperty("webdriver.firefox.bin", "C:\\Users\\thoma\\AppData\\Local\\Mozilla Firefox\\firefox.exe");
@@ -78,8 +79,6 @@ public class Main {
 		provinzen.add(new Point(456, 457));
 
 		List<Dorf> dorfListe = app.initProvinzen(provinzen);
-		
-
 
 		// Befehle wieder anzeigen
 		app.ausgehendenAngriffeVerbergen();
@@ -89,20 +88,9 @@ public class Main {
 		while (true) {
 			app.initVorlagen(app.getAnzahlAngriffe());
 
-			// Rohstofflager farmen
-			Buttons.OBERFLAECHE.sendText("d");
-
-			Buttons.ROHSTOFFLAGER_EINSAMMELN.click();
-			Main.sleep(1);
-			Buttons.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click();
-			Main.sleep(1);
-			Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement();
-			Buttons.ROHSTOFFLAGER_STARTEN.click();
-
-			Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+			app.rohstofflagerCheck();
 
 			// Koordinaten eingen
-
 			Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
 			if (!Buttons.X_KOORDINATE.isPresent(1))
@@ -164,6 +152,25 @@ public class Main {
 
 		// close Fire fox
 		// driver.close();
+	}
+
+	private  void rohstofflagerCheck() {
+		// Rohstofflager farmen
+		Buttons.OBERFLAECHE.sendText("d");
+
+		Buttons.ROHSTOFFLAGER_EINSAMMELN.click();
+		Main.sleep(1);
+		Buttons.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click();
+		Main.sleep(1);
+		Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement();
+		Buttons.ROHSTOFFLAGER_STARTEN.click();
+
+		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+		Buttons.ZEITLEISTE.click();
+
+		Buttons.ZEITLEISTE.click();
+
 	}
 
 	private static void checkDoerfer(int sec, List<Dorf> dorfListe, Main app) {
