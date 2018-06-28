@@ -160,7 +160,10 @@ public class Main {
 		Main.sleep(1);
 		Buttons.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click();
 		Main.sleep(1);
-		Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement();
+		if (Buttons.ROHSTOFFLAGER_STARTEN.isPresent()) {
+			Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement();
+
+		}
 		Buttons.ROHSTOFFLAGER_STARTEN.click();
 
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
