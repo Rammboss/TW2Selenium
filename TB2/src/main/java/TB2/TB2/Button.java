@@ -3,9 +3,11 @@ package TB2.TB2;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,16 +19,13 @@ public class Button {
 
 	private WebDriver driver;
 
-	private boolean isClickable;
-	
 	private final int waitForClick = 2;
 
-	public Button(String label, String xpath, WebDriver driver, boolean isClickable) {
+	public Button(String label, String xpath, WebDriver driver) {
 		super();
 		this.label = label;
 		this.xpath = xpath;
 		this.driver = driver;
-		this.isClickable = isClickable;
 	}
 
 	public boolean isPresent() {
@@ -57,7 +56,7 @@ public class Button {
 		boolean present = true;
 
 		for (long stop = System.nanoTime() + unit.toNanos(time); stop > System.nanoTime();) {
-			if (!isPresent())
+			if (isPresent())
 				return false;
 		}
 		return present;
@@ -125,6 +124,14 @@ public class Button {
 
 	}
 
+
+
+	public void scrollToElement() {
+		WebElement e = driver.findElement(By.xpath(xpath));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", e);
+		Main.sleep(500, TimeUnit.MILLISECONDS);
+	}
+
 	public void clear() {
 
 		driver.findElement(By.xpath(xpath)).clear();
@@ -153,14 +160,6 @@ public class Button {
 
 	public void setDriver(WebDriver driver) {
 		this.driver = driver;
-	}
-
-	public boolean isClickable() {
-		return isClickable;
-	}
-
-	public void setClickable(boolean isClickable) {
-		this.isClickable = isClickable;
 	}
 
 }

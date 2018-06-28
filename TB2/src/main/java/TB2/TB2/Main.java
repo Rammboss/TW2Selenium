@@ -9,18 +9,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Main {
 
 	static {
-//		System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+		// System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla
+		// Firefox\\firefox.exe");
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
-		
 		System.setProperty("webdriver.firefox.bin", "C:\\Users\\thoma\\AppData\\Local\\Mozilla Firefox\\firefox.exe");
 		driver = new FirefoxDriver();
 
@@ -49,10 +52,9 @@ public class Main {
 
 		if (Buttons.LOGIN.isPresent(4))
 			Buttons.LOGIN.click();
-
-		if (!Buttons.LOADING_SCREEN.isNOTPresent(20, TimeUnit.SECONDS)) {
-			Main.sleep(3);
-
+		sleep(1);
+		while (Buttons.LOADING_SCREEN.isPresent()) {
+			sleep(1);
 		}
 
 	}
@@ -68,18 +70,21 @@ public class Main {
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
 		provinzen.add(new Point(425, 445));
-		provinzen.add(new Point(433, 456));
-		provinzen.add(new Point(421, 457));
-		provinzen.add(new Point(437, 443));
-		provinzen.add(new Point(443, 456));
-		provinzen.add(new Point(436, 468));
-		provinzen.add(new Point(412, 466));
-		provinzen.add(new Point(423, 470));
-		provinzen.add(new Point(431, 432));
-		provinzen.add(new Point(450, 469));
-		provinzen.add(new Point(456, 457));
+//		provinzen.add(new Point(433, 456));
+//		provinzen.add(new Point(421, 457));
+//		provinzen.add(new Point(437, 443));
+//		provinzen.add(new Point(443, 456));
+//		provinzen.add(new Point(436, 468));
+//		provinzen.add(new Point(412, 466));
+//		provinzen.add(new Point(423, 470));
+//		provinzen.add(new Point(431, 432));
+//		provinzen.add(new Point(450, 469));
+//		provinzen.add(new Point(456, 457));
 
 		List<Dorf> dorfListe = app.initProvinzen(provinzen);
+		
+//		checkDoerfer(300, dorfListe, app);
+
 
 		// Befehle wieder anzeigen
 		app.ausgehendenAngriffeVerbergen();
@@ -167,8 +172,15 @@ public class Main {
 
 	private static void checkDoerfer(int sec, List<Dorf> dorfListe, Main app) {
 
+		for (int i = 0; i < dorfListe.size(); i++) {
+			if (dorfListe.get(i).getName().equals("Barbarendorf")) {
+				dorfListe.remove(i);
+				i--;
+			}
+		}
+
 		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(sec);
-		for (int i = 0; i < dorfListe.size() || stop > System.nanoTime(); i++) {
+		for (int i = 0; i < dorfListe.size() && stop > System.nanoTime(); i++) {
 
 			if (!Buttons.X_KOORDINATE.isPresent(1))
 				Buttons.AUF_WELTKARTE_SUCHEN.click();
@@ -180,6 +192,10 @@ public class Main {
 			sleep(500, TimeUnit.MILLISECONDS);
 			Buttons.JUMP_TO.click();
 			Main.sleep(300, TimeUnit.MILLISECONDS);
+			if (Buttons.NACHRICHT_SENDEN.isPresent(200, TimeUnit.MILLISECONDS)) {
+				continue;
+			}
+
 			Barbarendorf baba = new Barbarendorf(dorfListe.get(i).getPunkte(), dorfListe.get(i).getCoordinaten());
 			if (Buttons.PRODUKTION_STEIGERN.isPresent(200, TimeUnit.MILLISECONDS) && !app.babas.contains(baba)) {
 
@@ -234,9 +250,18 @@ public class Main {
 	private void ausgehendenAngriffeVerbergen() {
 		Buttons.EINSTELLUNGEN.click();
 		Buttons.EINSTELLUNGEN_SPIEL.click();
-		Buttons.OBERFLAECHE.sendText(Keys.DOWN, 5);
+
+		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement();
+
 		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.click();
+
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+		Buttons.OBERFLAECHE.scrollToElement();
+
+		Buttons.ZEITLEISTE.click();
+
+		Buttons.ZEITLEISTE.click();
 
 	}
 
@@ -249,11 +274,13 @@ public class Main {
 		int verbleibendeAngriffe = 50 - anzahlAngriffe;
 
 		System.out.println("Verbleibende Angriffe: " + verbleibendeAngriffe);
+		sleep(1);
 		if (verbleibendeAngriffe > 0) {
 			// Barbaren
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.clear();
+			String tmp = Buttons.ANZAHL_AXT.getText().replace(".", "");
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN
-					.sendText(Integer.parseInt(Buttons.ANZAHL_AXT.getText().replace(".", "")) / verbleibendeAngriffe);
+					.sendText(Integer.parseInt(tmp) / verbleibendeAngriffe);
 			// SPEER
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER
@@ -264,7 +291,7 @@ public class Main {
 					Integer.parseInt(Buttons.ANZAHL_SCHWERT.getText().replace(".", "")) / verbleibendeAngriffe);
 		}
 
-		Buttons.OBERFLAECHE.sendText(Keys.DOWN, 9);
+		Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_1.scrollToElement();
 		Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_1.click();
 		Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_ANGRIFF.click();
 		Buttons.GLOBALE_VORLAGENLISTE_SPEICHERN.click();
@@ -359,7 +386,7 @@ public class Main {
 		}
 	}
 
-	private static void sleep(int i, TimeUnit milliseconds) {
+	public static void sleep(int i, TimeUnit milliseconds) {
 		try {
 			milliseconds.sleep(i);
 		} catch (InterruptedException e1) {
