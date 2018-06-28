@@ -18,6 +18,8 @@ public class Button {
 	private WebDriver driver;
 
 	private boolean isClickable;
+	
+	private final int waitForClick = 2;
 
 	public Button(String label, String xpath, WebDriver driver, boolean isClickable) {
 		super();
@@ -50,6 +52,17 @@ public class Button {
 		return present;
 	}
 
+	public boolean isNOTPresent(int time, TimeUnit unit) {
+
+		boolean present = true;
+
+		for (long stop = System.nanoTime() + unit.toNanos(time); stop > System.nanoTime();) {
+			if (!isPresent())
+				return false;
+		}
+		return present;
+	}
+
 	public boolean isPresent(int sec) {
 
 		return isPresent(sec, TimeUnit.SECONDS);
@@ -65,28 +78,28 @@ public class Button {
 	}
 
 	public void sendText(String text) {
-		if (isPresent(2))
+		if (isPresent(waitForClick))
 			driver.findElement(By.xpath(xpath)).sendKeys(text);
 	}
 
 	public void sendText(double text) {
-		if (isPresent(2))
+		if (isPresent(waitForClick))
 			driver.findElement(By.xpath(xpath)).sendKeys(text + "");
 	}
 
 	public void sendText(int text) {
-		if (isPresent(2))
+		if (isPresent(waitForClick))
 			driver.findElement(By.xpath(xpath)).sendKeys(text + "");
 	}
 
 	public void sendText(Keys escape) {
-		if (isPresent(2))
+		if (isPresent(waitForClick))
 			driver.findElement(By.xpath(xpath)).sendKeys(escape);
 	}
 
 	public void sendText(Keys escape, int times) {
 		for (int i = 0; i <= times; i++) {
-			if (isPresent(2))
+			if (isPresent(waitForClick))
 				driver.findElement(By.xpath(xpath)).sendKeys(escape);
 			try {
 				TimeUnit.MILLISECONDS.sleep(10);

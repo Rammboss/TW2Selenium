@@ -10,7 +10,7 @@ public class Buttons {
 		provinzen.add(new Button("Kankan", "//*[@id=\\\"click-layer\\\"]", Main.driver, true));
 	}
 	
-	
+	public static Button LOADING_SCREEN = new Button("Loading Screen", "//*[@id=\"screen-loading\"]",Main.driver, true);
 	public static Button SPIELERNAME = new Button("Spielername", "/html/body/div[3]/div[2]/header/div/div[4]/div[1]/div[1]/form/div[1]/input",Main.driver, true);
 	public static Button PASSWORT = new Button("Passwort", "/html/body/div[3]/div[2]/header/div/div[4]/div[1]/div[1]/form/div[2]/input",Main.driver, true);
 	public static Button SPIELEN = new Button("Spielen", "/html/body/div[3]/div[2]/header/div/div[4]/div[1]/div[1]/form/button",Main.driver, true);

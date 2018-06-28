@@ -17,6 +17,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class Main {
 
 	static {
+//		System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
+
+		
 		System.setProperty("webdriver.firefox.bin", "C:\\Users\\thoma\\AppData\\Local\\Mozilla Firefox\\firefox.exe");
 		driver = new FirefoxDriver();
 
@@ -46,7 +50,11 @@ public class Main {
 		if (Buttons.LOGIN.isPresent(4))
 			Buttons.LOGIN.click();
 
-		Main.sleep(7);
+		if (!Buttons.LOADING_SCREEN.isNOTPresent(20, TimeUnit.SECONDS)) {
+			Main.sleep(3);
+
+		}
+
 	}
 
 	public static void main(String[] args) {
