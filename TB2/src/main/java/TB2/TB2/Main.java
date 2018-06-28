@@ -17,11 +17,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class Main {
 
 	static {
-		// System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla
-		// Firefox\\firefox.exe");
+		System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
-		System.setProperty("webdriver.firefox.bin", "C:\\Users\\thoma\\AppData\\Local\\Mozilla Firefox\\firefox.exe");
 		driver = new FirefoxDriver();
 
 	}
@@ -154,7 +152,7 @@ public class Main {
 		// driver.close();
 	}
 
-	private  void rohstofflagerCheck() {
+	private void rohstofflagerCheck() {
 		// Rohstofflager farmen
 		Buttons.OBERFLAECHE.sendText("d");
 
