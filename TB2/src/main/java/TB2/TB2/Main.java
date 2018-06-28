@@ -69,20 +69,19 @@ public class Main {
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
 		provinzen.add(new Point(425, 445));
-//		provinzen.add(new Point(433, 456));
-//		provinzen.add(new Point(421, 457));
-//		provinzen.add(new Point(437, 443));
-//		provinzen.add(new Point(443, 456));
-//		provinzen.add(new Point(436, 468));
-//		provinzen.add(new Point(412, 466));
-//		provinzen.add(new Point(423, 470));
-//		provinzen.add(new Point(431, 432));
-//		provinzen.add(new Point(450, 469));
-//		provinzen.add(new Point(456, 457));
+		provinzen.add(new Point(433, 456));
+		provinzen.add(new Point(421, 457));
+		provinzen.add(new Point(437, 443));
+		provinzen.add(new Point(443, 456));
+		provinzen.add(new Point(436, 468));
+		provinzen.add(new Point(412, 466));
+		provinzen.add(new Point(423, 470));
+		provinzen.add(new Point(431, 432));
+		provinzen.add(new Point(450, 469));
+		provinzen.add(new Point(456, 457));
 
 		List<Dorf> dorfListe = app.initProvinzen(provinzen);
 		
-//		checkDoerfer(300, dorfListe, app);
 
 
 		// Befehle wieder anzeigen
@@ -100,6 +99,7 @@ public class Main {
 			Main.sleep(1);
 			Buttons.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click();
 			Main.sleep(1);
+			Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement();
 			Buttons.ROHSTOFFLAGER_STARTEN.click();
 
 			Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
