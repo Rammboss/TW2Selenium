@@ -72,11 +72,10 @@ public class Main {
 
 	private void runTask() {
 		this.login();
-		
+
 		this.disableSound();
 
 		this.ausgehendenAngriffeVerbergen();
-
 
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
@@ -121,7 +120,8 @@ public class Main {
 				Buttons.Y_KOORDINATE.sendText(dorf.getCoordinaten().getY());
 				Buttons.JUMP_TO.click();
 				Main.sleep(300, TimeUnit.MILLISECONDS);
-				if (Buttons.PRODUKTION_STEIGERN.isPresent(700, TimeUnit.MILLISECONDS) ||Buttons.PRODUKTION_STEIGERN2.isPresent(700, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
+				if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS)
+						|| Buttons.PRODUKTION_STEIGERN2.isPresent(1000, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
 					Buttons.OBERFLAECHE.sendText(1);
 
 					if (Buttons.ERROR_50_ANGRIFFE.isPresent(100, TimeUnit.MILLISECONDS)) {
@@ -231,16 +231,17 @@ public class Main {
 			Buttons.Y_KOORDINATE.sendText(dorfListe.get(Main.index).getCoordinaten().getY());
 			sleep(500, TimeUnit.MILLISECONDS);
 			Buttons.JUMP_TO.click();
-			Main.sleep(600, TimeUnit.MILLISECONDS);
 
-			if (Buttons.NACHRICHT_SENDEN.isPresent(200, TimeUnit.MILLISECONDS)) {
+			if (Buttons.NACHRICHT_SENDEN.isPresent(2, TimeUnit.SECONDS)) {
 				Main.index++;
 				continue;
 			}
 
 			Barbarendorf baba = new Barbarendorf(dorfListe.get(Main.index).getPunkte(),
 					dorfListe.get(Main.index).getCoordinaten());
-			if (Buttons.PRODUKTION_STEIGERN.isPresent(700, TimeUnit.MILLISECONDS) ||Buttons.PRODUKTION_STEIGERN2.isPresent(700, TimeUnit.MILLISECONDS) && !app.babas.contains(baba)) {
+			if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS)
+					|| Buttons.PRODUKTION_STEIGERN2.isPresent(1000, TimeUnit.MILLISECONDS)
+							&& !app.babas.contains(baba)) {
 
 				System.out.println("Füge Babarendorf " + baba.getName() + "hinzu!");
 				app.babas.add(baba);
