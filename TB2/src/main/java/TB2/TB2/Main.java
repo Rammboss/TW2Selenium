@@ -124,7 +124,7 @@ public class Main {
 						|| Buttons.PRODUKTION_STEIGERN2.isPresent(1000, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
 					Buttons.OBERFLAECHE.sendText(1);
 
-					if (Buttons.ERROR_50_ANGRIFFE.isPresent(100, TimeUnit.MILLISECONDS)) {
+					if (Buttons.ERROR_50_ANGRIFFE.isPresent(500, TimeUnit.MILLISECONDS)) {
 						Buttons.ERROR_50_ANGRIFFE.click();
 
 						if (counter >= OwnVillage.OWN.size() - 1) {
