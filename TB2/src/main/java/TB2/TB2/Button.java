@@ -3,6 +3,7 @@ package TB2.TB2;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -20,7 +21,6 @@ public class Button {
 
 	private final int waitForClick = 5;
 
-
 	public Button(String label, String xpath) {
 		super();
 		this.label = label;
@@ -31,7 +31,8 @@ public class Button {
 		try {
 
 			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(500, TimeUnit.MILLISECONDS)
-			.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+					.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
+					.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 
 			return true;
 		} catch (TimeoutException e) {
@@ -118,6 +119,7 @@ public class Button {
 		try {
 			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(5, TimeUnit.SECONDS)
 					.pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
+					.ignoring(ElementNotInteractableException.class)
 					.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
 		} catch (TimeoutException e) {
 			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!");
