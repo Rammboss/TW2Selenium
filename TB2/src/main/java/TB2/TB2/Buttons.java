@@ -71,6 +71,12 @@ public class Buttons {
 
 	public static Button EINSTELLUNGEN_SPIEL= new Button("Einstellungen Spiel Tab öffnen","/html/body/div[2]/section/div/div/div[1]/div/div[2]/div/div/div/a");
 
+	public static Button EINSTELLUNGEN_SPIEL_ANNIMATION1= new Button("Annimationen auf 1 setzten","/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[2]/tbody/tr[3]/td[1]/div[2]/div/a[1]");
+
+	public static Button EINSTELLUNGEN_SPIEL_MUSIK_SOUND= new Button("Musik an/aus","/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[3]/tbody/tr[2]/td[1]/label");
+	public static Button EINSTELLUNGEN_SPIEL_EFFEKT_SOUND= new Button("Effekte Sound an/aus","/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[3]/tbody/tr[3]/td[1]/label");
+
+	
 	public static Button EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN = new Button("Einstellungen Spiel Tab Ausgehende Befehle Anzeigen","/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[2]/tbody/tr[8]/td[2]/label");
 
 	public static Button EINHEITEN_UEBERSICHT = new Button("Einheiten Übersicht aktuelles Dorf","/html/body/div[2]/footer/div/div[2]/div[2]/ul/li[5]/a");
