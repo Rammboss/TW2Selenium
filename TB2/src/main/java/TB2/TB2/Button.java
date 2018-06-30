@@ -3,10 +3,10 @@ package TB2.TB2;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,20 +17,17 @@ public class Button {
 
 	private String xpath;
 
-	private WebDriver driver;
-
 	private final int waitForClick = 2;
 
-	public Button(String label, String xpath, WebDriver driver) {
+	public Button(String label, String xpath) {
 		super();
 		this.label = label;
 		this.xpath = xpath;
-		this.driver = driver;
 	}
 
 	public boolean isPresent() {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, 2, 200);
+			WebDriverWait wait = new WebDriverWait(Main.getDriver(), 2, 200);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 
 			return true;
@@ -70,7 +67,7 @@ public class Button {
 
 	public String getText() {
 		if (isPresent(2))
-			return driver.findElement(By.xpath(xpath)).getText();
+			return Main.getDriver().findElement(By.xpath(xpath)).getText();
 
 		return "Nichts gefunden";
 
@@ -78,28 +75,28 @@ public class Button {
 
 	public void sendText(String text) {
 		if (isPresent(waitForClick))
-			driver.findElement(By.xpath(xpath)).sendKeys(text);
+			Main.getDriver().findElement(By.xpath(xpath)).sendKeys(text);
 	}
 
 	public void sendText(double text) {
 		if (isPresent(waitForClick))
-			driver.findElement(By.xpath(xpath)).sendKeys(text + "");
+			Main.getDriver().findElement(By.xpath(xpath)).sendKeys(text + "");
 	}
 
 	public void sendText(int text) {
 		if (isPresent(waitForClick))
-			driver.findElement(By.xpath(xpath)).sendKeys(text + "");
+			Main.getDriver().findElement(By.xpath(xpath)).sendKeys(text + "");
 	}
 
 	public void sendText(Keys escape) {
 		if (isPresent(waitForClick))
-			driver.findElement(By.xpath(xpath)).sendKeys(escape);
+			Main.getDriver().findElement(By.xpath(xpath)).sendKeys(escape);
 	}
 
 	public void sendText(Keys escape, int times) {
 		for (int i = 0; i <= times; i++) {
 			if (isPresent(waitForClick))
-				driver.findElement(By.xpath(xpath)).sendKeys(escape);
+				Main.getDriver().findElement(By.xpath(xpath)).sendKeys(escape);
 			try {
 				TimeUnit.MILLISECONDS.sleep(10);
 			} catch (InterruptedException e1) {
@@ -111,30 +108,34 @@ public class Button {
 	}
 
 	public String getCSSClass() {
-		return driver.findElement(By.xpath(xpath)).getAttribute("class");
+		return Main.getDriver().findElement(By.xpath(xpath)).getAttribute("class");
 	}
 
 	public void click() {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, 2, 200);
+			WebDriverWait wait = new WebDriverWait(Main.getDriver(), 2, 200);
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
 		} catch (TimeoutException e) {
 			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!");
+		} catch (ElementClickInterceptedException e) {
+			System.out.println("Der Button konnte nicht gelickt werden!\nFersuche es erneut!");
+
+			this.click();
+
 		}
 
 	}
 
-
-
 	public void scrollToElement() {
-		WebElement e = driver.findElement(By.xpath(xpath));
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", e);
+		WebElement e = Main.getDriver().findElement(By.xpath(xpath));
+		((JavascriptExecutor) Main.getDriver())
+				.executeScript("arguments[0].scrollIntoView({block: \"end\", behavior: \"smooth\"});", e);
 		Main.sleep(500, TimeUnit.MILLISECONDS);
 	}
 
 	public void clear() {
 
-		driver.findElement(By.xpath(xpath)).clear();
+		Main.getDriver().findElement(By.xpath(xpath)).clear();
 
 	}
 
@@ -152,14 +153,6 @@ public class Button {
 
 	public void setXpath(String xpath) {
 		this.xpath = xpath;
-	}
-
-	public WebDriver getDriver() {
-		return driver;
-	}
-
-	public void setDriver(WebDriver driver) {
-		this.driver = driver;
 	}
 
 }

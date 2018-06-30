@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 public class Barbarendorf extends Dorf {
 
 	private Timestamp attackedAt;
+	
+	private static final int FARM_INTERVALL = 90;
 
 	public Barbarendorf(int punkte, Point coordinaten) {
 		super("Barbarendorf", punkte, coordinaten);
@@ -17,7 +19,7 @@ public class Barbarendorf extends Dorf {
 
 	public boolean isFarmable() {
 		Timestamp current = new Timestamp(System.currentTimeMillis());
-		if (compareTwoTimeStamps(current, attackedAt) > 60) {
+		if (compareTwoTimeStamps(current, attackedAt) > FARM_INTERVALL) {
 			return true;
 
 		}
