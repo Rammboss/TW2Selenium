@@ -133,7 +133,8 @@ public class Main {
 
 							// Eigenes Dorf wechseln
 							counter++;
-							Buttons.AUF_WELTKARTE_SUCHEN.click();
+							if (!Buttons.X_KOORDINATE.isPresent(1))
+								Buttons.AUF_WELTKARTE_SUCHEN.click();
 							Buttons.X_KOORDINATE.clear();
 							Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getX());
 							Buttons.Y_KOORDINATE.clear();
@@ -150,7 +151,8 @@ public class Main {
 
 							this.initVorlagen(this.getAnzahlAngriffe());
 
-							Buttons.AUF_WELTKARTE_SUCHEN.click();
+							if (!Buttons.X_KOORDINATE.isPresent(1))
+								Buttons.AUF_WELTKARTE_SUCHEN.click();
 						}
 
 					} else {
@@ -370,7 +372,8 @@ public class Main {
 
 		for (Point point : points) {
 
-			Buttons.AUF_WELTKARTE_SUCHEN.click();
+			if (!Buttons.X_KOORDINATE.isPresent(1))
+				Buttons.AUF_WELTKARTE_SUCHEN.click();
 			Buttons.X_KOORDINATE.clear();
 			Buttons.X_KOORDINATE.sendText(point.getX());
 			Buttons.Y_KOORDINATE.clear();
