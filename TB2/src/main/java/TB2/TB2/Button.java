@@ -117,11 +117,6 @@ public class Button {
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
 		} catch (TimeoutException e) {
 			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!");
-		} catch (ElementClickInterceptedException e) {
-			System.out.println("Der Button: " + this.getLabel() + "konnte nicht gelickt werden!\nFersuche es erneut!");
-
-			this.click();
-
 		}
 
 	}

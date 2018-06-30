@@ -110,7 +110,7 @@ public class Main {
 					Buttons.Y_KOORDINATE.sendText(dorf.getCoordinaten().getY());
 					Buttons.JUMP_TO.click();
 					Main.sleep(300, TimeUnit.MILLISECONDS);
-					if (Buttons.PRODUKTION_STEIGERN.isPresent(500, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
+					if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
 						Buttons.OBERFLAECHE.sendText(1);
 
 						if (Buttons.ERROR_50_ANGRIFFE.isPresent(100, TimeUnit.MILLISECONDS)) {
@@ -168,7 +168,7 @@ public class Main {
 	private void disableSound() {
 		Buttons.EINSTELLUNGEN.click();
 		Buttons.EINSTELLUNGEN_SPIEL.click();
-		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("end");
+		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("start");
 		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.click();
 		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.scrollToElement("start");
 		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.click();
