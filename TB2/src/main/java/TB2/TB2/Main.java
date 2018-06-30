@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -50,7 +49,8 @@ public class Main {
 		if (Buttons.LOGIN.isPresent(4))
 			Buttons.LOGIN.click();
 		sleep(1);
-		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(30); ;
+		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(30);
+		;
 		while (Buttons.LOADING_SCREEN.isPresent() && stop > System.nanoTime()) {
 			sleep(1);
 		}
@@ -60,38 +60,37 @@ public class Main {
 	public static void main(String[] args) {
 
 		Main app = new Main();
-
-		app.login();
-
-		app.ausgehendenAngriffeVerbergen();
-		
-		app.disableSound();
-
-
-		// Privinzen einlesen
-		List<Point> provinzen = new ArrayList<Point>();
-		provinzen.add(new Point(425, 445));
-		provinzen.add(new Point(433, 456));
-		provinzen.add(new Point(421, 457));
-		provinzen.add(new Point(437, 443));
-		provinzen.add(new Point(443, 456));
-		provinzen.add(new Point(436, 468));
-		provinzen.add(new Point(412, 466));
-		provinzen.add(new Point(423, 470));
-		provinzen.add(new Point(431, 432));
-		provinzen.add(new Point(450, 469));
-		provinzen.add(new Point(456, 457));
-
-		List<Dorf> dorfListe = app.initProvinzen(provinzen);
-
-		// Befehle wieder anzeigen
-		app.ausgehendenAngriffeVerbergen();
-
-		app.babas = app.getBabarendoerfer(dorfListe);
 		try {
+			app.login();
+
+			app.ausgehendenAngriffeVerbergen();
+
+			app.disableSound();
+
+			// Privinzen einlesen
+			List<Point> provinzen = new ArrayList<Point>();
+			provinzen.add(new Point(425, 445));
+			provinzen.add(new Point(433, 456));
+			provinzen.add(new Point(421, 457));
+			provinzen.add(new Point(437, 443));
+			provinzen.add(new Point(443, 456));
+			provinzen.add(new Point(436, 468));
+			provinzen.add(new Point(412, 466));
+			provinzen.add(new Point(423, 470));
+			provinzen.add(new Point(431, 432));
+			provinzen.add(new Point(450, 469));
+			provinzen.add(new Point(456, 457));
+
+			List<Dorf> dorfListe = app.initProvinzen(provinzen);
+
+			// Befehle wieder anzeigen
+			app.ausgehendenAngriffeVerbergen();
+
+			app.babas = app.getBabarendoerfer(dorfListe);
+
 			while (true) {
 				app.disableSound();
-				
+
 				app.initVorlagen(app.getAnzahlAngriffe());
 
 				app.rohstofflagerCheck();
@@ -155,7 +154,7 @@ public class Main {
 				}
 
 				checkDoerfer(600, dorfListe, app);
-				
+
 				System.out.println("Driver wird neugestartet!");
 				app.restartDriver(app);
 			}
@@ -175,14 +174,12 @@ public class Main {
 		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.click();
 		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.scrollToElement("start");
 		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.click();
-		
+
 		// um normale view wiederherzustellen
 		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.scrollToElement("end");
 
-		
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
-		
 	}
 
 	private void rohstofflagerCheck() {
@@ -295,12 +292,10 @@ public class Main {
 		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("start");
 
 		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.click();
-		
+
 		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("end");
 
-
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
-
 
 	}
 
