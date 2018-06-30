@@ -139,7 +139,14 @@ public class Main {
 							Buttons.Y_KOORDINATE.clear();
 							Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getY());
 							Buttons.JUMP_TO.click();
-							Buttons.ACTIVE_VILLAGE.click();
+							if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
+								Buttons.ACTIVE_VILLAGE.click();
+
+							}
+							if (Buttons.ACTIVE_VILLAGE2.isPresent(5)) {
+								Buttons.ACTIVE_VILLAGE2.click();
+
+							}
 
 							this.initVorlagen(this.getAnzahlAngriffe());
 

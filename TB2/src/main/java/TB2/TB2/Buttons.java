@@ -74,7 +74,9 @@ public class Buttons {
 	public static Button NEXT_VILLAGE= new Button("Nextes Dorf","//*[@id=\"switch-village-next\"]");
 
 	
-	public static Button ACTIVE_VILLAGE= new Button("Aktives Dorf festlegen","/html/body/div[2]/div[9]/div[4]/div/ul/li[8]/div/div");
+	public static Button ACTIVE_VILLAGE= new Button("Aktives Dorf 1 festlegen","/html/body/div[2]/div[9]/div[4]/div/ul/li[8]/div/div");
+	public static Button ACTIVE_VILLAGE2= new Button("Aktives Dorf2 festlegen","/html/body/div[2]/div[9]/div[5]/div/ul/li[8]/div/div");
+
 	public static Button NACHRICHT_SENDEN = new Button("Nachricht senden","/html/body/div[2]/div[9]/div[4]/div/ul/li[7]/div/div");
 
 	
