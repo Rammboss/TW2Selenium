@@ -166,9 +166,13 @@ public class Main {
 			Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getY());
 			Buttons.JUMP_TO.click();
 			Main.sleep(1);
-			if (Buttons.ACTIVE_VILLAGE.isPresent(200, TimeUnit.MILLISECONDS)) {
-
+			if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
 				Buttons.ACTIVE_VILLAGE.click();
+
+			}
+			if (Buttons.ACTIVE_VILLAGE2.isPresent(5)) {
+				Buttons.ACTIVE_VILLAGE2.click();
+
 			}
 
 			checkDoerfer(600, dorfListe, this);
