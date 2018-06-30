@@ -291,9 +291,12 @@ public class Main {
 		Buttons.EINSTELLUNGEN.click();
 		Buttons.EINSTELLUNGEN_SPIEL.click();
 
-		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("end");
+		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("start");
 
 		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.click();
+		
+		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("end");
+
 
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
