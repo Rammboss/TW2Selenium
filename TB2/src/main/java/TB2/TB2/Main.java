@@ -121,7 +121,7 @@ public class Main {
 				Buttons.Y_KOORDINATE.sendText(dorf.getCoordinaten().getY());
 				Buttons.JUMP_TO.click();
 				Main.sleep(300, TimeUnit.MILLISECONDS);
-				if (Buttons.PRODUKTION_STEIGERN.isPresent(2000, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
+				if (Buttons.PRODUKTION_STEIGERN.isPresent(700, TimeUnit.MILLISECONDS) ||Buttons.PRODUKTION_STEIGERN2.isPresent(700, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
 					Buttons.OBERFLAECHE.sendText(1);
 
 					if (Buttons.ERROR_50_ANGRIFFE.isPresent(100, TimeUnit.MILLISECONDS)) {
@@ -240,7 +240,7 @@ public class Main {
 
 			Barbarendorf baba = new Barbarendorf(dorfListe.get(Main.index).getPunkte(),
 					dorfListe.get(Main.index).getCoordinaten());
-			if (Buttons.PRODUKTION_STEIGERN.isPresent(2000, TimeUnit.MILLISECONDS) && !app.babas.contains(baba)) {
+			if (Buttons.PRODUKTION_STEIGERN.isPresent(700, TimeUnit.MILLISECONDS) ||Buttons.PRODUKTION_STEIGERN2.isPresent(700, TimeUnit.MILLISECONDS) && !app.babas.contains(baba)) {
 
 				System.out.println("Füge Babarendorf " + baba.getName() + "hinzu!");
 				app.babas.add(baba);
