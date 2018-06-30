@@ -3,7 +3,6 @@ package TB2.TB2;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -12,8 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Button {
 
@@ -21,22 +18,20 @@ public class Button {
 
 	private String xpath;
 
-	private final int waitForClick = 2;
+	private final int waitForClick = 5;
 
-	private Wait<WebDriver> wait;
 
 	public Button(String label, String xpath) {
 		super();
 		this.label = label;
 		this.xpath = xpath;
-		wait = new FluentWait<WebDriver>(Main.getDriver()).withTimeout(500, TimeUnit.MILLISECONDS)
-				.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
 	}
 
 	public boolean isPresent() {
 		try {
 
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(500, TimeUnit.MILLISECONDS)
+			.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 
 			return true;
 		} catch (TimeoutException e) {
@@ -121,7 +116,7 @@ public class Button {
 
 	public void click() {
 		try {
-			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(3, TimeUnit.SECONDS)
+			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(5, TimeUnit.SECONDS)
 					.pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
 					.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
 		} catch (TimeoutException e) {
