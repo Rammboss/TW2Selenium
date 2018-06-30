@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -26,12 +27,12 @@ public class Main {
 
 	public static WebDriver driver;
 
+	public static int index;
+
 	public List<Barbarendorf> babas;
 
 	public Main() {
-		// launch Fire fox and direct it to the Base URL
-		driver.get("https://de.tribalwars2.com/");
-
+		Main.index = 0;
 	}
 
 	public WebElement findElement(String xpath) {
@@ -40,6 +41,7 @@ public class Main {
 	}
 
 	public void login() {
+		driver.get("https://de.tribalwars2.com/");
 
 		Buttons.SPIELERNAME.sendText("Rammboss");
 		Buttons.PASSWORT.sendText("kalterhund");
@@ -82,95 +84,98 @@ public class Main {
 		app.ausgehendenAngriffeVerbergen();
 
 		app.babas = app.getBabarendoerfer(dorfListe);
+		try {
+			while (true) {
+				app.initVorlagen(app.getAnzahlAngriffe());
 
-		while (true) {
-			app.initVorlagen(app.getAnzahlAngriffe());
+				app.rohstofflagerCheck();
 
-			app.rohstofflagerCheck();
+				// Koordinaten eingen
+				Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
-			// Koordinaten eingen
-			Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+				if (!Buttons.X_KOORDINATE.isPresent(1))
+					Buttons.AUF_WELTKARTE_SUCHEN.click();
 
-			if (!Buttons.X_KOORDINATE.isPresent(1))
-				Buttons.AUF_WELTKARTE_SUCHEN.click();
+				int counter = 0;
 
-			int counter = 0;
+				for (Barbarendorf dorf : getFarmableBabas(app.babas)) {
+					Buttons.X_KOORDINATE.clear();
+					Buttons.X_KOORDINATE.sendText(dorf.getCoordinaten().getX());
+					Buttons.Y_KOORDINATE.clear();
+					Buttons.Y_KOORDINATE.sendText(dorf.getCoordinaten().getY());
+					Buttons.JUMP_TO.click();
+					Main.sleep(300, TimeUnit.MILLISECONDS);
+					if (Buttons.PRODUKTION_STEIGERN.isPresent(500, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
+						Buttons.OBERFLAECHE.sendText(1);
 
-			for (Barbarendorf dorf : getFarmableBabas(app.babas)) {
-				Buttons.X_KOORDINATE.clear();
-				Buttons.X_KOORDINATE.sendText(dorf.getCoordinaten().getX());
-				Buttons.Y_KOORDINATE.clear();
-				Buttons.Y_KOORDINATE.sendText(dorf.getCoordinaten().getY());
-				Buttons.JUMP_TO.click();
-				Main.sleep(300, TimeUnit.MILLISECONDS);
-				if (Buttons.PRODUKTION_STEIGERN.isPresent(500, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
-					Buttons.OBERFLAECHE.sendText(1);
+						if (Buttons.ERROR_50_ANGRIFFE.isPresent(100, TimeUnit.MILLISECONDS)) {
+							Buttons.ERROR_50_ANGRIFFE.click();
 
-					if (Buttons.ERROR_50_ANGRIFFE.isPresent(100, TimeUnit.MILLISECONDS)) {
-						Buttons.ERROR_50_ANGRIFFE.click();
+							if (counter >= OwnVillage.OWN.size() - 1) {
+								break;
+							} else {
 
-						if (counter >= OwnVillage.OWN.size() - 1) {
-							break;
+								// Eigenes Dorf wechseln
+								counter++;
+								Buttons.AUF_WELTKARTE_SUCHEN.click();
+								Buttons.X_KOORDINATE.clear();
+								Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getX());
+								Buttons.Y_KOORDINATE.clear();
+								Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getY());
+								Buttons.JUMP_TO.click();
+								Buttons.ACTIVE_VILLAGE.click();
+
+								app.initVorlagen(app.getAnzahlAngriffe());
+
+								Buttons.AUF_WELTKARTE_SUCHEN.click();
+							}
+
 						} else {
-
-							// Eigenes Dorf wechseln
-							counter++;
-							Buttons.AUF_WELTKARTE_SUCHEN.click();
-							Buttons.X_KOORDINATE.clear();
-							Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getX());
-							Buttons.Y_KOORDINATE.clear();
-							Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getY());
-							Buttons.JUMP_TO.click();
-							Buttons.ACTIVE_VILLAGE.click();
-
-							app.initVorlagen(app.getAnzahlAngriffe());
-
-							Buttons.AUF_WELTKARTE_SUCHEN.click();
+							dorf.setAttackedAt(new Timestamp(System.currentTimeMillis()));
 						}
-
-					} else {
-						dorf.setAttackedAt(new Timestamp(System.currentTimeMillis()));
 					}
 				}
-			}
-			if (!Buttons.X_KOORDINATE.isPresent(1))
-				Buttons.AUF_WELTKARTE_SUCHEN.click();
-			Buttons.X_KOORDINATE.clear();
-			Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getX());
-			Buttons.Y_KOORDINATE.clear();
-			Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getY());
-			Buttons.JUMP_TO.click();
-			Main.sleep(1);
-			if (Buttons.ACTIVE_VILLAGE.isPresent(200, TimeUnit.MILLISECONDS)) {
+				if (!Buttons.X_KOORDINATE.isPresent(1))
+					Buttons.AUF_WELTKARTE_SUCHEN.click();
+				Buttons.X_KOORDINATE.clear();
+				Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getX());
+				Buttons.Y_KOORDINATE.clear();
+				Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getY());
+				Buttons.JUMP_TO.click();
+				Main.sleep(1);
+				if (Buttons.ACTIVE_VILLAGE.isPresent(200, TimeUnit.MILLISECONDS)) {
 
-				Buttons.ACTIVE_VILLAGE.click();
+					Buttons.ACTIVE_VILLAGE.click();
+				}
+
+				checkDoerfer(600, dorfListe, app);
+				app.restartDriver(app);
+				System.out.println("Driver wird neugestartet!");
 			}
-			checkDoerfer(300, dorfListe, app);
+		} catch (Exception e) {
+			System.out.println("Ein unerwarteter Fehler ist aufgetreten!");
+			app.restartDriver(app);
 		}
 
-		// close Fire fox
-		// driver.close();
 	}
 
 	private void rohstofflagerCheck() {
 		// Rohstofflager farmen
 		Buttons.OBERFLAECHE.sendText("d");
-
-		Buttons.ROHSTOFFLAGER_EINSAMMELN.click();
-		Main.sleep(1);
-		Buttons.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click();
-		Main.sleep(1);
-		if (Buttons.ROHSTOFFLAGER_STARTEN.isPresent()) {
-			Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement();
-
+		if (Buttons.ROHSTOFFLAGER_EINSAMMELN.isPresent(300, TimeUnit.MILLISECONDS)) {
+			Buttons.ROHSTOFFLAGER_EINSAMMELN.click();
 		}
-		Buttons.ROHSTOFFLAGER_STARTEN.click();
+		Main.sleep(1);
+		if (Buttons.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.isPresent(300, TimeUnit.MILLISECONDS)) {
+			Buttons.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click();
+		}
+		Main.sleep(1);
+		if (Buttons.ROHSTOFFLAGER_STARTEN.isPresent(300, TimeUnit.MILLISECONDS)) {
+			Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement();
+			Buttons.ROHSTOFFLAGER_STARTEN.click();
+		}
 
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-		Buttons.ZEITLEISTE.click();
-
-		Buttons.ZEITLEISTE.click();
 
 	}
 
@@ -182,31 +187,37 @@ public class Main {
 				i--;
 			}
 		}
-
+		if (Main.index > dorfListe.size()) {
+			Main.index = 0;
+		}
 		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(sec);
-		for (int i = 0; i < dorfListe.size() && stop > System.nanoTime(); i++) {
+		while (Main.index < dorfListe.size() && stop > System.nanoTime()) {
 
 			if (!Buttons.X_KOORDINATE.isPresent(1))
 				Buttons.AUF_WELTKARTE_SUCHEN.click();
 
 			Buttons.X_KOORDINATE.clear();
-			Buttons.X_KOORDINATE.sendText(dorfListe.get(i).getCoordinaten().getX());
+			Buttons.X_KOORDINATE.sendText(dorfListe.get(Main.index).getCoordinaten().getX());
 			Buttons.Y_KOORDINATE.clear();
-			Buttons.Y_KOORDINATE.sendText(dorfListe.get(i).getCoordinaten().getY());
+			Buttons.Y_KOORDINATE.sendText(dorfListe.get(Main.index).getCoordinaten().getY());
 			sleep(500, TimeUnit.MILLISECONDS);
 			Buttons.JUMP_TO.click();
-			Main.sleep(300, TimeUnit.MILLISECONDS);
+			Main.sleep(600, TimeUnit.MILLISECONDS);
+
 			if (Buttons.NACHRICHT_SENDEN.isPresent(200, TimeUnit.MILLISECONDS)) {
+				Main.index++;
 				continue;
 			}
 
-			Barbarendorf baba = new Barbarendorf(dorfListe.get(i).getPunkte(), dorfListe.get(i).getCoordinaten());
+			Barbarendorf baba = new Barbarendorf(dorfListe.get(Main.index).getPunkte(),
+					dorfListe.get(Main.index).getCoordinaten());
 			if (Buttons.PRODUKTION_STEIGERN.isPresent(500, TimeUnit.MILLISECONDS) && !app.babas.contains(baba)) {
 
 				System.out.println("Füge Babarendorf " + baba.getName() + "hinzu!");
 				app.babas.add(baba);
-			}
+				Main.index++;
 
+			}
 		}
 
 	}
@@ -263,10 +274,6 @@ public class Main {
 
 		Buttons.OBERFLAECHE.scrollToElement();
 
-		Buttons.ZEITLEISTE.click();
-
-		Buttons.ZEITLEISTE.click();
-
 	}
 
 	private void initVorlagen(int anzahlAngriffe) {
@@ -281,10 +288,16 @@ public class Main {
 		sleep(1);
 		if (verbleibendeAngriffe > 0) {
 			// Barbaren
+
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.clear();
-			String tmp = Buttons.ANZAHL_AXT.getText().replace(".", "");
-			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN
-					.sendText(Integer.parseInt(tmp) / verbleibendeAngriffe);
+			int tmp = Integer.parseInt(Buttons.ANZAHL_AXT.getText().replace(".", ""));
+			System.out.println(tmp);
+			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.sendText(tmp / verbleibendeAngriffe);
+
+			if (tmp == 0) {
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.sendText(10);
+
+			}
 			// SPEER
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER
@@ -396,6 +409,20 @@ public class Main {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	public void restartDriver(Main app) {
+		driver.close();
+		Main.driver = null;
+		sleep(10);
+
+		Main.driver = new FirefoxDriver();
+		sleep(1);
+		app.login();
+	}
+
+	public static WebDriver getDriver() {
+		return Main.driver;
 	}
 
 }
