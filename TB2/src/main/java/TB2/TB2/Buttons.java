@@ -46,6 +46,11 @@ public class Buttons {
 	public static Button JUMP_TO = new Button("Dorf auswählen","/html/body/div[2]/footer/div/div[2]/div[1]/div/div/table[1]/tbody/tr/td[3]/div");
 	
 	public static Button PRODUKTION_STEIGERN = new Button("Produktion steigern","/html/body/div[2]/div[9]/div[4]/div/ul/li[9]/div/div");
+	
+	// Für lowe Rechner
+	public static Button PRODUKTION_STEIGERN2 = new Button("Produktion steigern","/html/body/div[2]/div[9]/div[5]/div/ul/li[9]/div/div");
+
+	
 
 	public static Button GLOBALE_VORLAGENLISTE = new Button("Globale Vorlagenliste","/html/body/div[2]/section/div/div[2]/div[1]/div/div[2]/div[2]/ul/li[2]/a");
 	public static Button GLOBALE_VORLAGENLISTE_STATUS= new Button("Globale Vorlagenliste Status","/html/body/div[4]/div/div/div/div/div/div[1]/div/div[2]/table/tbody/tr[2]/td[2]/div/div/div/div");
