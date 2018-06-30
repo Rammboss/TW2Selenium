@@ -86,6 +86,7 @@ public class Main {
 		app.babas = app.getBabarendoerfer(dorfListe);
 		try {
 			while (true) {
+				app.disableSound();
 				app.initVorlagen(app.getAnzahlAngriffe());
 
 				app.rohstofflagerCheck();
@@ -149,14 +150,30 @@ public class Main {
 				}
 
 				checkDoerfer(600, dorfListe, app);
-				app.restartDriver(app);
+				
 				System.out.println("Driver wird neugestartet!");
+				app.restartDriver(app);
 			}
 		} catch (Exception e) {
 			System.out.println("Ein unerwarteter Fehler ist aufgetreten!");
 			app.restartDriver(app);
 		}
 
+	}
+
+	private void disableSound() {
+		Buttons.EINSTELLUNGEN.click();
+		Buttons.EINSTELLUNGEN_SPIEL.click();
+		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement();
+		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.click();
+		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.scrollToElement();
+		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.click();
+		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.scrollToElement();
+		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.click();
+		
+		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+		
 	}
 
 	private void rohstofflagerCheck() {
