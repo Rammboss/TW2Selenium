@@ -6,10 +6,14 @@ import java.util.List;
 
 public class Buttons {
 	public static List<Button> provinzen = new ArrayList<Button>();
+	public static List<Button> ACCOUNTS = new ArrayList<Button>();
 
 	static {
 		provinzen.add(new Button("Kankan", "//*[@id=\\\"click-layer\\\"]"));
-	
+		ACCOUNTS.add(new Button("Ausloggen","/html/body/div[2]/div[11]/div[2]/div/div[10]/div[1]/div/div[2]/div[5]/a"));
+		ACCOUNTS.add(new Button("Ausloggen","/html/body/div[2]/div[11]/div[2]/div/div[10]/div[1]/div/div[2]/div[6]/a"));
+		ACCOUNTS.add(new Button("Ausloggen","/html/body/div[2]/div[11]/div[2]/div/div[10]/div[1]/div/div[2]/div[4]/a"));
+
 	}
 	
 	public static Button LOADING_SCREEN = new Button("Loading Screen", "//*[@id=\"screen-loading\"]");
@@ -20,6 +24,9 @@ public class Buttons {
 	public static Button HOLZ = new Button("Holz", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[1]/div[2]/div[1]");
 	public static Button OBERFLAECHE = new Button("Spielfeld","//*[@id=\"click-layer\"]");
 	public static Button ZEITLEISTE = new Button("Zeitleiste","/html/body/div[2]/footer/div/div[2]/div[3]/a");
+	public static Button LOGOUT = new Button("Ausloggen","//*[@id=\"button-logout\"]");
+	
+
 
 	
 	

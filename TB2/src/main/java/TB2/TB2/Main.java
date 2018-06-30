@@ -91,6 +91,7 @@ public class Main {
 		try {
 			while (true) {
 				app.disableSound();
+				
 				app.initVorlagen(app.getAnzahlAngriffe());
 
 				app.rohstofflagerCheck();
