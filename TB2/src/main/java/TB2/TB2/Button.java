@@ -22,22 +22,20 @@ public class Button {
 	private String xpath;
 
 	private final int waitForClick = 2;
-	
+
 	private Wait<WebDriver> wait;
 
 	public Button(String label, String xpath) {
 		super();
 		this.label = label;
 		this.xpath = xpath;
-		wait = new FluentWait<WebDriver>(Main.getDriver())
-			    .withTimeout(500, TimeUnit.MILLISECONDS)
-			    .pollingEvery(100, TimeUnit.MILLISECONDS)
-			    .ignoring(NoSuchElementException.class);
+		wait = new FluentWait<WebDriver>(Main.getDriver()).withTimeout(500, TimeUnit.MILLISECONDS)
+				.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
 	}
 
 	public boolean isPresent() {
 		try {
-			
+
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 
 			return true;
@@ -110,7 +108,7 @@ public class Button {
 			try {
 				TimeUnit.MILLISECONDS.sleep(10);
 			} catch (InterruptedException e1) {
-				
+
 				e1.printStackTrace();
 			}
 		}
@@ -123,7 +121,9 @@ public class Button {
 
 	public void click() {
 		try {
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
+			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(3, TimeUnit.SECONDS)
+					.pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
+					.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
 		} catch (TimeoutException e) {
 			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!");
 		}
