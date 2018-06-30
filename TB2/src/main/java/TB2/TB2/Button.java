@@ -126,10 +126,10 @@ public class Button {
 
 	}
 
-	public void scrollToElement() {
+	public void scrollToElement(String topaligin) {
 		WebElement e = Main.getDriver().findElement(By.xpath(xpath));
 		((JavascriptExecutor) Main.getDriver())
-				.executeScript("arguments[0].scrollIntoView({block: \"end\", behavior: \"smooth\"});", e);
+				.executeScript("arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", e);
 		Main.sleep(500, TimeUnit.MILLISECONDS);
 	}
 

@@ -50,7 +50,8 @@ public class Main {
 		if (Buttons.LOGIN.isPresent(4))
 			Buttons.LOGIN.click();
 		sleep(1);
-		while (Buttons.LOADING_SCREEN.isPresent()) {
+		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(20); ;
+		while (Buttons.LOADING_SCREEN.isPresent() && stop > System.nanoTime()) {
 			sleep(1);
 		}
 
@@ -63,6 +64,9 @@ public class Main {
 		app.login();
 
 		app.ausgehendenAngriffeVerbergen();
+		
+		app.disableSound();
+
 
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
@@ -164,12 +168,16 @@ public class Main {
 	private void disableSound() {
 		Buttons.EINSTELLUNGEN.click();
 		Buttons.EINSTELLUNGEN_SPIEL.click();
-		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement();
+		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("end");
 		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.click();
-		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.scrollToElement();
+		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.scrollToElement("start");
 		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.click();
-		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.scrollToElement();
+		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.scrollToElement("start");
 		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.click();
+		
+		// um normale view wiederherzustellen
+		Buttons.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.scrollToElement("end");
+
 		
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
@@ -188,7 +196,7 @@ public class Main {
 		}
 		Main.sleep(1);
 		if (Buttons.ROHSTOFFLAGER_STARTEN.isPresent(300, TimeUnit.MILLISECONDS)) {
-			Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement();
+			Buttons.ROHSTOFFLAGER_STARTEN.scrollToElement("end");
 			Buttons.ROHSTOFFLAGER_STARTEN.click();
 		}
 
@@ -283,13 +291,12 @@ public class Main {
 		Buttons.EINSTELLUNGEN.click();
 		Buttons.EINSTELLUNGEN_SPIEL.click();
 
-		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement();
+		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("end");
 
 		Buttons.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.click();
 
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
-		Buttons.OBERFLAECHE.scrollToElement();
 
 	}
 
@@ -325,7 +332,7 @@ public class Main {
 					Integer.parseInt(Buttons.ANZAHL_SCHWERT.getText().replace(".", "")) / verbleibendeAngriffe);
 		}
 
-		Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_1.scrollToElement();
+		Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_1.scrollToElement("end");
 		Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_1.click();
 		Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_ANGRIFF.click();
 		Buttons.GLOBALE_VORLAGENLISTE_SPEICHERN.click();
