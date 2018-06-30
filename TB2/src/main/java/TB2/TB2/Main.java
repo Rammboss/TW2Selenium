@@ -61,108 +61,114 @@ public class Main {
 
 		Main app = new Main();
 		try {
-			app.login();
-
-			app.ausgehendenAngriffeVerbergen();
-
-			app.disableSound();
-
-			// Privinzen einlesen
-			List<Point> provinzen = new ArrayList<Point>();
-			provinzen.add(new Point(425, 445));
-			provinzen.add(new Point(433, 456));
-			provinzen.add(new Point(421, 457));
-			provinzen.add(new Point(437, 443));
-			provinzen.add(new Point(443, 456));
-			provinzen.add(new Point(436, 468));
-			provinzen.add(new Point(412, 466));
-			provinzen.add(new Point(423, 470));
-			provinzen.add(new Point(431, 432));
-			provinzen.add(new Point(450, 469));
-			provinzen.add(new Point(456, 457));
-
-			List<Dorf> dorfListe = app.initProvinzen(provinzen);
-
-			// Befehle wieder anzeigen
-			app.ausgehendenAngriffeVerbergen();
-
-			app.babas = app.getBabarendoerfer(dorfListe);
-
-			while (true) {
-				app.disableSound();
-
-				app.initVorlagen(app.getAnzahlAngriffe());
-
-				app.rohstofflagerCheck();
-
-				// Koordinaten eingen
-				Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-				if (!Buttons.X_KOORDINATE.isPresent(1))
-					Buttons.AUF_WELTKARTE_SUCHEN.click();
-
-				int counter = 0;
-
-				for (Barbarendorf dorf : getFarmableBabas(app.babas)) {
-					Buttons.X_KOORDINATE.clear();
-					Buttons.X_KOORDINATE.sendText(dorf.getCoordinaten().getX());
-					Buttons.Y_KOORDINATE.clear();
-					Buttons.Y_KOORDINATE.sendText(dorf.getCoordinaten().getY());
-					Buttons.JUMP_TO.click();
-					Main.sleep(300, TimeUnit.MILLISECONDS);
-					if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
-						Buttons.OBERFLAECHE.sendText(1);
-
-						if (Buttons.ERROR_50_ANGRIFFE.isPresent(100, TimeUnit.MILLISECONDS)) {
-							Buttons.ERROR_50_ANGRIFFE.click();
-
-							if (counter >= OwnVillage.OWN.size() - 1) {
-								break;
-							} else {
-
-								// Eigenes Dorf wechseln
-								counter++;
-								Buttons.AUF_WELTKARTE_SUCHEN.click();
-								Buttons.X_KOORDINATE.clear();
-								Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getX());
-								Buttons.Y_KOORDINATE.clear();
-								Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getY());
-								Buttons.JUMP_TO.click();
-								Buttons.ACTIVE_VILLAGE.click();
-
-								app.initVorlagen(app.getAnzahlAngriffe());
-
-								Buttons.AUF_WELTKARTE_SUCHEN.click();
-							}
-
-						} else {
-							dorf.setAttackedAt(new Timestamp(System.currentTimeMillis()));
-						}
-					}
-				}
-				if (!Buttons.X_KOORDINATE.isPresent(1))
-					Buttons.AUF_WELTKARTE_SUCHEN.click();
-				Buttons.X_KOORDINATE.clear();
-				Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getX());
-				Buttons.Y_KOORDINATE.clear();
-				Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getY());
-				Buttons.JUMP_TO.click();
-				Main.sleep(1);
-				if (Buttons.ACTIVE_VILLAGE.isPresent(200, TimeUnit.MILLISECONDS)) {
-
-					Buttons.ACTIVE_VILLAGE.click();
-				}
-
-				checkDoerfer(600, dorfListe, app);
-
-				System.out.println("Driver wird neugestartet!");
-				app.restartDriver(app);
-			}
+			app.runTask();
 		} catch (Exception e) {
 			System.out.println("Ein unerwarteter Fehler ist aufgetreten!");
-			app.restartDriver(app);
+			app.restartDriver();
+			app.runTask();
 		}
 
+	}
+
+	private void runTask() {
+		this.login();
+		
+		this.disableSound();
+
+		this.ausgehendenAngriffeVerbergen();
+
+
+		// Privinzen einlesen
+		List<Point> provinzen = new ArrayList<Point>();
+		provinzen.add(new Point(425, 445));
+		provinzen.add(new Point(433, 456));
+		provinzen.add(new Point(421, 457));
+		provinzen.add(new Point(437, 443));
+		provinzen.add(new Point(443, 456));
+		provinzen.add(new Point(436, 468));
+		provinzen.add(new Point(412, 466));
+		provinzen.add(new Point(423, 470));
+		provinzen.add(new Point(431, 432));
+		provinzen.add(new Point(450, 469));
+		provinzen.add(new Point(456, 457));
+
+		List<Dorf> dorfListe = this.initProvinzen(provinzen);
+
+		// Befehle wieder anzeigen
+		this.ausgehendenAngriffeVerbergen();
+
+		this.babas = this.getBabarendoerfer(dorfListe);
+
+		while (true) {
+			this.disableSound();
+
+			this.initVorlagen(this.getAnzahlAngriffe());
+
+			this.rohstofflagerCheck();
+
+			// Koordinaten eingen
+			Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+			if (!Buttons.X_KOORDINATE.isPresent(1))
+				Buttons.AUF_WELTKARTE_SUCHEN.click();
+
+			int counter = 0;
+
+			for (Barbarendorf dorf : getFarmableBabas(this.babas)) {
+				Buttons.X_KOORDINATE.clear();
+				Buttons.X_KOORDINATE.sendText(dorf.getCoordinaten().getX());
+				Buttons.Y_KOORDINATE.clear();
+				Buttons.Y_KOORDINATE.sendText(dorf.getCoordinaten().getY());
+				Buttons.JUMP_TO.click();
+				Main.sleep(300, TimeUnit.MILLISECONDS);
+				if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
+					Buttons.OBERFLAECHE.sendText(1);
+
+					if (Buttons.ERROR_50_ANGRIFFE.isPresent(100, TimeUnit.MILLISECONDS)) {
+						Buttons.ERROR_50_ANGRIFFE.click();
+
+						if (counter >= OwnVillage.OWN.size() - 1) {
+							break;
+						} else {
+
+							// Eigenes Dorf wechseln
+							counter++;
+							Buttons.AUF_WELTKARTE_SUCHEN.click();
+							Buttons.X_KOORDINATE.clear();
+							Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getX());
+							Buttons.Y_KOORDINATE.clear();
+							Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(counter).getCoordinaten().getY());
+							Buttons.JUMP_TO.click();
+							Buttons.ACTIVE_VILLAGE.click();
+
+							this.initVorlagen(this.getAnzahlAngriffe());
+
+							Buttons.AUF_WELTKARTE_SUCHEN.click();
+						}
+
+					} else {
+						dorf.setAttackedAt(new Timestamp(System.currentTimeMillis()));
+					}
+				}
+			}
+			if (!Buttons.X_KOORDINATE.isPresent(1))
+				Buttons.AUF_WELTKARTE_SUCHEN.click();
+			Buttons.X_KOORDINATE.clear();
+			Buttons.X_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getX());
+			Buttons.Y_KOORDINATE.clear();
+			Buttons.Y_KOORDINATE.sendText(OwnVillage.OWN.get(0).getCoordinaten().getY());
+			Buttons.JUMP_TO.click();
+			Main.sleep(1);
+			if (Buttons.ACTIVE_VILLAGE.isPresent(200, TimeUnit.MILLISECONDS)) {
+
+				Buttons.ACTIVE_VILLAGE.click();
+			}
+
+			checkDoerfer(600, dorfListe, this);
+
+			System.out.println("Driver wird neugestartet!");
+			this.restartDriver();
+		}
 	}
 
 	private void disableSound() {
@@ -434,14 +440,14 @@ public class Main {
 		}
 	}
 
-	public void restartDriver(Main app) {
+	public void restartDriver() {
 		driver.close();
 		Main.driver = null;
 		sleep(10);
 
 		Main.driver = new FirefoxDriver();
 		sleep(1);
-		app.login();
+		this.login();
 	}
 
 	public static WebDriver getDriver() {
