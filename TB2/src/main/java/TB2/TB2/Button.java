@@ -6,9 +6,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Button {
@@ -27,7 +31,11 @@ public class Button {
 
 	public boolean isPresent() {
 		try {
-			WebDriverWait wait = new WebDriverWait(Main.getDriver(), 2, 200);
+			Wait<WebDriver> wait = new FluentWait<WebDriver>(Main.getDriver())
+				    .withTimeout(500, TimeUnit.MILLISECONDS)
+				    .pollingEvery(100, TimeUnit.MILLISECONDS)
+				    .ignoring(NoSuchElementException.class);
+			
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 
 			return true;
