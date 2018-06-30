@@ -75,9 +75,10 @@ public class Buttons {
 
 	
 	public static Button ACTIVE_VILLAGE= new Button("Aktives Dorf 1 festlegen","/html/body/div[2]/div[9]/div[4]/div/ul/li[8]/div/div");
-	public static Button ACTIVE_VILLAGE2= new Button("Aktives Dorf2 festlegen","/html/body/div[2]/div[9]/div[5]/div/ul/li[8]/div/div");
+	public static Button ACTIVE_VILLAGE2= new Button("Aktives Dorf2 festlegen","/html/body/div[2]/div[9]/div[5]/div/ul/li[8]/div/div"); // low pc
 
-	public static Button NACHRICHT_SENDEN = new Button("Nachricht senden","/html/body/div[2]/div[9]/div[4]/div/ul/li[7]/div/div");
+	public static Button NACHRICHT_SENDEN = new Button("Nachricht senden 1","/html/body/div[2]/div[9]/div[4]/div/ul/li[7]/div/div");
+	public static Button NACHRICHT_SENDEN2 = new Button("Nachricht senden 2","/html/body/div[2]/div[9]/div[5]/div/ul/li[7]/div/div"); //low pc
 
 	
 	

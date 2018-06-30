@@ -243,7 +243,7 @@ public class Main {
 			sleep(500, TimeUnit.MILLISECONDS);
 			Buttons.JUMP_TO.click();
 
-			if (Buttons.NACHRICHT_SENDEN.isPresent(2, TimeUnit.SECONDS)) {
+			if (Buttons.NACHRICHT_SENDEN.isPresent(2, TimeUnit.SECONDS) || Buttons.NACHRICHT_SENDEN2.isPresent(2, TimeUnit.SECONDS)) {
 				Main.index++;
 				continue;
 			}
