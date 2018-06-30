@@ -50,7 +50,7 @@ public class Main {
 		if (Buttons.LOGIN.isPresent(4))
 			Buttons.LOGIN.click();
 		sleep(1);
-		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(20); ;
+		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(30); ;
 		while (Buttons.LOADING_SCREEN.isPresent() && stop > System.nanoTime()) {
 			sleep(1);
 		}
