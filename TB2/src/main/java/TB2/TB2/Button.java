@@ -118,7 +118,7 @@ public class Button {
 		} catch (TimeoutException e) {
 			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!");
 		} catch (ElementClickInterceptedException e) {
-			System.out.println("Der Button konnte nicht gelickt werden!\nFersuche es erneut!");
+			System.out.println("Der Button: " + this.getLabel() + "konnte nicht gelickt werden!\nFersuche es erneut!");
 
 			this.click();
 
