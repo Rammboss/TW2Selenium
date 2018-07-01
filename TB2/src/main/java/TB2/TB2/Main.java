@@ -125,7 +125,7 @@ public class Main {
 					Buttons.OBERFLAECHE.sendText(1);
 
 					if (Buttons.ERROR_50_ANGRIFFE.isPresent(500, TimeUnit.MILLISECONDS)) {
-						Buttons.ERROR_50_ANGRIFFE.click();
+						sleep(5); // instead of click on message, because causes errors
 
 						if (counter >= OwnVillage.OWN.size() - 1) {
 							break;
