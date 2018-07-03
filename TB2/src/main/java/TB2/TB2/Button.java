@@ -38,7 +38,8 @@ public class Button {
 
 			return true;
 		} catch (TimeoutException e) {
-			//System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden werden!");
+			// System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden
+			// werden!");
 			return false;
 		}
 	}
@@ -116,31 +117,36 @@ public class Button {
 	public String getCSSClass() {
 		return getWebelement().getAttribute("class");
 	}
-	
+
 	public WebElement getWebelement() {
 		return Main.getDriver().findElement(By.xpath(xpath));
 	}
-	
+
 	public List<WebElement> getWebelements() {
 		return Main.getDriver().findElements(By.xpath(xpath));
 	}
 
-	public void click() throws ElementClickInterceptedException{
+	public void click() {
 		try {
-			new WebDriverWait(Main.getDriver(), 5).until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
-//			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(5, TimeUnit.SECONDS)
-//					.pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
-//					.ignoring(ElementNotInteractableException.class).ignoring(ElementClickInterceptedException.class)
-					
+			new WebDriverWait(Main.getDriver(), 5).until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)))
+					.click();
+			// new FluentWait<WebDriver>(Main.getDriver()).withTimeout(5, TimeUnit.SECONDS)
+			// .pollingEvery(500,
+			// TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
+			// .ignoring(ElementNotInteractableException.class).ignoring(ElementClickInterceptedException.class)
+
 		} catch (TimeoutException e) {
-			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!");
+			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!(Zeitüberschreitung)");
+		} catch (ElementClickInterceptedException e) {
+			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!(not clickable)");
+
 		}
 
 	}
 
 	public void scrollToElement(String topaligin) {
-		((JavascriptExecutor) Main.getDriver())
-				.executeScript("arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", getWebelement());
+		((JavascriptExecutor) Main.getDriver()).executeScript(
+				"arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", getWebelement());
 		Main.sleep(500, TimeUnit.MILLISECONDS);
 	}
 

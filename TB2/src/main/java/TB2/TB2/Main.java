@@ -67,7 +67,7 @@ public class Main {
 
 	}
 
-	private void runTask() throws ElementClickInterceptedException{
+	private void runTask() {
 		this.login();
 
 		this.disableSound();
@@ -173,8 +173,7 @@ public class Main {
 				Buttons.ACTIVE_VILLAGE2.click();
 
 			}
-			
-			
+
 			System.out.println("Dorfliste size:" + dorfListe.size());
 			System.out.println("Aktueller Stand: " + Main.index);
 			checkDoerfer(600, dorfListe, this);
