@@ -1,10 +1,10 @@
 package TB2.TB2;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Button {
 
@@ -37,7 +38,7 @@ public class Button {
 
 			return true;
 		} catch (TimeoutException e) {
-			System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden werden!");
+			//System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden werden!");
 			return false;
 		}
 	}
@@ -72,7 +73,7 @@ public class Button {
 
 	public String getText() {
 		if (isPresent(2))
-			return Main.getDriver().findElement(By.xpath(xpath)).getText();
+			return getWebelement().getText();
 
 		return "Nichts gefunden";
 
@@ -80,28 +81,28 @@ public class Button {
 
 	public void sendText(String text) {
 		if (isPresent(waitForClick))
-			Main.getDriver().findElement(By.xpath(xpath)).sendKeys(text);
+			getWebelement().sendKeys(text);
 	}
 
 	public void sendText(double text) {
 		if (isPresent(waitForClick))
-			Main.getDriver().findElement(By.xpath(xpath)).sendKeys(text + "");
+			getWebelement().sendKeys(text + "");
 	}
 
 	public void sendText(int text) {
 		if (isPresent(waitForClick))
-			Main.getDriver().findElement(By.xpath(xpath)).sendKeys(text + "");
+			getWebelement().sendKeys(text + "");
 	}
 
 	public void sendText(Keys escape) {
 		if (isPresent(waitForClick))
-			Main.getDriver().findElement(By.xpath(xpath)).sendKeys(escape);
+			getWebelement().sendKeys(escape);
 	}
 
 	public void sendText(Keys escape, int times) {
 		for (int i = 0; i <= times; i++) {
 			if (isPresent(waitForClick))
-				Main.getDriver().findElement(By.xpath(xpath)).sendKeys(escape);
+				getWebelement().sendKeys(escape);
 			try {
 				TimeUnit.MILLISECONDS.sleep(10);
 			} catch (InterruptedException e1) {
@@ -113,15 +114,24 @@ public class Button {
 	}
 
 	public String getCSSClass() {
-		return Main.getDriver().findElement(By.xpath(xpath)).getAttribute("class");
+		return getWebelement().getAttribute("class");
+	}
+	
+	public WebElement getWebelement() {
+		return Main.getDriver().findElement(By.xpath(xpath));
+	}
+	
+	public List<WebElement> getWebelements() {
+		return Main.getDriver().findElements(By.xpath(xpath));
 	}
 
-	public void click() {
+	public void click() throws ElementClickInterceptedException{
 		try {
-			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(5, TimeUnit.SECONDS)
-					.pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
-					.ignoring(ElementNotInteractableException.class).ignoring(ElementClickInterceptedException.class)
-					.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
+			new WebDriverWait(Main.getDriver(), 5).until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
+//			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(5, TimeUnit.SECONDS)
+//					.pollingEvery(500, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
+//					.ignoring(ElementNotInteractableException.class).ignoring(ElementClickInterceptedException.class)
+					
 		} catch (TimeoutException e) {
 			System.out.println("Button:" + this.getLabel() + " konnte nicht geklickt werden!");
 		}
@@ -129,15 +139,14 @@ public class Button {
 	}
 
 	public void scrollToElement(String topaligin) {
-		WebElement e = Main.getDriver().findElement(By.xpath(xpath));
 		((JavascriptExecutor) Main.getDriver())
-				.executeScript("arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", e);
+				.executeScript("arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", getWebelement());
 		Main.sleep(500, TimeUnit.MILLISECONDS);
 	}
 
 	public void clear() {
 
-		Main.getDriver().findElement(By.xpath(xpath)).clear();
+		getWebelement().clear();
 
 	}
 

@@ -34,11 +34,6 @@ public class Main {
 		Main.index = 0;
 	}
 
-	public WebElement findElement(String xpath) {
-
-		return driver.findElement(By.xpath(xpath));
-	}
-
 	public void login() {
 		driver.get("https://de.tribalwars2.com/");
 
@@ -64,6 +59,7 @@ public class Main {
 			app.runTask();
 		} catch (Exception e) {
 			System.out.println("Ein unerwarteter Fehler ist aufgetreten!");
+			e.printStackTrace();
 			app.restartDriver();
 			app.runTask();
 		}
@@ -112,7 +108,7 @@ public class Main {
 				Buttons.AUF_WELTKARTE_SUCHEN.click();
 
 			int counter = 0;
-
+			System.out.println("Farmen vorhanden: " + getFarmableBabas(this.babas).size());
 			for (Barbarendorf dorf : getFarmableBabas(this.babas)) {
 				Buttons.X_KOORDINATE.clear();
 				Buttons.X_KOORDINATE.sendText(dorf.getCoordinaten().getX());
@@ -176,7 +172,10 @@ public class Main {
 				Buttons.ACTIVE_VILLAGE2.click();
 
 			}
-
+			
+			
+			System.out.println("Dorfliste size:" + dorfListe.size());
+			System.out.println("Aktueller Stand: " + Main.index);
 			checkDoerfer(600, dorfListe, this);
 
 			System.out.println("Driver wird neugestartet!");
@@ -229,7 +228,7 @@ public class Main {
 				i--;
 			}
 		}
-		if (Main.index > dorfListe.size()) {
+		if (Main.index >= dorfListe.size()) {
 			Main.index = 0;
 		}
 		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(sec);
@@ -245,7 +244,8 @@ public class Main {
 			sleep(500, TimeUnit.MILLISECONDS);
 			Buttons.JUMP_TO.click();
 
-			if (Buttons.NACHRICHT_SENDEN.isPresent(2, TimeUnit.SECONDS) || Buttons.NACHRICHT_SENDEN2.isPresent(2, TimeUnit.SECONDS)) {
+			if (Buttons.NACHRICHT_SENDEN.isPresent(2, TimeUnit.SECONDS)
+					|| Buttons.NACHRICHT_SENDEN2.isPresent(2, TimeUnit.SECONDS)) {
 				Main.index++;
 				continue;
 			}
@@ -269,27 +269,11 @@ public class Main {
 		Buttons.EINHEITEN_UEBERSICHT.click();
 		sleep(2);
 
-		WebElement element = driver
-				.findElement(By.xpath("/html/body/div[2]/section/div/div/div[1]/div[2]/div[6]/div/table/tbody"));
-		String elementSource = element.getAttribute("innerHTML");
-
-		Pattern pattern = Pattern.compile("ng-binding\">(.*?)</td>");
-		Matcher matcher = pattern.matcher(elementSource);
-		int anzahlAngriffe = 0;
-		int rowCount = driver
-				.findElements(By.xpath("/html/body/div[2]/section/div/div/div[1]/div[2]/div[6]/div/table/tbody/tr"))
-				.size();
-		System.out.println("Anzahl Rows: " + rowCount);
-
-		while (matcher.find()) {
-			if (matcher.group(1).contains("Rammboss") || matcher.group(1).contains("-</span>")) {
-				anzahlAngriffe++;
-			}
-		}
+		int rowCount = Buttons.TABLE_UNITS_ROWS.getWebelements().size();
 
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
-		System.out.println("Anzahl der bisherigen Angriffe: " + anzahlAngriffe);
-		return anzahlAngriffe;
+		System.out.println("Anzahl der bisherigen Angriffe: " + rowCount);
+		return rowCount;
 
 	}
 
@@ -384,8 +368,8 @@ public class Main {
 			Buttons.OBERFLAECHE.click();
 
 			Main.sleep(2);
-			WebElement element = driver
-					.findElement(By.xpath("/html/body/div[2]/section/div/div/div[2]/div/div[1]/table[2]/tbody"));
+			WebElement element = Buttons.TABLE_VILLAGES_IN_PROVINZ.getWebelement();
+
 			String elementSource = element.getAttribute("innerHTML");
 
 			Pattern pattern = Pattern.compile("ng-binding\">(.*?)</td>");
