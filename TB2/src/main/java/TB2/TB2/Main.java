@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -66,7 +67,7 @@ public class Main {
 
 	}
 
-	private void runTask() {
+	private void runTask() throws ElementClickInterceptedException{
 		this.login();
 
 		this.disableSound();
