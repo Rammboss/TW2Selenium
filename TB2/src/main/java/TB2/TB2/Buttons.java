@@ -80,11 +80,11 @@ public class Buttons {
 	public static Button NACHRICHT_SENDEN = new Button("Nachricht senden 1","/html/body/div[2]/div[9]/div[4]/div/ul/li[7]/div/div");
 	public static Button NACHRICHT_SENDEN2 = new Button("Nachricht senden 2","/html/body/div[2]/div[9]/div[5]/div/ul/li[7]/div/div"); //low pc
 
-	public static Button TABLE_VILLAGES_IN_PROVINZ = new Button("Tabelle - Dörfer der Provinz","/html/body/div[2]/section/div/div/div[2]/div/div[1]/table[2]/tbody");
+	public static Button TABLE_VILLAGES_IN_PROVINZ = new Button("Tabelle - Frende Dörfer in Provinz","/html/body/div[2]/section/div/div/div[2]/div/div[1]/table[2]/tbody");
 	public static Button TABLE_UNITS = new Button("Tabelle - Einheiten Dorf","/html/body/div[2]/section/div/div/div[1]/div[2]/div[6]/div/table/tbody");
 	public static Button TABLE_UNITS_ROWS = new Button("Tabelle - Einheiten Dorf Anzahl der Angriffe","/html/body/div[2]/section/div/div/div[1]/div[2]/div[6]/div/table/tbody/tr");
+	public static Button TABLE_OWN_VILLAGES_IN_PROVINZ = new Button("Tabelle - Eigene Dörfer in Provinz","/html/body/div[2]/section/div/div/div[2]/div/div[1]/table[1]/tbody");
 
-	
 	
 	
 	public static Button EINSTELLUNGEN= new Button("Einstellungen öffnen","/html/body/div[2]/footer/div/div[2]/div[2]/ul/li[10]/a");

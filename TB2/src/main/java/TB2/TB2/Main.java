@@ -3,13 +3,12 @@ package TB2.TB2;
 import java.awt.Point;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -69,8 +68,6 @@ public class Main {
 
 	private void runTask() {
 		this.login();
-
-		this.disableSound();
 
 		this.ausgehendenAngriffeVerbergen();
 
@@ -368,6 +365,61 @@ public class Main {
 			Buttons.OBERFLAECHE.click();
 
 			Main.sleep(2);
+			// Eigene Dörfer durchsuchen
+			if(Buttons.TABLE_OWN_VILLAGES_IN_PROVINZ.isPresent()) {
+				WebElement element = Buttons.TABLE_OWN_VILLAGES_IN_PROVINZ.getWebelement();
+				
+				String elementSource = element.getAttribute("innerHTML");
+
+				Pattern pattern = Pattern.compile("ng-binding\">(.*?)</td>");
+				Matcher matcher = pattern.matcher(elementSource);
+				int counter = 0;
+				String name = "";
+				int punkte = 0;
+				Point coordinaten = null;
+
+				while (matcher.find()) {
+
+					switch (counter % 3) {
+					case 0:
+						name = matcher.group(1);
+						break;
+					case 1:
+						punkte = Integer.parseInt(matcher.group(1).replace(".", ""));
+						break;
+					case 2:
+						String[] test = matcher.group(1).split("|");
+						int x = Integer.parseInt(test[0] + test[1] + test[2]);
+						int y = Integer.parseInt(test[6] + test[7] + test[8]);
+						coordinaten = new Point(x, y);
+						OwnVillage village = new OwnVillage(name, punkte, coordinaten);
+						OwnVillage.OWN.add(village);
+						break;
+
+					default:
+						break;
+					}
+					counter++;
+				}
+			}
+			
+			OwnVillage.OWN.sort(new Comparator<OwnVillage>() {
+
+				public int compare(OwnVillage o1, OwnVillage o2) {
+					return o1.getName().compareTo(o2.getName());
+				}
+				
+				
+			});
+			
+			for (OwnVillage dorf : OwnVillage.OWN) {
+				
+				System.out.println(dorf);
+				
+			}
+			
+			
+			//Fremde Dörfer durchsuchen
 			WebElement element = Buttons.TABLE_VILLAGES_IN_PROVINZ.getWebelement();
 
 			String elementSource = element.getAttribute("innerHTML");
