@@ -70,32 +70,7 @@ public class Main {
 		this.login();
 		this.disableSound();
 
-		// Rohstoffe checken
-		Buttons.OBERFLAECHE.sendText("v");
-		sleep(2);
-		Buttons.DORFANSICHTLAYER.clickCoords(100, 300);
-
-		String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
-		String[] lehm = Buttons.SPEICHER_LEHM.getText().split(" / ");
-		String[] eisen = Buttons.SPEICHER_EISEN.getText().split(" / ");
 		
-		int max = Integer.parseInt(holz[1].replace(".", ""));
-		int currentHolz = Integer.parseInt(holz[0].replace(".", ""));
-		int currentLehm = Integer.parseInt(lehm[0].replace(".", ""));
-
-		int currentEisen = Integer.parseInt(eisen[0].replace(".", ""));
-
-		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
-		Buttons.OBERFLAECHE.sendText("v");
-
-		if ((currentHolz >= max || currentLehm >= max || currentEisen >= max)
-				&& Integer.parseInt(Buttons.PROVIANT.getText()) > 20) {
-			System.out.println("Baue 20 axtkämpfer");
-			baue20Axt();
-		}else {
-			System.out.println("Vorraussetzungen für 20 axtkämpfer nicht erfüllt!");
-
-		}
 
 		this.ausgehendenAngriffeVerbergen();
 
@@ -114,6 +89,33 @@ public class Main {
 
 		while (true) {
 			this.disableSound();
+			
+			// Rohstoffe checken
+			Buttons.OBERFLAECHE.sendText("v");
+			sleep(2);
+			Buttons.DORFANSICHTLAYER.clickCoords(100, 300);
+
+			String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
+			String[] lehm = Buttons.SPEICHER_LEHM.getText().split(" / ");
+			String[] eisen = Buttons.SPEICHER_EISEN.getText().split(" / ");
+			
+			int max = Integer.parseInt(holz[1].replace(".", ""));
+			int currentHolz = Integer.parseInt(holz[0].replace(".", ""));
+			int currentLehm = Integer.parseInt(lehm[0].replace(".", ""));
+
+			int currentEisen = Integer.parseInt(eisen[0].replace(".", ""));
+
+			Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+			Buttons.OBERFLAECHE.sendText("v");
+
+			if ((currentHolz >= max || currentLehm >= max || currentEisen >= max)
+					&& Integer.parseInt(Buttons.PROVIANT.getText()) > 20) {
+				System.out.println("Baue 20 axtkämpfer");
+				baue20Axt();
+			}else {
+				System.out.println("Vorraussetzungen für 20 axtkämpfer nicht erfüllt!");
+
+			}
 
 			this.initVorlagen(this.getAnzahlAngriffe());
 
