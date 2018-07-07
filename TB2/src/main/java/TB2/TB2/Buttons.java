@@ -22,10 +22,33 @@ public class Buttons {
 	public static Button SPIELEN = new Button("Spielen", "/html/body/div[3]/div[2]/header/div/div[4]/div[1]/div[1]/form/button");
 	public static Button LOGIN = new Button("Login", "/html/body/div[4]/div[2]/div[2]/div[3]/div/div/div[1]/div[1]/div/div[1]/div[2]/div/ul/li[1]/a");
 	public static Button HOLZ = new Button("Holz", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[1]/div[2]/div[1]");
+	public static Button LEHM = new Button("Lehm", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]/div[1]");
+	public static Button EISEN = new Button("Eisen", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]");
+	public static Button PROVIANT = new Button("Proviant", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[4]/div[2]/div[1]");
+
+	
+	
+	
+	//Buttons in Dorfansicht
+	public static Button DORFANSICHTLAYER = new Button("Dorfansicht Layer", "//*[@id=\"click-layer\"]");
+
+	public static Button SPEICHER = new Button("Speicher", "/html/body/div[2]/div[9]/div[4]/div/div[1]");
+	
+	public static Button SPEICHER_HOLZ = new Button("Speicher Holz", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[2]/table[1]/tbody/tr[2]/td[1]/div/div/div[1]/span");
+	public static Button SPEICHER_LEHM = new Button("Speicher Lehm", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[2]/table[1]/tbody/tr[3]/td[1]/div/div/div[1]/span");
+	public static Button SPEICHER_EISEN = new Button("Speicher Eisen", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[2]/table[1]/tbody/tr[4]/td[1]/div/div/div[1]/span");
+
+	
+	// Kaserne
+	public static Button KASERNE_AXTKAEMPFER = new Button("Axtkämpfer rekrutieren", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[3]/div/div/div[2]/div[2]/div[1]/label[1]/table/tbody/tr[3]/td/div[2]");
+
+	
+
 	public static Button OBERFLAECHE = new Button("Spielfeld","//*[@id=\"click-layer\"]");
 	public static Button ZEITLEISTE = new Button("Zeitleiste","/html/body/div[2]/footer/div/div[2]/div[3]/a");
 	public static Button LOGOUT = new Button("Ausloggen","//*[@id=\"button-logout\"]");
-	
+	public static Button COMPLETE_BUILDING = new Button("Gebäude fertig stellen ","/html/body/div[2]/div[13]/div[2]/div/ul/li[1]/div[1]/div/div[1]/a");
+
 
 
 	
@@ -63,6 +86,7 @@ public class Buttons {
 	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER= new Button("Globale Vorlagenliste Anzahl Speerträger","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[1]/td[1]/div/input");
 	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT= new Button("Globale Vorlagenliste Anzahl Schwertkämpfer","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[1]/td[2]/div/input");
 	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN= new Button("Globale Vorlagenliste Anzahl Barbaren","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[2]/td[1]/div/input");
+	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_PALADIN= new Button("Globale Vorlagenliste Anzahl Paladin","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[6]/td[2]/div/input");
 
 	
 	

@@ -68,22 +68,42 @@ public class Main {
 
 	private void runTask() {
 		this.login();
+		this.disableSound();
+
+		// Rohstoffe checken
+		Buttons.OBERFLAECHE.sendText("v");
+		sleep(2);
+		Buttons.DORFANSICHTLAYER.clickCoords(100, 300);
+
+		String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
+		String[] lehm = Buttons.SPEICHER_LEHM.getText().split(" / ");
+		String[] eisen = Buttons.SPEICHER_EISEN.getText().split(" / ");
+		
+		int max = Integer.parseInt(holz[1].replace(".", ""));
+		int currentHolz = Integer.parseInt(holz[0].replace(".", ""));
+		int currentLehm = Integer.parseInt(lehm[0].replace(".", ""));
+
+		int currentEisen = Integer.parseInt(eisen[0].replace(".", ""));
+
+		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+		Buttons.OBERFLAECHE.sendText("v");
+
+		if ((currentHolz >= max || currentLehm >= max || currentEisen >= max)
+				&& Integer.parseInt(Buttons.PROVIANT.getText()) > 20) {
+			System.out.println("Baue 20 axtkämpfer");
+			baue20Axt();
+		}else {
+			System.out.println("Vorraussetzungen für 20 axtkämpfer nicht erfüllt!");
+
+		}
 
 		this.ausgehendenAngriffeVerbergen();
 
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
-		provinzen.add(new Point(425, 445));
-		provinzen.add(new Point(433, 456));
-		provinzen.add(new Point(421, 457));
-		provinzen.add(new Point(437, 443));
-		provinzen.add(new Point(443, 456));
-		provinzen.add(new Point(436, 468));
-		provinzen.add(new Point(412, 466));
-		provinzen.add(new Point(423, 470));
-		provinzen.add(new Point(431, 432));
-		provinzen.add(new Point(450, 469));
-		provinzen.add(new Point(456, 457));
+		provinzen.add(new Point(584, 568));
+		provinzen.add(new Point(572, 567));
+		provinzen.add(new Point(579, 555));
 
 		List<Dorf> dorfListe = this.initProvinzen(provinzen);
 
@@ -173,11 +193,29 @@ public class Main {
 
 			System.out.println("Dorfliste size:" + dorfListe.size());
 			System.out.println("Aktueller Stand: " + Main.index);
-			checkDoerfer(600, dorfListe, this);
+			// checkDoerfer(600, dorfListe, this);
+			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(5); stop > System.nanoTime();) {
+
+				if (Buttons.COMPLETE_BUILDING.isPresent()) {
+					Buttons.COMPLETE_BUILDING.click();
+				}
+				sleep(5);
+			}
 
 			System.out.println("Driver wird neugestartet!");
 			this.restartDriver();
 		}
+	}
+
+	private void baue20Axt() {
+
+		Buttons.OBERFLAECHE.sendText("b");
+		sleep(1);
+		Buttons.KASERNE_AXTKAEMPFER.scrollToElement("start");
+		if (Buttons.KASERNE_AXTKAEMPFER.isPresent()) {
+			Buttons.KASERNE_AXTKAEMPFER.click();
+		}
+
 	}
 
 	private void disableSound() {
@@ -318,18 +356,40 @@ public class Main {
 			System.out.println(tmp);
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.sendText(tmp / verbleibendeAngriffe);
 
-			if (tmp == 0) {
-				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.sendText(10);
+			if (tmp < 500) {
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.clear();
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.sendText(20);
 
 			}
 			// SPEER
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER
 					.sendText(Integer.parseInt(Buttons.ANZAHL_SPEER.getText().replace(".", "")) / verbleibendeAngriffe);
+
+			tmp = Integer.parseInt(Buttons.ANZAHL_SPEER.getText().replace(".", ""));
+
+			if (tmp < 500) {
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
+
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(10);
+
+			}
 			// SCHWERT
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.clear();
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(
 					Integer.parseInt(Buttons.ANZAHL_SCHWERT.getText().replace(".", "")) / verbleibendeAngriffe);
+
+			tmp = Integer.parseInt(Buttons.ANZAHL_SCHWERT.getText().replace(".", ""));
+
+			if (tmp < 500) {
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.clear();
+
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(10);
+
+			}
+
+			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_PALADIN.clear();
+			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_PALADIN.sendText(1);
 		}
 
 		Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_1.scrollToElement("end");
@@ -366,9 +426,9 @@ public class Main {
 
 			Main.sleep(2);
 			// Eigene Dörfer durchsuchen
-			if(Buttons.TABLE_OWN_VILLAGES_IN_PROVINZ.isPresent()) {
+			if (Buttons.TABLE_OWN_VILLAGES_IN_PROVINZ.isPresent()) {
 				WebElement element = Buttons.TABLE_OWN_VILLAGES_IN_PROVINZ.getWebelement();
-				
+
 				String elementSource = element.getAttribute("innerHTML");
 
 				Pattern pattern = Pattern.compile("ng-binding\">(.*?)</td>");
@@ -402,24 +462,22 @@ public class Main {
 					counter++;
 				}
 			}
-			
+
 			OwnVillage.OWN.sort(new Comparator<OwnVillage>() {
 
 				public int compare(OwnVillage o1, OwnVillage o2) {
 					return o1.getName().compareTo(o2.getName());
 				}
-				
-				
+
 			});
-			
+
 			for (OwnVillage dorf : OwnVillage.OWN) {
-				
+
 				System.out.println(dorf);
-				
+
 			}
-			
-			
-			//Fremde Dörfer durchsuchen
+
+			// Fremde Dörfer durchsuchen
 			WebElement element = Buttons.TABLE_VILLAGES_IN_PROVINZ.getWebelement();
 
 			String elementSource = element.getAttribute("innerHTML");

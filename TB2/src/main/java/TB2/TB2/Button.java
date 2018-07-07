@@ -11,6 +11,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -53,6 +54,17 @@ public class Button {
 				return true;
 		}
 		return present;
+	}
+	
+	public void mouseOver() {
+		Actions action = new Actions(Main.getDriver());
+		
+		action.moveToElement(getWebelement()).moveToElement(Main.getDriver().findElement(By.xpath(this.getXpath()))).perform();;
+	}
+	
+	public void clickCoords(int x, int y) {
+		Actions a = new Actions(Main.getDriver()).moveToElement(this.getWebelement());
+		a.moveByOffset(x/2, y/2).click().perform();
 	}
 
 	public boolean isNOTPresent(int time, TimeUnit unit) {
