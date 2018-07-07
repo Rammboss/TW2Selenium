@@ -215,6 +215,11 @@ public class Main {
 		if (Buttons.KASERNE_AXTKAEMPFER.isPresent()) {
 			Buttons.KASERNE_AXTKAEMPFER.click();
 		}
+		Buttons.KASERNE_AXTKAEMPFER_VALUE.clear();
+		Buttons.KASERNE_AXTKAEMPFER_VALUE.sendText(20);
+		Buttons.KASERNE_AXTKAEMPFER_VALUE.sendText(Keys.ENTER);
+		
+		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
 	}
 
