@@ -26,14 +26,22 @@ public class Buttons {
 	public static Button EISEN = new Button("Eisen", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]");
 	public static Button PROVIANT = new Button("Proviant", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[4]/div[2]/div[1]");
 	public static Button DORFANSICHT = new Button("Proviant", "//*[@id=\"building-label-wrapper\"]");
+	public static Button KASERNENSLOT1 = new Button("Kaserne Slot 1", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[1]/div/div[1]");
+	public static Button KASERNENSLOT2 = new Button("Kaserne Slot 2", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[2]/div");
+	public static Button BAUSCHLEIFE = new Button("Bauschleife", "/html/body/div[2]/div[13]/div[1]/div[1]/div");
+	public static Button REKRUTIERUNGSSCHEIFE = new Button("Rekrutierungsschleife", "/html/body/div[2]/div[13]/div[1]/div[2]/div");
 
 	
 	
 	
 	//Buttons in Dorfansicht
-	public static Button DORFANSICHTLAYER = new Button("Dorfansicht Layer", "//*[@id=\"click-layer\"]");
+	public static Button SPEICHER = new Button("Speicher 1", "/html/body/div[4]/div[14]/a/span[1]");
+	public static Button SPEICHER2 = new Button("Speicher 2", "/html/body/div[2]/div[9]/div[4]/div/ul/li[1]/div/div");
 
-	public static Button SPEICHER = new Button("Speicher", "/html/body/div[2]/div[9]/div[4]/div/div[1]");
+	
+	
+	// public static Button DORFANSICHTLAYER = new Button("Dorfansicht Layer", "//*[@id=\"click-layer\"]");
+
 	
 	public static Button SPEICHER_HOLZ = new Button("Speicher Holz", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[2]/table[1]/tbody/tr[2]/td[1]/div/div/div[1]/span");
 	public static Button SPEICHER_LEHM = new Button("Speicher Lehm", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[2]/table[1]/tbody/tr[3]/td[1]/div/div/div[1]/span");
@@ -42,6 +50,10 @@ public class Buttons {
 	
 	// Kaserne
 	public static Button KASERNE_AXTKAEMPFER = new Button("Axtkämpfer rekrutieren", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[3]/div/div/div[2]/div[2]/div[1]/label[1]/table/tbody/tr[2]/td/div/div[1]");
+			
+					
+	public static Button KASERNE_AXTKAEMPFER_NICHT_VORHANDEN = new Button("Axtkämpfer nicht vorhanden", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[3]/div/div/div[2]/div[2]/div[1]/label[1]/table/tbody/tr[3]/td/div[2]");
+
 	public static Button KASERNE_AXTKAEMPFER_VALUE = new Button("Axtkämpfer Anzahl", "//*[@id=\"input-unit-recruit-axe\"]");
 
 	

@@ -29,6 +29,21 @@ public class Button {
 		this.label = label;
 		this.xpath = xpath;
 	}
+	
+	public boolean isClickable() {
+		try {
+
+			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(1000, TimeUnit.MILLISECONDS)
+					.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
+					.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+
+			return true;
+		} catch (TimeoutException e) {
+			// System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden
+			// werden!");
+			return false;
+		}
+	}
 
 	public boolean isPresent() {
 		try {
@@ -160,6 +175,13 @@ public class Button {
 		((JavascriptExecutor) Main.getDriver()).executeScript(
 				"arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", getWebelement());
 		Main.sleep(500, TimeUnit.MILLISECONDS);
+		
+	
+	}
+	
+	public String getAttribute(String attribute) {
+		
+		return getWebelement().getAttribute(attribute);
 	}
 
 	public void clear() {

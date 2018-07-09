@@ -75,13 +75,12 @@ public class Main {
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
 		provinzen.add(new Point(584, 568)); // Hohnsurfing
-		provinzen.add(new Point(572, 567)); // Folzol
-		provinzen.add(new Point(579, 555)); // Markmarkhohn
-		provinzen.add(new Point(595, 566)); // Balbalzol
-		provinzen.add(new Point(590, 554)); // Kanheim
-		provinzen.add(new Point(580, 580)); // Daufingbal
-		provinzen.add(new Point(568, 578)); // Foldauheim
-
+		 provinzen.add(new Point(572, 567)); // Folzol
+		 provinzen.add(new Point(579, 555)); // Markmarkhohn
+		 provinzen.add(new Point(595, 566)); // Balbalzol
+		 provinzen.add(new Point(590, 554)); // Kanheim
+		 provinzen.add(new Point(580, 580)); // Daufingbal
+		 provinzen.add(new Point(568, 578)); // Foldauheim
 
 		List<Dorf> dorfListe = this.initProvinzen(provinzen);
 
@@ -102,7 +101,11 @@ public class Main {
 				Buttons.OBERFLAECHE.sendText("v");
 			}
 			sleep(1);
-			Buttons.DORFANSICHTLAYER.clickCoords(100, 300);
+			
+			Buttons.SPEICHER.click();
+			sleep(1);
+
+			Buttons.SPEICHER2.click();
 			sleep(1);
 
 			String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
@@ -118,14 +121,20 @@ public class Main {
 			Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 			Buttons.OBERFLAECHE.sendText("v");
 
+			Buttons.REKRUTIERUNGSSCHEIFE.click();
+			int anzahl = 50;
+
 			if ((currentHolz >= max || currentLehm >= max || currentEisen >= max)
-					&& Integer.parseInt(Buttons.PROVIANT.getText()) > 20) {
-				System.out.println("Baue 20 axtkämpfer");
-				baue20Axt();
+					&& Integer.parseInt(Buttons.PROVIANT.getText()) > anzahl
+					|| Buttons.KASERNENSLOT1.getAttribute("tooltip-content").equals("Kaserne öffnen")) {
+				System.out.println("Baue " + anzahl + " axtkämpfer");
+				baueAxt(anzahl);
 			} else {
-				System.out.println("Vorraussetzungen für 20 axtkämpfer nicht erfüllt!");
+				System.out.println("Vorraussetzungen für " + anzahl + " axtkämpfer nicht erfüllt!");
 
 			}
+
+			Buttons.BAUSCHLEIFE.click();
 
 			this.initVorlagen(this.getAnzahlAngriffe());
 
@@ -205,7 +214,7 @@ public class Main {
 
 			System.out.println("Dorfliste size:" + dorfListe.size());
 			System.out.println("Aktueller Stand: " + Main.index);
-			
+
 			// checkDoerfer(600, dorfListe, this);
 			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(15); stop > System.nanoTime();) {
 
@@ -220,19 +229,30 @@ public class Main {
 		}
 	}
 
-	private void baue20Axt() {
+	private void baueAxt(int anzahl) {
 
 		Buttons.OBERFLAECHE.sendText("b");
 		sleep(1);
 		Buttons.KASERNE_AXTKAEMPFER.scrollToElement("start");
-		if (Buttons.KASERNE_AXTKAEMPFER.isPresent()) {
+		sleep(1);
+		System.out.println(Buttons.KASERNE_AXTKAEMPFER_NICHT_VORHANDEN.isPresent());
+		System.out.println(Buttons.KASERNE_AXTKAEMPFER.isPresent());
+
+		if (Buttons.KASERNE_AXTKAEMPFER.isPresent() && !Buttons.KASERNE_AXTKAEMPFER_NICHT_VORHANDEN.isPresent()) {
 			Buttons.KASERNE_AXTKAEMPFER.click();
+
+			Buttons.KASERNE_AXTKAEMPFER_VALUE.clear();
+			Buttons.KASERNE_AXTKAEMPFER_VALUE.sendText(anzahl);
+			Buttons.KASERNE_AXTKAEMPFER_VALUE.sendText(Keys.ENTER);
 		}
-		Buttons.KASERNE_AXTKAEMPFER_VALUE.clear();
-		Buttons.KASERNE_AXTKAEMPFER_VALUE.sendText(20);
-		Buttons.KASERNE_AXTKAEMPFER_VALUE.sendText(Keys.ENTER);
 
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+		Buttons.ZEITLEISTE.click();
+		sleep(1);
+
+		Buttons.ZEITLEISTE.click();
+		sleep(1);
 
 	}
 
