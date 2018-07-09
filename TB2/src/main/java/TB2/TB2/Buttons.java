@@ -25,6 +25,7 @@ public class Buttons {
 	public static Button LEHM = new Button("Lehm", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]/div[1]");
 	public static Button EISEN = new Button("Eisen", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]");
 	public static Button PROVIANT = new Button("Proviant", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[4]/div[2]/div[1]");
+	public static Button DORFANSICHT = new Button("Proviant", "//*[@id=\"building-label-wrapper\"]");
 
 	
 	

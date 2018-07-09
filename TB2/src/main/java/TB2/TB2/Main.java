@@ -70,15 +70,18 @@ public class Main {
 		this.login();
 		this.disableSound();
 
-		
-
 		this.ausgehendenAngriffeVerbergen();
 
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
-		provinzen.add(new Point(584, 568));
-		provinzen.add(new Point(572, 567));
-		provinzen.add(new Point(579, 555));
+		provinzen.add(new Point(584, 568)); // Hohnsurfing
+		provinzen.add(new Point(572, 567)); // Folzol
+		provinzen.add(new Point(579, 555)); // Markmarkhohn
+		provinzen.add(new Point(595, 566)); // Balbalzol
+		provinzen.add(new Point(590, 554)); // Kanheim
+		provinzen.add(new Point(580, 580)); // Daufingbal
+		provinzen.add(new Point(568, 578)); // Foldauheim
+
 
 		List<Dorf> dorfListe = this.initProvinzen(provinzen);
 
@@ -89,16 +92,23 @@ public class Main {
 
 		while (true) {
 			this.disableSound();
-			
+
 			// Rohstoffe checken
+			sleep(1);
+
 			Buttons.OBERFLAECHE.sendText("v");
-			sleep(2);
+			sleep(1);
+			if (!Buttons.DORFANSICHT.isPresent()) {
+				Buttons.OBERFLAECHE.sendText("v");
+			}
+			sleep(1);
 			Buttons.DORFANSICHTLAYER.clickCoords(100, 300);
+			sleep(1);
 
 			String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
 			String[] lehm = Buttons.SPEICHER_LEHM.getText().split(" / ");
 			String[] eisen = Buttons.SPEICHER_EISEN.getText().split(" / ");
-			
+
 			int max = Integer.parseInt(holz[1].replace(".", ""));
 			int currentHolz = Integer.parseInt(holz[0].replace(".", ""));
 			int currentLehm = Integer.parseInt(lehm[0].replace(".", ""));
@@ -112,7 +122,7 @@ public class Main {
 					&& Integer.parseInt(Buttons.PROVIANT.getText()) > 20) {
 				System.out.println("Baue 20 axtkämpfer");
 				baue20Axt();
-			}else {
+			} else {
 				System.out.println("Vorraussetzungen für 20 axtkämpfer nicht erfüllt!");
 
 			}
@@ -195,8 +205,9 @@ public class Main {
 
 			System.out.println("Dorfliste size:" + dorfListe.size());
 			System.out.println("Aktueller Stand: " + Main.index);
+			
 			// checkDoerfer(600, dorfListe, this);
-			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(5); stop > System.nanoTime();) {
+			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(15); stop > System.nanoTime();) {
 
 				if (Buttons.COMPLETE_BUILDING.isPresent()) {
 					Buttons.COMPLETE_BUILDING.click();
@@ -220,7 +231,7 @@ public class Main {
 		Buttons.KASERNE_AXTKAEMPFER_VALUE.clear();
 		Buttons.KASERNE_AXTKAEMPFER_VALUE.sendText(20);
 		Buttons.KASERNE_AXTKAEMPFER_VALUE.sendText(Keys.ENTER);
-		
+
 		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
 	}
