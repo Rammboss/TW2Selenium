@@ -75,12 +75,12 @@ public class Main {
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
 		provinzen.add(new Point(584, 568)); // Hohnsurfing
-		 provinzen.add(new Point(572, 567)); // Folzol
-		 provinzen.add(new Point(579, 555)); // Markmarkhohn
-		 provinzen.add(new Point(595, 566)); // Balbalzol
-		 provinzen.add(new Point(590, 554)); // Kanheim
-		 provinzen.add(new Point(580, 580)); // Daufingbal
-		 provinzen.add(new Point(568, 578)); // Foldauheim
+		provinzen.add(new Point(572, 567)); // Folzol
+		provinzen.add(new Point(579, 555)); // Markmarkhohn
+		provinzen.add(new Point(595, 566)); // Balbalzol
+		provinzen.add(new Point(590, 554)); // Kanheim
+		provinzen.add(new Point(580, 580)); // Daufingbal
+		provinzen.add(new Point(568, 578)); // Foldauheim
 
 		List<Dorf> dorfListe = this.initProvinzen(provinzen);
 
@@ -101,25 +101,30 @@ public class Main {
 				Buttons.OBERFLAECHE.sendText("v");
 			}
 			sleep(1);
-			
+
 			Buttons.SPEICHER.click();
 			sleep(1);
 
 			Buttons.SPEICHER2.click();
 			sleep(1);
+			int max = 100;
+			int currentHolz = 0;
+			int currentLehm = 0;
+			int currentEisen = 0;
+			if (Buttons.SPEICHER_HOLZ.isPresent()) {
+				String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
+				String[] lehm = Buttons.SPEICHER_LEHM.getText().split(" / ");
+				String[] eisen = Buttons.SPEICHER_EISEN.getText().split(" / ");
 
-			String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
-			String[] lehm = Buttons.SPEICHER_LEHM.getText().split(" / ");
-			String[] eisen = Buttons.SPEICHER_EISEN.getText().split(" / ");
-
-			int max = Integer.parseInt(holz[1].replace(".", ""));
-			int currentHolz = Integer.parseInt(holz[0].replace(".", ""));
-			int currentLehm = Integer.parseInt(lehm[0].replace(".", ""));
-
-			int currentEisen = Integer.parseInt(eisen[0].replace(".", ""));
+				max = Integer.parseInt(holz[1].replace(".", ""));
+				currentHolz = Integer.parseInt(holz[0].replace(".", ""));
+				currentLehm = Integer.parseInt(lehm[0].replace(".", ""));
+				currentEisen = Integer.parseInt(eisen[0].replace(".", ""));
+			}
 
 			Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 			Buttons.OBERFLAECHE.sendText("v");
+			sleep(1);
 
 			Buttons.REKRUTIERUNGSSCHEIFE.click();
 			int anzahl = 50;

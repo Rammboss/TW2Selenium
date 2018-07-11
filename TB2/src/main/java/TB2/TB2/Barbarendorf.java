@@ -7,7 +7,7 @@ public class Barbarendorf extends Dorf {
 
 	private Timestamp attackedAt;
 	
-	private static final int FARM_INTERVALL = 90;
+	private static final int FARM_INTERVALL = 50;
 
 	public Barbarendorf(int punkte, Point coordinaten) {
 		super("Barbarendorf", punkte, coordinaten);

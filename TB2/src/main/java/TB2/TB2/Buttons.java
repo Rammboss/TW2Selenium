@@ -37,7 +37,7 @@ public class Buttons {
 	//Buttons in Dorfansicht
 	public static Button SPEICHER = new Button("Speicher 1", "/html/body/div[4]/div[14]/a/span[1]");
 	public static Button SPEICHER2 = new Button("Speicher 2", "/html/body/div[2]/div[9]/div[4]/div/ul/li[1]/div/div");
-
+	
 	
 	
 	// public static Button DORFANSICHTLAYER = new Button("Dorfansicht Layer", "//*[@id=\"click-layer\"]");
