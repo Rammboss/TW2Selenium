@@ -183,6 +183,18 @@ public class Button {
 		
 		return getWebelement().getAttribute(attribute);
 	}
+	public boolean compareAttribute(String attr, String value)   {
+		
+		String tmp = this.getWebelement().getAttribute(attr);
+		
+		if (tmp != null) {
+			return tmp.equals(value);
+
+		}
+		// falls element nicht existiert etc
+		return false;
+		
+	}
 
 	public void clear() {
 

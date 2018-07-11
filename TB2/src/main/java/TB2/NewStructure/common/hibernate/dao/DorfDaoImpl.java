@@ -35,4 +35,22 @@ public class DorfDaoImpl extends AbstractDao implements DorfDao {
 		return (Dorf) getSession().get(Dorf.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Dorf> findAll() {
+		Criteria criteria = getSession().createCriteria(Dorf.class);
+		List<Dorf> list  = criteria.list();
+		
+		for(int i = 0; i < list.size(); i++) {
+			if (list.get(i).getClass() == Dorf.class) {
+				
+				
+			}else {
+				list.remove(i);
+				i--;
+			}
+		}
+		
+		return list;
+	}
+
 }

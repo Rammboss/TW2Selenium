@@ -2,18 +2,23 @@ package TB2.NewStructure.common.hibernate.model;
 
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
 @Entity
-@Table(name = "DORF")
+@Table(name = "Dorf")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(
+	    name="type",
+	    discriminatorType=DiscriminatorType.STRING
+	)
 public class Dorf {
 
 	@Id
@@ -28,15 +33,16 @@ public class Dorf {
 	@Column(name = "NAME")
 	private String name;
 	
-	@Column(name = "LASTATTACK")
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-    private LocalDateTime time;
+	@Column(name = "PUNKTE")
+	private int punkte;
+	
 
-	public Dorf(int x, int y, String name, LocalDateTime time) {
+
+	public Dorf(int x, int y, String name, int punkte) {
 		this.x = x;
 		this.y = y;
 		this.name = name;
-		this.time = time;
+		this.punkte = punkte;
 
 	}
 
@@ -76,12 +82,13 @@ public class Dorf {
 		this.name = name;
 	}
 
-	public LocalDateTime getTime() {
-		return time;
+
+	public int getPunkte() {
+		return punkte;
 	}
 
-	public void setTime(LocalDateTime time) {
-		this.time = time;
+	public void setPunkte(int punkte) {
+		this.punkte = punkte;
 	}
 
 	@Override
@@ -111,7 +118,7 @@ public class Dorf {
 
 	@Override
 	public String toString() {
-		return "Dorf [id=" + id + ", x=" + x + ", y=" + y + ", name=" + name + ", time=" + time + "]";
+		return "Dorf [id=" + id + ", x=" + x + ", y=" + y + ", name=" + name + "]";
 	}
 	
 

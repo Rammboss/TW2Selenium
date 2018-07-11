@@ -38,8 +38,8 @@ public class HibernateConfiguration {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://192.168.0.221:3306/DatabesBot");
-        dataSource.setUsername("root");
+        dataSource.setUrl("jdbc:mysql://192.168.0.221:3306/DatabasedBot");
+        dataSource.setUsername("bot");
         dataSource.setPassword("kalterhund");
         return dataSource;
     }
@@ -47,6 +47,7 @@ public class HibernateConfiguration {
     private Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        properties.put("hibernate.hbm2ddl.auto", "update");
         properties.put("hibernate.show_sql", false);
         properties.put("hibernate.format_sql", false);
         return properties;        

@@ -15,5 +15,6 @@ public interface DorfService {
 	
 	Dorf findById(int id);
 
+	List<Dorf> findAll();
 
 }

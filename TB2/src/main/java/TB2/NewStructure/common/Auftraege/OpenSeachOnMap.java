@@ -12,7 +12,7 @@ public class OpenSeachOnMap extends Auftrag {
 
 	@Override
 	public boolean check() {
-		return Buttons.X_KOORDINATE.isPresent();
+		return Buttons.X_KOORDINATE.isPresent() && Buttons.Y_KOORDINATE.isPresent();
 	}
 
 	@Override

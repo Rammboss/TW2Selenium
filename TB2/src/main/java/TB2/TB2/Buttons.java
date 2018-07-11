@@ -26,7 +26,10 @@ public class Buttons {
 	public static Button EISEN = new Button("Eisen", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]");
 	public static Button PROVIANT = new Button("Proviant", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[4]/div[2]/div[1]");
 	public static Button DORFANSICHT = new Button("Proviant", "//*[@id=\"building-label-wrapper\"]");
-	public static Button KASERNENSLOT1 = new Button("Kaserne Slot 1", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[1]/div/div[1]");
+	public static Button KASERNENSLOT1 = new Button("Kaserne Slot 1", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[1]/div");
+	public static Button KASERNENSLOT11 = new Button("Kaserne Slot 2", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[1]/div/div[1]");
+
+	
 	public static Button KASERNENSLOT2 = new Button("Kaserne Slot 2", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[2]/div");
 	public static Button BAUSCHLEIFE = new Button("Bauschleife", "/html/body/div[2]/div[13]/div[1]/div[1]/div");
 	public static Button REKRUTIERUNGSSCHEIFE = new Button("Rekrutierungsschleife", "/html/body/div[2]/div[13]/div[1]/div[2]/div");
@@ -36,6 +39,9 @@ public class Buttons {
 	
 	//Buttons in Dorfansicht
 	public static Button SPEICHER = new Button("Speicher 1", "/html/body/div[4]/div[14]/a/span[1]");
+	public static Button SPEICHER1 = new Button("Speicher 1-2", "/html/body/div[4]/div[13]/a/span[1]");
+
+	
 	public static Button SPEICHER2 = new Button("Speicher 2", "/html/body/div[2]/div[9]/div[4]/div/ul/li[1]/div/div");
 	
 	

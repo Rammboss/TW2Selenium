@@ -35,4 +35,8 @@ public class DorfServiceImpl implements DorfService {
 		return dao.findById(id);
 	}
 
+	public List<Dorf> findAll() {
+		return dao.findAll();
+	}
+
 }
