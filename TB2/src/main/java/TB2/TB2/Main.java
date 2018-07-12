@@ -82,8 +82,6 @@ public class Main {
 		this.login();
 		this.disableSound();
 
-		this.ausgehendenAngriffeVerbergen();
-
 		// Privinzen einlesen
 		List<Point> provinzen = new ArrayList<Point>();
 		provinzen.add(new Point(584, 568)); // Hohnsurfing
@@ -97,9 +95,6 @@ public class Main {
 		provinzen.add(new Point(547, 588)); // Daufahldau
 		provinzen.add(new Point(556, 577)); // Balfingfol
 
-		
-		
-
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		DorfService serviceDorf = (DorfService) context.getBean("dorfService");
 		EigenesDorfService serviceEigenesDorf = (EigenesDorfService) context.getBean("eigenesDorfService");
@@ -110,18 +105,18 @@ public class Main {
 		List<Barbarendorf> barbarendoerfer = serviceBabarendorf.findAll();
 
 		if (Main.eigene.size() == 0 || dorfListe.size() == 0) {
+			this.ausgehendenAngriffeVerbergen();
 
 			dorfListe = this.initProvinzen(provinzen);
 			Main.eigene = serviceEigenesDorf.findAll();
 			dorfListe = serviceDorf.findAll();
 			barbarendoerfer = serviceBabarendorf.findAll();
+
+			this.ausgehendenAngriffeVerbergen();
+
 		}
-		
-		
 
 		// Befehle wieder anzeigen
-		this.ausgehendenAngriffeVerbergen();
-
 		this.babas = barbarendoerfer;
 
 		while (true) {
@@ -225,6 +220,14 @@ public class Main {
 				}
 				sleep(5);
 			}
+			context.close();
+			context = new AnnotationConfigApplicationContext(AppConfig.class);
+			serviceDorf = (DorfService) context.getBean("dorfService");
+			serviceEigenesDorf = (EigenesDorfService) context.getBean("eigenesDorfService");
+			serviceBabarendorf = (BarbarendorfService) context.getBean("barbarenDorfService");
+
+			dorfListe = serviceDorf.findAll();
+			barbarendoerfer = serviceBabarendorf.findAll();
 
 			System.out.println("Driver wird neugestartet!");
 			this.restartDriver();
@@ -233,54 +236,54 @@ public class Main {
 
 	private void rohstoffeCheckenUndAxtBauen() {
 		// Rohstoffe checken
-					sleep(1);
+		sleep(1);
 
-					Buttons.OBERFLAECHE.sendText("v");
-					sleep(1);
-					if (!Buttons.DORFANSICHT.isPresent()) {
-						Buttons.OBERFLAECHE.sendText("v");
-					}
-					sleep(1);
+		Buttons.OBERFLAECHE.sendText("v");
+		sleep(1);
+		if (!Buttons.DORFANSICHT.isPresent()) {
+			Buttons.OBERFLAECHE.sendText("v");
+		}
+		sleep(1);
 
-					Buttons.SPEICHER.click();
-					Buttons.SPEICHER1.click();
-					sleep(1);
+		Buttons.SPEICHER.click();
+		Buttons.SPEICHER1.click();
+		sleep(1);
 
-					Buttons.SPEICHER2.click();
-					sleep(1);
-					int max = 100;
-					int currentHolz = 0;
-					int currentLehm = 0;
-					int currentEisen = 0;
-					if (Buttons.SPEICHER_HOLZ.isPresent()) {
-						String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
-						String[] lehm = Buttons.SPEICHER_LEHM.getText().split(" / ");
-						String[] eisen = Buttons.SPEICHER_EISEN.getText().split(" / ");
+		Buttons.SPEICHER2.click();
+		sleep(1);
+		int max = 100;
+		int currentHolz = 0;
+		int currentLehm = 0;
+		int currentEisen = 0;
+		if (Buttons.SPEICHER_HOLZ.isPresent()) {
+			String[] holz = Buttons.SPEICHER_HOLZ.getText().split(" / ");
+			String[] lehm = Buttons.SPEICHER_LEHM.getText().split(" / ");
+			String[] eisen = Buttons.SPEICHER_EISEN.getText().split(" / ");
 
-						max = Integer.parseInt(holz[1].replace(".", ""));
-						currentHolz = Integer.parseInt(holz[0].replace(".", ""));
-						currentLehm = Integer.parseInt(lehm[0].replace(".", ""));
-						currentEisen = Integer.parseInt(eisen[0].replace(".", ""));
-					}
+			max = Integer.parseInt(holz[1].replace(".", ""));
+			currentHolz = Integer.parseInt(holz[0].replace(".", ""));
+			currentLehm = Integer.parseInt(lehm[0].replace(".", ""));
+			currentEisen = Integer.parseInt(eisen[0].replace(".", ""));
+		}
 
-					Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
-					Buttons.OBERFLAECHE.sendText("v");
-					sleep(1);
+		Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+		Buttons.OBERFLAECHE.sendText("v");
+		sleep(1);
 
-					Buttons.REKRUTIERUNGSSCHEIFE.click();
-					int anzahl = 50;
-					if ((currentHolz >= max || currentLehm >= max || currentEisen >= max)
-							&& Integer.parseInt(Buttons.PROVIANT.getText()) > anzahl
-							|| Buttons.KASERNENSLOT1.compareAttribute("tooltip-content", "Kaserne öffnen")) {
-						System.out.println("Baue " + anzahl + " axtkämpfer");
-						baueAxt(anzahl);
-					} else {
-						System.out.println("Vorraussetzungen für " + anzahl + " axtkämpfer nicht erfüllt!");
+		Buttons.REKRUTIERUNGSSCHEIFE.click();
+		int anzahl = 50;
+		if ((currentHolz >= max || currentLehm >= max || currentEisen >= max)
+				&& Integer.parseInt(Buttons.PROVIANT.getText()) > anzahl
+				|| Buttons.KASERNENSLOT1.compareAttribute("tooltip-content", "Kaserne öffnen")) {
+			System.out.println("Baue " + anzahl + " axtkämpfer");
+			baueAxt(anzahl);
+		} else {
+			System.out.println("Vorraussetzungen für " + anzahl + " axtkämpfer nicht erfüllt!");
 
-					}
+		}
 
-					Buttons.BAUSCHLEIFE.click();
-		
+		Buttons.BAUSCHLEIFE.click();
+
 	}
 
 	private void baueAxt(int anzahl) {
@@ -446,7 +449,7 @@ public class Main {
 
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.clear();
 			int tmp = Integer.parseInt(Buttons.ANZAHL_AXT.getText().replace(".", ""));
-			System.out.println(tmp);
+			
 			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.sendText(tmp / verbleibendeAngriffe);
 
 			if (tmp < 500) {

@@ -38,7 +38,7 @@ public class HibernateConfiguration {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://192.168.0.221:3306/DatabasedBot");
+        dataSource.setUrl("jdbc:mysql://192.168.0.220:3306/DatabasedBot");
         dataSource.setUsername("bot");
         dataSource.setPassword("kalterhund");
         return dataSource;
