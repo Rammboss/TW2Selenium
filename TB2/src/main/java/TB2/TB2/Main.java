@@ -201,19 +201,22 @@ public class Main {
 			}
 			if (!Buttons.X_KOORDINATE.isPresent(1))
 				Buttons.AUF_WELTKARTE_SUCHEN.click();
-			Buttons.X_KOORDINATE.clear();
-			Buttons.X_KOORDINATE.sendText(serviceEigenesDorf.findByName("A001").get(0).getX());
-			Buttons.Y_KOORDINATE.clear();
-			Buttons.Y_KOORDINATE.sendText(serviceEigenesDorf.findByName("A001").get(0).getY());
-			Buttons.JUMP_TO.click();
-			Main.sleep(1);
-			if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
-				Buttons.ACTIVE_VILLAGE.click();
+			
+			if (serviceEigenesDorf.findByName("A001").size() != 0) {
+				Buttons.X_KOORDINATE.clear();
+				Buttons.X_KOORDINATE.sendText(serviceEigenesDorf.findByName("A001").get(0).getX());
+				Buttons.Y_KOORDINATE.clear();
+				Buttons.Y_KOORDINATE.sendText(serviceEigenesDorf.findByName("A001").get(0).getY());
+				Buttons.JUMP_TO.click();
+				Main.sleep(1);
+				if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
+					Buttons.ACTIVE_VILLAGE.click();
 
-			}
-			if (Buttons.ACTIVE_VILLAGE2.isPresent(5)) {
-				Buttons.ACTIVE_VILLAGE2.click();
+				}
+				if (Buttons.ACTIVE_VILLAGE2.isPresent(5)) {
+					Buttons.ACTIVE_VILLAGE2.click();
 
+				}
 			}
 
 			// checkDoerfer(600, dorfListe, this);
