@@ -21,9 +21,12 @@ import TB2.NewStructure.common.hibernate.configuration.AppConfig;
 import TB2.NewStructure.common.hibernate.model.Barbarendorf;
 import TB2.NewStructure.common.hibernate.model.Dorf;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
+import TB2.NewStructure.common.hibernate.model.Provinz;
 import TB2.NewStructure.common.hibernate.service.BarbarendorfService;
 import TB2.NewStructure.common.hibernate.service.DorfService;
 import TB2.NewStructure.common.hibernate.service.EigenesDorfService;
+import TB2.NewStructure.common.hibernate.service.PointService;
+import TB2.NewStructure.common.hibernate.service.ProvinzService;
 
 public class Main {
 
@@ -53,14 +56,16 @@ public class Main {
 		Buttons.PASSWORT.sendText("kalterhund");
 		Buttons.SPIELEN.click();
 
-		if (Buttons.LOGIN.isPresent(4))
-			Buttons.LOGIN.click();
+		if (Buttons.LOGIN.isPresent(8))
+			sleep(1);
+		Buttons.LOGIN.click();
 		sleep(1);
 		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(30);
 
 		while (Buttons.LOADING_SCREEN.isPresent() && stop > System.nanoTime()) {
 			sleep(1);
 		}
+		sleep(2);
 
 	}
 
@@ -70,7 +75,8 @@ public class Main {
 		try {
 			app.runTask();
 		} catch (Exception e) {
-			System.out.println("Ein unerwarteter Fehler ist aufgetreten!");
+			System.out.println("Ein unerwarteter Fehler ist aufgetreten! Treiber wird in 5 sekunden neu gestartet!");
+			sleep(5);
 			e.printStackTrace();
 			app.restartDriver();
 			app.runTask();
@@ -82,18 +88,18 @@ public class Main {
 		this.login();
 		this.disableSound();
 
-		// Privinzen einlesen
-		List<Point> provinzen = new ArrayList<Point>();
-		provinzen.add(new Point(584, 568)); // Hohnsurfing
-		provinzen.add(new Point(572, 567)); // Folzol
-		provinzen.add(new Point(579, 555)); // Markmarkhohn
-		provinzen.add(new Point(595, 566)); // Balbalzol
-		provinzen.add(new Point(590, 554)); // Kanheim
-		provinzen.add(new Point(580, 580)); // Daufingbal
-		provinzen.add(new Point(568, 578)); // Foldauheim
-		provinzen.add(new Point(558, 591)); // Talzol
-		provinzen.add(new Point(547, 588)); // Daufahldau
-		provinzen.add(new Point(556, 577)); // Balfingfol
+		// // Privinzen einlesen
+		// List<Point> provinzen = new ArrayList<Point>();
+		// provinzen.add(new Point(584, 568)); // Hohnsurfing
+		// provinzen.add(new Point(572, 567)); // Folzol
+		// provinzen.add(new Point(579, 555)); // Markmarkhohn
+		// provinzen.add(new Point(595, 566)); // Balbalzol
+		// provinzen.add(new Point(590, 554)); // Kanheim
+		// provinzen.add(new Point(580, 580)); // Daufingbal
+		// provinzen.add(new Point(568, 578)); // Foldauheim
+		// provinzen.add(new Point(558, 591)); // Talzol
+		// provinzen.add(new Point(547, 588)); // Daufahldau
+		// provinzen.add(new Point(556, 577)); // Balfingfol
 
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		DorfService serviceDorf = (DorfService) context.getBean("dorfService");
@@ -107,7 +113,7 @@ public class Main {
 		if (Main.eigene.size() == 0 || dorfListe.size() == 0) {
 			this.ausgehendenAngriffeVerbergen();
 
-			dorfListe = this.initProvinzen(provinzen);
+			// dorfListe = this.initProvinzen(provinzen);
 			Main.eigene = serviceEigenesDorf.findAll();
 			dorfListe = serviceDorf.findAll();
 			barbarendoerfer = serviceBabarendorf.findAll();
@@ -149,6 +155,7 @@ public class Main {
 
 				if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS)
 						|| Buttons.PRODUKTION_STEIGERN2.isPresent(1000, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
+					sleep(1);
 					Buttons.OBERFLAECHE.sendText(1);
 
 					if (Buttons.ERROR_50_ANGRIFFE.isPresent(500, TimeUnit.MILLISECONDS)) {
@@ -209,15 +216,87 @@ public class Main {
 
 			}
 
-			System.out.println("Dorfliste size:" + dorfListe.size());
-			System.out.println("Aktueller Stand: " + Main.index);
-
 			// checkDoerfer(600, dorfListe, this);
 			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(15); stop > System.nanoTime();) {
 
-				if (Buttons.COMPLETE_BUILDING.isPresent()) {
-					Buttons.COMPLETE_BUILDING.click();
+				PointService servicePoint = (PointService) context.getBean("pointService");
+				ProvinzService serviceProvinz = (ProvinzService) context.getBean("provinzService");
+
+				for (TB2.NewStructure.common.hibernate.model.Point point : servicePoint.findAll()) {
+					if (Buttons.COMPLETE_BUILDING.isPresent()) {
+						Buttons.COMPLETE_BUILDING.click();
+					}
+
+					if (!Buttons.X_KOORDINATE.isPresent(1))
+						Buttons.AUF_WELTKARTE_SUCHEN.click();
+
+					Buttons.X_KOORDINATE.clear();
+					Buttons.X_KOORDINATE.sendText(point.getX());
+					Buttons.Y_KOORDINATE.clear();
+					Buttons.Y_KOORDINATE.sendText(point.getY());
+					Buttons.JUMP_TO.click();
+
+					if (Buttons.ACTIVE_VILLAGE.isPresent() || Buttons.DORFINFORMATIONEN.isPresent()
+							|| Buttons.DORFINFORMATIONEN1_2.isPresent() && Buttons.GRUPPEN_HINZUFUEGEN.isPresent()
+							|| Buttons.GRUPPEN_HINZUFUEGEN1_2.isPresent()
+									&& Buttons.NACHRICHT_SENDEN.isNOTPresent(500, TimeUnit.MILLISECONDS)) {
+						Buttons.DORFINFORMATIONEN.click();
+						Buttons.DORFINFORMATIONEN1_2.click();
+
+						String dorfname = Buttons.DORFINFORMATIONEN_NAME.getText().split(" ")[0];
+						int dorfpunkte = Integer.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+
+						serviceEigenesDorf.saveDorf(
+								new EigenesDorf(point.getX(), point.getY(), dorfname, dorfpunkte, "Rammboss"));
+
+						System.out.println("Eigenes Dorf hinzugefügt");
+
+						Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+					} else if (Buttons.PRODUKTION_STEIGERN.isPresent() || Buttons.PRODUKTION_STEIGERN2.isPresent()) {
+						Buttons.DORFINFORMATIONEN.click();
+						Buttons.DORFINFORMATIONEN1_2.click();
+
+						int dorfpunkte = Integer.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+
+						serviceBabarendorf.saveDorf(new Barbarendorf(point.getX(), point.getY(), dorfpunkte));
+						System.out.println("Barbarendorf hinzugefügt");
+
+						Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+					} else if (Buttons.NACHRICHT_SENDEN.isPresent() || Buttons.NACHRICHT_SENDEN2.isPresent()) {
+						Buttons.DORFINFORMATIONEN.click();
+						Buttons.DORFINFORMATIONEN1_2.click();
+
+						String dorfname = Buttons.DORFINFORMATIONEN_NAME.getText().split(" ")[0];
+						int dorfpunkte = Integer.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+
+						serviceDorf.saveDorf(new Dorf(point.getX(), point.getY(), dorfname, dorfpunkte));
+						System.out.println(" Dorf Gegner hinzugefügt");
+
+						Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+					} else {
+						Buttons.OBERFLAECHE.click();
+
+						if (Buttons.PROVINZ_BUTTON_PROVINZDOERVER.isPresent()) {
+							serviceProvinz.saveProvinz(new Provinz(point.getX(), point.getY(),
+									Buttons.PROVINZ_NAME.getText(), new LocalDateTime()));
+
+							System.out.println("Provinz hinzugefügt");
+
+							Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+						}
+					}
+
+					TB2.NewStructure.common.hibernate.model.Point p = servicePoint.findById(point.getId());
+					p.setChecked(true);
+					p.setCheckedAt(new LocalDateTime());
+
+					servicePoint.updatePoint(p);
 				}
+
 				sleep(5);
 			}
 			context.close();
@@ -243,13 +322,16 @@ public class Main {
 		if (!Buttons.DORFANSICHT.isPresent()) {
 			Buttons.OBERFLAECHE.sendText("v");
 		}
-		sleep(1);
+		sleep(5);
 
 		Buttons.SPEICHER.click();
 		Buttons.SPEICHER1.click();
 		sleep(1);
 
 		Buttons.SPEICHER2.click();
+		Buttons.SPEICHER2_1.click();
+		Buttons.SPEICHER2_3.click();
+
 		sleep(1);
 		int max = 100;
 		int currentHolz = 0;
@@ -316,7 +398,7 @@ public class Main {
 	private void disableSound() {
 		Buttons.EINSTELLUNGEN.click();
 		Buttons.EINSTELLUNGEN_SPIEL.click();
-		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("start");
+		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("end");
 		Buttons.EINSTELLUNGEN_SPIEL_ANNIMATION1.click();
 		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.scrollToElement("start");
 		Buttons.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.click();
@@ -447,14 +529,14 @@ public class Main {
 		if (verbleibendeAngriffe > 0) {
 			// Barbaren
 
-			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.clear();
+			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.clear();
 			int tmp = Integer.parseInt(Buttons.ANZAHL_AXT.getText().replace(".", ""));
-			
-			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.sendText(tmp / verbleibendeAngriffe);
+
+			Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.sendText(tmp / verbleibendeAngriffe);
 
 			if (tmp < 500) {
-				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.clear();
-				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN.sendText(20);
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.clear();
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.sendText(20);
 
 			}
 			// SPEER

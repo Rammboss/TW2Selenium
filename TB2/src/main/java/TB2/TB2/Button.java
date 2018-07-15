@@ -29,7 +29,7 @@ public class Button {
 		this.label = label;
 		this.xpath = xpath;
 	}
-	
+
 	public boolean isClickable() {
 		try {
 
@@ -70,16 +70,18 @@ public class Button {
 		}
 		return present;
 	}
-	
+
 	public void mouseOver() {
 		Actions action = new Actions(Main.getDriver());
-		
-		action.moveToElement(getWebelement()).moveToElement(Main.getDriver().findElement(By.xpath(this.getXpath()))).perform();;
+
+		action.moveToElement(getWebelement()).moveToElement(Main.getDriver().findElement(By.xpath(this.getXpath())))
+				.perform();
+		;
 	}
-	
+
 	public void clickCoords(int x, int y) {
 		Actions a = new Actions(Main.getDriver()).moveToElement(this.getWebelement());
-		a.moveByOffset(x/2, y/2).click().perform();
+		a.moveByOffset(x / 2, y / 2).click().perform();
 	}
 
 	public boolean isNOTPresent(int time, TimeUnit unit) {
@@ -175,30 +177,32 @@ public class Button {
 		((JavascriptExecutor) Main.getDriver()).executeScript(
 				"arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", getWebelement());
 		Main.sleep(500, TimeUnit.MILLISECONDS);
-		
-	
+
 	}
-	
+
 	public String getAttribute(String attribute) {
-		
+
 		return getWebelement().getAttribute(attribute);
 	}
-	public boolean compareAttribute(String attr, String value)   {
-		
+
+	public boolean compareAttribute(String attr, String value) {
+
 		String tmp = this.getWebelement().getAttribute(attr);
-		
+
 		if (tmp != null) {
 			return tmp.equals(value);
 
 		}
 		// falls element nicht existiert etc
 		return false;
-		
+
 	}
 
 	public void clear() {
+		if (isPresent()) {
+			getWebelement().clear();
 
-		getWebelement().clear();
+		}
 
 	}
 

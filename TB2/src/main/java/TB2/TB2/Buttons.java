@@ -34,7 +34,9 @@ public class Buttons {
 	public static Button BAUSCHLEIFE = new Button("Bauschleife", "/html/body/div[2]/div[13]/div[1]/div[1]/div");
 	public static Button REKRUTIERUNGSSCHEIFE = new Button("Rekrutierungsschleife", "/html/body/div[2]/div[13]/div[1]/div[2]/div");
 
-	
+	public static Button PROVINZ_BUTTON_PROVINZDOERVER = new Button("Provinzdörfer", "/html/body/div[2]/section/div/div/div[1]/div/div[1]/div/div/a");
+	public static Button PROVINZ_NAME = new Button("Provinzname", "/html/body/div[2]/section/div/header/h2");
+
 	
 	
 	//Buttons in Dorfansicht
@@ -43,6 +45,9 @@ public class Buttons {
 
 	
 	public static Button SPEICHER2 = new Button("Speicher 2", "/html/body/div[2]/div[9]/div[4]/div/ul/li[1]/div/div");
+	public static Button SPEICHER2_1 = new Button("Speicher 2-1", "/html/body/div[2]/div[9]/div[3]/div/ul/li[1]/div/div");
+	public static Button SPEICHER2_3 = new Button("Speicher 2-3", "/html/body/div[2]/div[9]/div[5]/div/ul/li[1]/div/div");
+
 	
 	
 	
@@ -92,8 +97,19 @@ public class Buttons {
 	
 	// Für lowe Rechner
 	public static Button PRODUKTION_STEIGERN2 = new Button("Produktion steigern","/html/body/div[2]/div[9]/div[5]/div/ul/li[9]/div/div");
-
 	
+	public static Button DORFINFORMATIONEN = new Button("Dorf Infos","/html/body/div[2]/div[9]/div[5]/div/ul/li[1]/div/div");
+	
+	public static Button DORFINFORMATIONEN1_2 = new Button("Dorf Infos 1-2","/html/body/div[2]/div[9]/div[4]/div/ul/li[1]/div/div");
+
+																		
+	public static Button DORFINFORMATIONEN_NAME = new Button("Dorf Infos Name","/html/body/div[2]/section/div/div[2]/div/div[1]/div/table[1]/tbody/tr[1]/td[2]/div/div[1]/span[2]");
+	public static Button DORFINFORMATIONEN_PUNKTE = new Button("Dorf Infos Punkte","/html/body/div[2]/section/div/div[2]/div/div[1]/div/table[1]/tbody/tr[2]/td[1]/div/div/span[2]");
+	
+	public static Button GRUPPEN_HINZUFUEGEN = new Button("Gruppen hinztufügen","/html/body/div[2]/div[9]/div[5]/div/ul/li[6]/div/div");
+	public static Button GRUPPEN_HINZUFUEGEN1_2 = new Button("Gruppen hinztufügen 1-2","/html/body/div[2]/div[9]/div[4]/div/ul/li[6]/div/div");
+
+																				
 
 	public static Button GLOBALE_VORLAGENLISTE = new Button("Globale Vorlagenliste","/html/body/div[2]/section/div/div[2]/div[1]/div/div[2]/div[2]/ul/li[2]/a");
 	public static Button GLOBALE_VORLAGENLISTE_STATUS= new Button("Globale Vorlagenliste Status","/html/body/div[4]/div/div/div/div/div/div[1]/div/div[2]/table/tbody/tr[2]/td[2]/div/div/div/div");
@@ -105,7 +121,7 @@ public class Buttons {
 	
 	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER= new Button("Globale Vorlagenliste Anzahl Speerträger","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[1]/td[1]/div/input");
 	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT= new Button("Globale Vorlagenliste Anzahl Schwertkämpfer","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[1]/td[2]/div/input");
-	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_BARBAREN= new Button("Globale Vorlagenliste Anzahl Barbaren","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[2]/td[1]/div/input");
+	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT= new Button("Globale Vorlagenliste Anzahl Barbaren","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[2]/td[1]/div/input");
 	public static Button GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_PALADIN= new Button("Globale Vorlagenliste Anzahl Paladin","/html/body/div[4]/div/div/div/div/div/div[1]/div/table[3]/tbody/tr[6]/td[2]/div/input");
 
 	
@@ -136,7 +152,7 @@ public class Buttons {
 	public static Button EINSTELLUNGEN_SPIEL= new Button("Einstellungen Spiel Tab öffnen","/html/body/div[2]/section/div/div/div[1]/div/div[2]/div/div/div/a");
 
 	public static Button EINSTELLUNGEN_SPIEL_ANNIMATION1= new Button("Annimationen auf 1 setzten","/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[2]/tbody/tr[3]/td[1]/div[2]/div/a[1]");
-
+																													
 	public static Button EINSTELLUNGEN_SPIEL_MUSIK_SOUND= new Button("Musik an/aus","/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[3]/tbody/tr[2]/td[2]/div[2]/div/a[1]");
 	public static Button EINSTELLUNGEN_SPIEL_EFFEKT_SOUND= new Button("Effekte Sound an/aus","/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[3]/tbody/tr[3]/td[2]/div[2]/div/a[1]");
 

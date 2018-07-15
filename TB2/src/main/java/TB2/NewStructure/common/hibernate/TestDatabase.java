@@ -1,43 +1,57 @@
 package TB2.NewStructure.common.hibernate;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-import org.joda.time.LocalDateTime;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import TB2.NewStructure.common.hibernate.configuration.AppConfig;
-import TB2.NewStructure.common.hibernate.model.Barbarendorf;
-import TB2.NewStructure.common.hibernate.model.Dorf;
-import TB2.NewStructure.common.hibernate.model.EigenesDorf;
-import TB2.NewStructure.common.hibernate.service.BarbarendorfService;
-import TB2.NewStructure.common.hibernate.service.DorfService;
-import TB2.NewStructure.common.hibernate.service.EigenesDorfService;
+import TB2.NewStructure.common.hibernate.configuration.HibernateConfiguration;
+import TB2.NewStructure.common.hibernate.model.Point;
+import TB2.NewStructure.common.hibernate.service.PointService;
 
 public class TestDatabase {
 
 	public static void main(String[] args) {
 
-		System.out.println(getDistance(585, 562, 565, 593) * 14 - 420);
-
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-		DorfService serviceDorf = (DorfService) context.getBean("dorfService");
+		PointService servicePoint = (PointService) context.getBean("pointService");
 
-		BarbarendorfService serviceBarbarendorf = (BarbarendorfService) context.getBean("barbarendorfService");
+		List<Point> pointlist = new ArrayList<Point>();
 
-		Barbarendorf d = new Barbarendorf(412, 422, 5000);
-		serviceBarbarendorf.saveDorf(d);
+		for (int x = 0; x <= 1000; x++) {
 
-		Dorf test = new Dorf(412, 422, "wurst", 5000);
-		serviceDorf.saveDorf(test);
-		List<Barbarendorf> list = serviceBarbarendorf.findAll();
+			for (int y = 0; y <= 1000; y++) {
+				pointlist.add(new Point(x, y, false));
+			}
 
-		d = (Barbarendorf) serviceBarbarendorf.findById(1);
+		}
 
-		d.setX(413);
-		serviceBarbarendorf.updateDorf(d);
+		pointlist.sort(new Comparator<Point>() {
+
+			public int compare(Point o1, Point o2) {
+				// TODO Auto-generated method stub
+				return getDistance((int) o1.getX(), 585, (int) o1.getY(), 565)
+						- getDistance((int) o2.getX(), 585, (int) o2.getY(), 565);
+			}
+		});
+		int i = 0;
+		for (Point point : pointlist) {
+			servicePoint.savePoint(point);
+			i++;
+			if ((i % 100000) == 0) {
+				context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+				servicePoint = (PointService) context.getBean("pointService");
+			}
+
+		}
+
 		context.close();
 
 	}
@@ -46,12 +60,14 @@ public class TestDatabase {
 		return value % 2 != 0;
 	}
 
-	public static double getDistance(int x1, int x2, int y1, int y2) {
+	public static int getDistance(int x1, int x2, int y1, int y2) {
 		double z1 = isodd(y1) ? x1 + 0.5 : x1 - 0.5;
 		double z2 = isodd(y2) ? x2 + 0.5 : x2 - 0.5;
 
 		double d1 = Math.sqrt(Math.pow((z1 - z2), 2) + 0.75 * Math.pow(y1 - y2, 2));
 		double d2 = Math.sqrt(Math.pow((x1 - x2), 2) + 0.75 * Math.pow((y1 - y2), 2));
-		return (d1 + d2) / 2;
+		int erg = (int) ((d1 + d2) / 2 * 10000);
+		return erg;
 	}
+
 }
