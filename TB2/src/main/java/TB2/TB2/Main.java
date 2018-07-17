@@ -34,9 +34,9 @@ public class Main {
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
 		driver = new FirefoxDriver();
-		 account = new Account("Rammboss", "kalterhund", "Gaillard");
+		account = new Account("Rammboss", "kalterhund", "Gaillard");
 		// account = new Account("DerZurecker", "aleyotmi1", "Gaillard");
-		//account = new Account("Don Porro", "Kacklappen", "Gaillard");
+		// account = new Account("Don Porro", "Kacklappen", "Gaillard");
 
 	}
 
@@ -106,7 +106,7 @@ public class Main {
 		EigenesDorfService serviceEigenesDorf = (EigenesDorfService) context.getBean("eigenesDorfService");
 		BarbarendorfService serviceBabarendorf = (BarbarendorfService) context.getBean("barbarenDorfService");
 
-		Main.eigene = serviceEigenesDorf.findByName(account.getSpielername());
+		Main.eigene = serviceEigenesDorf.findBySpieler(account.getSpielername());
 		List<Dorf> dorfListe = serviceDorf.findAll();
 		List<Barbarendorf> barbarendoerfer = serviceBabarendorf.findAll();
 		if (Main.eigene.size() != 0) {
@@ -118,7 +118,7 @@ public class Main {
 			this.ausgehendenAngriffeVerbergen();
 
 			// dorfListe = this.initProvinzen(provinzen);
-			Main.eigene = serviceEigenesDorf.findByName(account.getSpielername());
+			Main.eigene = serviceEigenesDorf.findBySpieler(account.getSpielername());
 			dorfListe = serviceDorf.findAll();
 			barbarendoerfer = serviceBabarendorf.findAll();
 
@@ -230,11 +230,11 @@ public class Main {
 
 			if (account.getErstesDorf() != null) {
 				Buttons.X_KOORDINATE.clear();
-				Buttons.X_KOORDINATE
-						.sendText(serviceEigenesDorf.findByName(account.getErstesDorf().getName()).get(0).getX());
+				Buttons.X_KOORDINATE.sendText(serviceEigenesDorf
+						.findBySpielerAndName(account.getErstesDorf().getName(), account.getSpielername()).getX());
 				Buttons.Y_KOORDINATE.clear();
-				Buttons.Y_KOORDINATE
-						.sendText(serviceEigenesDorf.findByName(account.getErstesDorf().getName()).get(0).getY());
+				Buttons.Y_KOORDINATE.sendText(serviceEigenesDorf
+						.findBySpielerAndName(account.getErstesDorf().getName(), account.getSpielername()).getY());
 				Buttons.JUMP_TO.click();
 				Main.sleep(1);
 				if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
@@ -257,7 +257,7 @@ public class Main {
 
 				for (int i = 0; i < points.size(); i++) {
 					if (points.get(i).isChecked()
-							&& points.get(i).getCheckedAt().plusHours(5).isBefore(new LocalDateTime())) {
+							&& points.get(i).getCheckedAt().plusHours(48).isBefore(new LocalDateTime())) {
 						points.remove(i);
 						i--;
 
@@ -447,7 +447,7 @@ public class Main {
 			serviceEigenesDorf = (EigenesDorfService) context.getBean("eigenesDorfService");
 			serviceBabarendorf = (BarbarendorfService) context.getBean("barbarenDorfService");
 
-			Main.eigene = serviceEigenesDorf.findByName(account.getSpielername());
+			Main.eigene = serviceEigenesDorf.findBySpieler(account.getSpielername());
 			dorfListe = serviceDorf.findAll();
 			barbarendoerfer = serviceBabarendorf.findAll();
 

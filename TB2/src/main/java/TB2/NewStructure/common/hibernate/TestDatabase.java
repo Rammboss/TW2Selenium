@@ -18,8 +18,27 @@ public class TestDatabase {
 
 	public static void main(String[] args) {
 		
-
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+		
+		HibernateConfiguration h = new HibernateConfiguration();
+		Session session =  (Session) h.sessionFactory().getConfiguration().configure().buildSessionFactory() ;
+		Transaction tx = session.beginTransaction();
+		   
+		for ( int i=0; i<100000; i++ ) {
+		    Point p = new Point(1, 1, false);
+		    session.save(p);
+		    if ( i % 1000 == 0 ) { //20, same as the JDBC batch size
+		        //flush a batch of inserts and release memory:
+		        session.flush();
+		        session.clear();
+		    }
+		}
+		   
+		tx.commit();
+		session.close();
+		
+
 
 		PointService servicePoint = (PointService) context.getBean("pointService");
 

@@ -16,8 +16,8 @@ public class EigenesDorfServiceImpl implements EigenesDorfService {
 	@Autowired
 	private EigenesDorfDao dao;
 
-	public List<EigenesDorf> findByName(String name) {
-		return dao.findByName(name);
+	public EigenesDorf findBySpielerAndName(String name, String spieler) {
+		return (EigenesDorf) dao.findBySpielerAndName(name, spieler);
 	}
 
 	public void saveDorf(EigenesDorf dorf) {
@@ -41,6 +41,11 @@ public class EigenesDorfServiceImpl implements EigenesDorfService {
 
 	public EigenesDorf findByXandY(int x, int y) {
 		return dao.findByXandY(x, y);
+	}
+
+	public List<EigenesDorf> findBySpieler(String spieler) {
+		return dao.findBySpieler(spieler);
+
 	}
 
 }

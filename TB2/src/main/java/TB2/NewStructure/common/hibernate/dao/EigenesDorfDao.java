@@ -11,7 +11,9 @@ public interface EigenesDorfDao {
 
 	void saveDorf(EigenesDorf dorf);
 
-	List<EigenesDorf> findByName(String name);
+	EigenesDorf findBySpielerAndName(String name, String spieler);
+
+	List<EigenesDorf> findBySpieler(String spieler);
 
 	EigenesDorf findById(int id);
 

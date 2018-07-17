@@ -1,5 +1,6 @@
 package TB2.NewStructure.common.hibernate.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -23,10 +24,23 @@ public class EigenesDorfDaoImpl extends AbstractDao implements EigenesDorfDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<EigenesDorf> findByName(String name) {
+	public EigenesDorf findBySpielerAndName(String spieler, String name) {
+		Criteria criteria = getSession().createCriteria(EigenesDorf.class);
+		List<EigenesDorf> list = new ArrayList<EigenesDorf>();
+		if (list.size() == 1) {
+			return (EigenesDorf) list.get(0);
+
+		} else {
+			return new EigenesDorf(-1, -1, "Kein Name", -1, "Kein Spieler");
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<EigenesDorf> findBySpieler(String spieler) {
 		Criteria criteria = getSession().createCriteria(EigenesDorf.class);
 
-		return criteria.add(Restrictions.like("spieler", name)).list();
+		return criteria.add(Restrictions.like("spieler", spieler)).list();
 	}
 
 	public void updateDorf(EigenesDorf dorf) {
