@@ -26,7 +26,7 @@ public class EigenesDorfDaoImpl extends AbstractDao implements EigenesDorfDao {
 	public List<EigenesDorf> findByName(String name) {
 		Criteria criteria = getSession().createCriteria(EigenesDorf.class);
 
-		return criteria.add(Restrictions.like("name", name)).list();
+		return criteria.add(Restrictions.like("spieler", name)).list();
 	}
 
 	public void updateDorf(EigenesDorf dorf) {

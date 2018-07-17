@@ -34,9 +34,9 @@ public class Main {
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
 		driver = new FirefoxDriver();
-		// account = new Account("Rammboss", "kalterhund", "Gaillard");
+		 account = new Account("Rammboss", "kalterhund", "Gaillard");
 		// account = new Account("DerZurecker", "aleyotmi1", "Gaillard");
-		account = new Account("Don Porro", "Kacklappen", "Gaillard");
+		//account = new Account("Don Porro", "Kacklappen", "Gaillard");
 
 	}
 
