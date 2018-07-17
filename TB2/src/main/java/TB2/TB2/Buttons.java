@@ -21,6 +21,8 @@ public class Buttons {
 	public static Button PASSWORT = new Button("Passwort", "/html/body/div[3]/div[2]/header/div/div[4]/div[1]/div[1]/form/div[2]/input");
 	public static Button SPIELEN = new Button("Spielen", "/html/body/div[3]/div[2]/header/div/div[4]/div[1]/div[1]/form/button");
 	public static Button LOGIN = new Button("Login", "/html/body/div[4]/div[2]/div[2]/div[3]/div/div/div[1]/div[1]/div/div[1]/div[2]/div/ul/li[1]/a");
+	
+	
 	public static Button HOLZ = new Button("Holz", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[1]/div[2]/div[1]");
 	public static Button LEHM = new Button("Lehm", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]/div[1]");
 	public static Button EISEN = new Button("Eisen", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]");

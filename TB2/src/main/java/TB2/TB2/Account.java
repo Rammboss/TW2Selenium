@@ -8,13 +8,18 @@ public class Account {
 
 	private String passwort;
 	
+	private String welt;
+	
 	private EigenesDorf erstesDorf;
 
-	public Account(String spielername, String passwort) {
+	public Account(String spielername, String passwort, String welt) {
 		super();
 		this.spielername = spielername;
 		this.passwort = passwort;
+		this.welt = welt;
+		this.erstesDorf = erstesDorf;
 	}
+
 
 	public String getSpielername() {
 		return spielername;
@@ -39,6 +44,15 @@ public class Account {
 	public void setErstesDorf(EigenesDorf erstesDorf) {
 		this.erstesDorf = erstesDorf;
 	}
+
+	public String getWelt() {
+		return welt;
+	}
+
+	public void setWelt(String welt) {
+		this.welt = welt;
+	}
+	
 	
 
 }

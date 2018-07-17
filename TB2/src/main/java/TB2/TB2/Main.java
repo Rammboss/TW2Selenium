@@ -34,10 +34,9 @@ public class Main {
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
 		driver = new FirefoxDriver();
-		// account = new Account("Rammboss", "kalterhund");
-		account = new Account("DerZurecker", "aleyotmi1");
-		// account = new Account("DonPorro", "");
-
+		// account = new Account("Rammboss", "kalterhund", "Gaillard");
+		// account = new Account("DerZurecker", "aleyotmi1", "Gaillard");
+		account = new Account("Don Porro", "Kacklappen", "Gaillard");
 
 	}
 
@@ -64,7 +63,9 @@ public class Main {
 
 		if (Buttons.LOGIN.isPresent(8))
 			sleep(1);
-		Buttons.LOGIN.click();
+		Buttons.LOGIN.getWebelementsByAttributeWithCriteria("a", "class", "btn-orange btn-border small-icon",
+				account.getWelt()).click();
+
 		sleep(1);
 		long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(30);
 

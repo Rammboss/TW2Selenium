@@ -100,6 +100,8 @@ public class Button {
 		a.moveByOffset(x / 2, y / 2).click().perform();
 	}
 
+	
+
 	public boolean isNOTPresent(int time, TimeUnit unit) {
 
 		boolean present = true;
@@ -180,6 +182,26 @@ public class Button {
 
 			for (WebElement webElement : list) {
 				if (webElement.getAttribute(attribute).equals(tooltip)) {
+					return webElement;
+				}
+			}
+
+			return null;
+
+		} catch (StaleElementReferenceException e) {
+			System.out.println("Attempting to recover from StaleElementReferenceException ...");
+			return getWebelementsByAttribute(type, attribute, tooltip);
+		}
+	}
+	
+	public WebElement getWebelementsByAttributeWithCriteria(String type, String attribute, String tooltip, String criteria) {
+
+		try {
+			List<WebElement> list = Main.getDriver()
+					.findElements(By.cssSelector("" + type + "[" + attribute + "='" + tooltip + "']"));
+
+			for (WebElement webElement : list) {
+				if (webElement.getAttribute(attribute).equals(tooltip) && webElement.getAttribute("innerHTML").contains(criteria)) {
 					return webElement;
 				}
 			}
