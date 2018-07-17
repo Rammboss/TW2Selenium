@@ -17,6 +17,11 @@ public interface DorfDao {
 	void updateDorf(Dorf dorf);
 	
 	List<Dorf> findAll();
+	
+	Dorf findByXandY(int x, int y);
+
+	
+	
 
 
 }

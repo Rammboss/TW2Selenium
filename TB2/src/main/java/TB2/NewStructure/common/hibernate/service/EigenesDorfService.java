@@ -16,6 +16,8 @@ public interface EigenesDorfService {
 	Dorf findById(int id);
 	
 	List<EigenesDorf> findAll();
+	
+	EigenesDorf findByXandY(int x, int y);
 
 
 

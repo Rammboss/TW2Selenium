@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import TB2.NewStructure.common.hibernate.dao.PointDao;
 import TB2.NewStructure.common.hibernate.dao.ProvinzDao;
+import TB2.NewStructure.common.hibernate.model.Dorf;
 import TB2.NewStructure.common.hibernate.model.Provinz;
 
 @Service("provinzService")
@@ -38,5 +39,9 @@ public class ProvinzServiceImpl implements ProvinzService {
 
 	public List<Provinz> findAll() {
 		return dao.findAll();
+	}
+	
+	public Provinz findByXandY(int x, int y) {
+		return dao.findByXandY(x, y);
 	}
 }

@@ -74,8 +74,9 @@ public class Buttons {
 	public static Button LOGOUT = new Button("Ausloggen","//*[@id=\"button-logout\"]");
 	public static Button COMPLETE_BUILDING = new Button("Gebäude fertig stellen ","/html/body/div[2]/div[13]/div[2]/div/ul/li[1]/div[1]/div/div[1]/a");
 
+	public static Button BELOHNUNG_ANNEHMEN = new Button("Belohnung annehmen ","/html/body/div[4]/div/div/div/div/footer/ul/li/a");
 
-
+	
 	
 	
 	
@@ -93,19 +94,13 @@ public class Buttons {
 	public static Button Y_KOORDINATE = new Button("Y","/html/body/div[2]/footer/div/div[2]/div[1]/div/div/table[1]/tbody/tr/td[2]/input");
 	public static Button JUMP_TO = new Button("Dorf auswählen","/html/body/div[2]/footer/div/div[2]/div[1]/div/div/table[1]/tbody/tr/td[3]/div");
 	
+	public static Button MENUE_MITTE = new Button("Menu Mitte","/html/body/div[2]/div[9]/div[4]/div/div[1]");
 	public static Button PRODUKTION_STEIGERN = new Button("Produktion steigern","/html/body/div[2]/div[9]/div[4]/div/ul/li[9]/div/div");
-	
 	// Für lowe Rechner
-	public static Button PRODUKTION_STEIGERN2 = new Button("Produktion steigern","/html/body/div[2]/div[9]/div[5]/div/ul/li[9]/div/div");
-	
-	public static Button DORFINFORMATIONEN = new Button("Dorf Infos","/html/body/div[2]/div[9]/div[5]/div/ul/li[1]/div/div");
-	
-	public static Button DORFINFORMATIONEN1_2 = new Button("Dorf Infos 1-2","/html/body/div[2]/div[9]/div[4]/div/ul/li[1]/div/div");
-
-																		
+	public static Button PRODUKTION_STEIGERN2 = new Button("Produktion steigern1-2","/html/body/div[2]/div[9]/div[5]/div/ul/li[9]/div/div");
+	public static Button DORFINFORMATIONEN = new Button("Dorf Infos 1-2","/html/body/div[2]/div[9]/div[4]/div/ul/li[1]/div/div");
 	public static Button DORFINFORMATIONEN_NAME = new Button("Dorf Infos Name","/html/body/div[2]/section/div/div[2]/div/div[1]/div/table[1]/tbody/tr[1]/td[2]/div/div[1]/span[2]");
 	public static Button DORFINFORMATIONEN_PUNKTE = new Button("Dorf Infos Punkte","/html/body/div[2]/section/div/div[2]/div/div[1]/div/table[1]/tbody/tr[2]/td[1]/div/div/span[2]");
-	
 	public static Button GRUPPEN_HINZUFUEGEN = new Button("Gruppen hinztufügen","/html/body/div[2]/div[9]/div[5]/div/ul/li[6]/div/div");
 	public static Button GRUPPEN_HINZUFUEGEN1_2 = new Button("Gruppen hinztufügen 1-2","/html/body/div[2]/div[9]/div[4]/div/ul/li[6]/div/div");
 

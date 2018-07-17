@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Repository;
 
+import TB2.NewStructure.common.hibernate.model.Dorf;
 import TB2.NewStructure.common.hibernate.model.Provinz;
 
 @Repository("provinzDao")
@@ -28,7 +30,6 @@ public class ProvinzDaoImpl extends AbstractDao implements ProvinzDao {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public Provinz findById(int id) {
 		return (Provinz) getSession().get(Provinz.class, id);
 	}
@@ -38,6 +39,20 @@ public class ProvinzDaoImpl extends AbstractDao implements ProvinzDao {
 		Criteria criteria = getSession().createCriteria(Provinz.class);
 		List<Provinz> list = criteria.list();
 		return list;
+	}
+
+	public Provinz findByXandY(int x, int y) {
+		Criteria criteria = getSession().createCriteria(Provinz.class);
+
+		@SuppressWarnings("unchecked")
+		List<Provinz> list = criteria.add(Restrictions.like("x", x)).add(Restrictions.like("y", y)).list();
+
+		if (list.size() == 1) {
+			return list.get(0);
+
+		} else {
+			return new Provinz(-1, -1, "Keine Provinz", new LocalDateTime());
+		}
 	}
 
 }

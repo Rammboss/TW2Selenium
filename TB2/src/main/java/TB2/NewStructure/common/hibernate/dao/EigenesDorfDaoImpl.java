@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import TB2.NewStructure.common.hibernate.model.Barbarendorf;
 import TB2.NewStructure.common.hibernate.model.Dorf;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
+import TB2.NewStructure.common.hibernate.model.Provinz;
 
 @Repository("eigenesDorfDao")
 public class EigenesDorfDaoImpl extends AbstractDao implements EigenesDorfDao {
@@ -42,11 +43,25 @@ public class EigenesDorfDaoImpl extends AbstractDao implements EigenesDorfDao {
 
 	@SuppressWarnings("unchecked")
 	public List<EigenesDorf> findAll() {
-	
+
 		Criteria criteria = getSession().createCriteria(EigenesDorf.class);
-		
-		//List<EigenesDorf> tmp = criteria.add(Restrictions.like("spieler", "Rammboss")).list();
-		 return criteria.list();
-		
+
+		// List<EigenesDorf> tmp = criteria.add(Restrictions.like("spieler",
+		// "Rammboss")).list();
+		return criteria.list();
+
+	}
+
+	public EigenesDorf findByXandY(int x, int y) {
+		Criteria criteria = getSession().createCriteria(EigenesDorf.class);
+
+		List<EigenesDorf> list = criteria.add(Restrictions.like("x", x)).add(Restrictions.like("y", y)).list();
+
+		if (list.size() == 1) {
+			return (EigenesDorf) list.get(0);
+
+		} else {
+			return new EigenesDorf(-1, -1, "Kein Name", -1, "Kein Spieler");
+		}
 	}
 }

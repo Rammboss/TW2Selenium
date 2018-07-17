@@ -39,4 +39,8 @@ public class DorfServiceImpl implements DorfService {
 		return dao.findAll();
 	}
 
+	public Dorf findByXandY(int x, int y) {
+		return dao.findByXandY(x, y);
+	}
+
 }

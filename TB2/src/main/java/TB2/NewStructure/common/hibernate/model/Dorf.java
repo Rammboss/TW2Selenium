@@ -1,6 +1,5 @@
 package TB2.NewStructure.common.hibernate.model;
 
-
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -15,10 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Dorf")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(
-	    name="type",
-	    discriminatorType=DiscriminatorType.STRING
-	)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class Dorf {
 
 	@Id
@@ -32,11 +28,9 @@ public class Dorf {
 
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "PUNKTE")
 	private int punkte;
-	
-
 
 	public Dorf(int x, int y, String name, int punkte) {
 		this.x = x;
@@ -82,7 +76,6 @@ public class Dorf {
 		this.name = name;
 	}
 
-
 	public int getPunkte() {
 		return punkte;
 	}
@@ -95,6 +88,8 @@ public class Dorf {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + punkte;
 		result = prime * result + x;
 		result = prime * result + y;
 		return result;
@@ -109,6 +104,13 @@ public class Dorf {
 		if (getClass() != obj.getClass())
 			return false;
 		Dorf other = (Dorf) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (punkte != other.punkte)
+			return false;
 		if (x != other.x)
 			return false;
 		if (y != other.y)
@@ -120,6 +122,5 @@ public class Dorf {
 	public String toString() {
 		return "Dorf [id=" + id + ", x=" + x + ", y=" + y + ", name=" + name + "]";
 	}
-	
 
 }

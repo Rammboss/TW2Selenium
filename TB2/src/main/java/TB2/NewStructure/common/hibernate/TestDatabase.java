@@ -17,6 +17,7 @@ import TB2.NewStructure.common.hibernate.service.PointService;
 public class TestDatabase {
 
 	public static void main(String[] args) {
+		
 
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 

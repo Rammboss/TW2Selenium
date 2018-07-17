@@ -39,4 +39,8 @@ public class EigenesDorfServiceImpl implements EigenesDorfService {
 		return dao.findAll();
 	}
 
+	public EigenesDorf findByXandY(int x, int y) {
+		return dao.findByXandY(x, y);
+	}
+
 }

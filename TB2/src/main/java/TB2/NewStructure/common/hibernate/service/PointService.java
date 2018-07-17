@@ -9,7 +9,6 @@ public interface PointService {
 	
 	void savePoint(Point dorf);
 	
-
 	List<Point> findByName(String name);
 
 	void updatePoint(Point dorf);
@@ -17,6 +16,7 @@ public interface PointService {
 	Point findById(int id);
   	
 	List<Point> findAll();
+	
 	
 
 }

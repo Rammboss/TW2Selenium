@@ -8,6 +8,7 @@ import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -51,6 +52,21 @@ public class Button {
 			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(500, TimeUnit.MILLISECONDS)
 					.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
 					.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+
+			return true;
+		} catch (TimeoutException e) {
+			// System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden
+			// werden!");
+			return false;
+		}
+	}
+
+	public boolean isPresentByCSSSelector(String type, String attribute, String tooltip, int millis) {
+		try {
+
+			new FluentWait<WebDriver>(Main.getDriver()).withTimeout(millis, TimeUnit.MILLISECONDS)
+					.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class)
+					.until(ExpectedConditions.visibilityOf((getWebelementsByAttribute(type, attribute, tooltip))));
 
 			return true;
 		} catch (TimeoutException e) {
@@ -143,12 +159,44 @@ public class Button {
 
 	}
 
+	public boolean isDisplayed() {
+		return getWebelement().isDisplayed();
+	}
+
 	public String getCSSClass() {
+
 		return getWebelement().getAttribute("class");
 	}
 
 	public WebElement getWebelement() {
 		return Main.getDriver().findElement(By.xpath(xpath));
+	}
+
+	public WebElement getWebelementsByAttribute(String type, String attribute, String tooltip) {
+
+		try {
+			List<WebElement> list = Main.getDriver()
+					.findElements(By.cssSelector("" + type + "[" + attribute + "='" + tooltip + "']"));
+
+			for (WebElement webElement : list) {
+				if (webElement.getAttribute(attribute).equals(tooltip)) {
+					return webElement;
+				}
+			}
+
+			return null;
+
+		} catch (StaleElementReferenceException e) {
+			System.out.println("Attempting to recover from StaleElementReferenceException ...");
+			return getWebelementsByAttribute(type, attribute, tooltip);
+		}
+	}
+
+	public WebElement getWebelementsByText(String type, String text) {
+		List<WebElement> list = Main.getDriver()
+				.findElements(By.xpath("//" + type + "[contains(text(), '" + text + "')]"));
+
+		return list.get(0);
 	}
 
 	public List<WebElement> getWebelements() {
@@ -182,7 +230,19 @@ public class Button {
 
 	public String getAttribute(String attribute) {
 
-		return getWebelement().getAttribute(attribute);
+		try {
+			return getWebelement().getAttribute(attribute);
+
+		} catch (StaleElementReferenceException e) {
+
+			return "";
+
+		} catch (NoSuchElementException e) {
+
+			return "";
+
+		}
+
 	}
 
 	public boolean compareAttribute(String attr, String value) {

@@ -15,5 +15,7 @@ public interface BarbarendorfDao {
 	void updateDorf(Barbarendorf dorf);
 	
 	List<Barbarendorf> findAll();
+	
+	Barbarendorf findByXandY(int x, int y);
 
 }

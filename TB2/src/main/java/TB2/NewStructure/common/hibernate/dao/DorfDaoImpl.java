@@ -23,6 +23,21 @@ public class DorfDaoImpl extends AbstractDao implements DorfDao {
 		return criteria.add(Restrictions.like("name", name)).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public Dorf findByXandY(int x, int y) {
+		Criteria criteria = getSession().createCriteria(Dorf.class);
+
+		List<Dorf> list = criteria.add(Restrictions.like("x", x)).add(Restrictions.like("y", y)).list();
+
+		if (list.size() == 1) {
+			return (Dorf) list.get(0);
+
+		}else {
+			return new Dorf(-1, -1, "nichts", -1);
+		}
+
+	}
+
 	public void updateDorf(Dorf dorf) {
 		getSession().update(dorf);
 
@@ -38,18 +53,17 @@ public class DorfDaoImpl extends AbstractDao implements DorfDao {
 	@SuppressWarnings("unchecked")
 	public List<Dorf> findAll() {
 		Criteria criteria = getSession().createCriteria(Dorf.class);
-		List<Dorf> list  = criteria.list();
-		
-		for(int i = 0; i < list.size(); i++) {
+		List<Dorf> list = criteria.list();
+
+		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getClass() == Dorf.class) {
-				
-				
-			}else {
+
+			} else {
 				list.remove(i);
 				i--;
 			}
 		}
-		
+
 		return list;
 	}
 

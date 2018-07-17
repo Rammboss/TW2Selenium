@@ -26,4 +26,31 @@ public class EigenesDorf extends Dorf {
 		this.spieler = null;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((spieler == null) ? 0 : spieler.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EigenesDorf other = (EigenesDorf) obj;
+		if (spieler == null) {
+			if (other.spieler != null)
+				return false;
+		} else if (!spieler.equals(other.spieler))
+			return false;
+		return true;
+	}
+	
+	
+
 }

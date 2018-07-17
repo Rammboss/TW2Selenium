@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import TB2.NewStructure.common.hibernate.dao.BarbarendorfDao;
 import TB2.NewStructure.common.hibernate.model.Barbarendorf;
+import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 
 @Service("barbarenDorfService")
 @Transactional
@@ -40,6 +41,10 @@ public class BarbarendorfServiceImpl implements BarbarendorfService {
 
 	public List<Barbarendorf> findAll() {
 		return dao.findAll();
+	}
+	
+	public Barbarendorf findByXandY(int x, int y) {
+		return dao.findByXandY(x, y);
 	}
 
 }

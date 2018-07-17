@@ -53,4 +53,17 @@ public class BarbarendorfDaoImpl extends AbstractDao implements BarbarendorfDao 
 		return list;
 	}
 
+	public Barbarendorf findByXandY(int x, int y) {
+		Criteria criteria = getSession().createCriteria(Barbarendorf.class);
+
+		List<Barbarendorf> list = criteria.add(Restrictions.like("x", x)).add(Restrictions.like("y", y)).list();
+
+		if (list.size() == 1) {
+			return (Barbarendorf) list.get(0);
+
+		}else {
+			return new Barbarendorf(-1, -1, "Kein Dorfname", -1);
+		}
+	}
+
 }

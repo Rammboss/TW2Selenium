@@ -1,7 +1,6 @@
 package TB2.TB2;
 
 import java.awt.Point;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -35,9 +34,16 @@ public class Main {
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
 		driver = new FirefoxDriver();
+		// account = new Account("Rammboss", "kalterhund");
+		account = new Account("DerZurecker", "aleyotmi1");
+		// account = new Account("DonPorro", "");
+
+
 	}
 
 	public static WebDriver driver;
+
+	public static Account account;
 
 	public static int index;
 
@@ -52,8 +58,8 @@ public class Main {
 	public void login() {
 		driver.get("https://de.tribalwars2.com/");
 
-		Buttons.SPIELERNAME.sendText("Rammboss");
-		Buttons.PASSWORT.sendText("kalterhund");
+		Buttons.SPIELERNAME.sendText(account.getSpielername());
+		Buttons.PASSWORT.sendText(account.getPasswort());
 		Buttons.SPIELEN.click();
 
 		if (Buttons.LOGIN.isPresent(8))
@@ -86,39 +92,54 @@ public class Main {
 
 	private void runTask() {
 		this.login();
-		this.disableSound();
+		if (Buttons.BELOHNUNG_ANNEHMEN.isPresent()) {
+			Buttons.BELOHNUNG_ANNEHMEN.click();
+			sleep(5);
 
-		// // Privinzen einlesen
-		// List<Point> provinzen = new ArrayList<Point>();
-		// provinzen.add(new Point(584, 568)); // Hohnsurfing
-		// provinzen.add(new Point(572, 567)); // Folzol
-		// provinzen.add(new Point(579, 555)); // Markmarkhohn
-		// provinzen.add(new Point(595, 566)); // Balbalzol
-		// provinzen.add(new Point(590, 554)); // Kanheim
-		// provinzen.add(new Point(580, 580)); // Daufingbal
-		// provinzen.add(new Point(568, 578)); // Foldauheim
-		// provinzen.add(new Point(558, 591)); // Talzol
-		// provinzen.add(new Point(547, 588)); // Daufahldau
-		// provinzen.add(new Point(556, 577)); // Balfingfol
+		}
+
+		this.disableSound();
 
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		DorfService serviceDorf = (DorfService) context.getBean("dorfService");
 		EigenesDorfService serviceEigenesDorf = (EigenesDorfService) context.getBean("eigenesDorfService");
 		BarbarendorfService serviceBabarendorf = (BarbarendorfService) context.getBean("barbarenDorfService");
 
-		Main.eigene = serviceEigenesDorf.findAll();
+		Main.eigene = serviceEigenesDorf.findByName(account.getSpielername());
 		List<Dorf> dorfListe = serviceDorf.findAll();
 		List<Barbarendorf> barbarendoerfer = serviceBabarendorf.findAll();
+		if (Main.eigene.size() != 0) {
+			account.setErstesDorf(Main.eigene.get(0));
+
+		}
 
 		if (Main.eigene.size() == 0 || dorfListe.size() == 0) {
 			this.ausgehendenAngriffeVerbergen();
 
 			// dorfListe = this.initProvinzen(provinzen);
-			Main.eigene = serviceEigenesDorf.findAll();
+			Main.eigene = serviceEigenesDorf.findByName(account.getSpielername());
 			dorfListe = serviceDorf.findAll();
 			barbarendoerfer = serviceBabarendorf.findAll();
 
 			this.ausgehendenAngriffeVerbergen();
+
+		}
+		if (Main.eigene.size() != 0) {
+			if (!Buttons.X_KOORDINATE.isPresent(1))
+				Buttons.AUF_WELTKARTE_SUCHEN.click();
+			Buttons.X_KOORDINATE.clear();
+			Buttons.X_KOORDINATE.sendText(Main.eigene.get(0).getX());
+			Buttons.Y_KOORDINATE.clear();
+			Buttons.Y_KOORDINATE.sendText(Main.eigene.get(0).getY());
+			Buttons.JUMP_TO.click();
+		}
+
+		if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
+			Buttons.ACTIVE_VILLAGE.click();
+
+		}
+		if (Buttons.ACTIVE_VILLAGE2.isPresent(5)) {
+			Buttons.ACTIVE_VILLAGE2.click();
 
 		}
 
@@ -142,71 +163,77 @@ public class Main {
 
 			if (!Buttons.X_KOORDINATE.isPresent(1))
 				Buttons.AUF_WELTKARTE_SUCHEN.click();
+			if (Main.eigene.size() != 0) {
 
-			int counter = 0;
-			System.out.println("Farmen vorhanden: " + getFarmableBabas(this.babas).size());
-			for (Barbarendorf dorf : getFarmableBabas(this.babas)) {
-				Buttons.X_KOORDINATE.clear();
-				Buttons.X_KOORDINATE.sendText(dorf.getX());
-				Buttons.Y_KOORDINATE.clear();
-				Buttons.Y_KOORDINATE.sendText(dorf.getY());
-				Buttons.JUMP_TO.click();
-				Main.sleep(300, TimeUnit.MILLISECONDS);
+				int counter = 0;
+				System.out
+						.println("Farmen vorhanden: " + getFarmableBabas(this.babas, Main.eigene.get(counter)).size());
+				for (Barbarendorf dorf : getFarmableBabas(this.babas, Main.eigene.get(counter))) {
+					Buttons.X_KOORDINATE.clear();
+					Buttons.X_KOORDINATE.sendText(dorf.getX());
+					Buttons.Y_KOORDINATE.clear();
+					Buttons.Y_KOORDINATE.sendText(dorf.getY());
+					Buttons.JUMP_TO.click();
+					Main.sleep(300, TimeUnit.MILLISECONDS);
 
-				if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS)
-						|| Buttons.PRODUKTION_STEIGERN2.isPresent(1000, TimeUnit.MILLISECONDS) && dorf.isFarmable()) {
-					sleep(1);
-					Buttons.OBERFLAECHE.sendText(1);
+					if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS)
+							|| Buttons.PRODUKTION_STEIGERN2.isPresent(1000, TimeUnit.MILLISECONDS)
+									&& dorf.isFarmable(Main.eigene.get(counter))) {
+						sleep(1);
+						Buttons.OBERFLAECHE.sendText(1);
 
-					if (Buttons.ERROR_50_ANGRIFFE.isPresent(500, TimeUnit.MILLISECONDS)) {
-						sleep(5); // instead of click on message, because causes errors
+						if (Buttons.ERROR_50_ANGRIFFE.isPresent(500, TimeUnit.MILLISECONDS)) {
+							sleep(5); // instead of click on message, because causes errors
 
-						if (counter >= Main.eigene.size() - 1) {
-							break;
+							if (counter >= Main.eigene.size() - 1) {
+								break;
+							} else {
+
+								// Eigenes Dorf wechseln
+								counter++;
+								if (!Buttons.X_KOORDINATE.isPresent(1))
+									Buttons.AUF_WELTKARTE_SUCHEN.click();
+								Buttons.X_KOORDINATE.clear();
+								Buttons.X_KOORDINATE.sendText(Main.eigene.get(counter).getX());
+								Buttons.Y_KOORDINATE.clear();
+								Buttons.Y_KOORDINATE.sendText(Main.eigene.get(counter).getY());
+								Buttons.JUMP_TO.click();
+								if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
+									Buttons.ACTIVE_VILLAGE.click();
+
+								}
+								if (Buttons.ACTIVE_VILLAGE2.isPresent(5)) {
+									Buttons.ACTIVE_VILLAGE2.click();
+
+								}
+								sleep(1);
+								this.rohstoffeCheckenUndAxtBauen();
+
+								this.initVorlagen(this.getAnzahlAngriffe());
+
+								if (!Buttons.X_KOORDINATE.isPresent(1))
+									Buttons.AUF_WELTKARTE_SUCHEN.click();
+							}
+
 						} else {
+							Barbarendorf tmp = serviceBabarendorf.findById(dorf.getId());
+							tmp.setAttackedAt(new LocalDateTime());
 
-							// Eigenes Dorf wechseln
-							counter++;
-							if (!Buttons.X_KOORDINATE.isPresent(1))
-								Buttons.AUF_WELTKARTE_SUCHEN.click();
-							Buttons.X_KOORDINATE.clear();
-							Buttons.X_KOORDINATE.sendText(Main.eigene.get(counter).getX());
-							Buttons.Y_KOORDINATE.clear();
-							Buttons.Y_KOORDINATE.sendText(Main.eigene.get(counter).getY());
-							Buttons.JUMP_TO.click();
-							if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
-								Buttons.ACTIVE_VILLAGE.click();
-
-							}
-							if (Buttons.ACTIVE_VILLAGE2.isPresent(5)) {
-								Buttons.ACTIVE_VILLAGE2.click();
-
-							}
-							sleep(1);
-							this.rohstoffeCheckenUndAxtBauen();
-
-							this.initVorlagen(this.getAnzahlAngriffe());
-
-							if (!Buttons.X_KOORDINATE.isPresent(1))
-								Buttons.AUF_WELTKARTE_SUCHEN.click();
+							serviceBabarendorf.updateDorf(tmp);
 						}
-
-					} else {
-						Barbarendorf tmp = serviceBabarendorf.findById(dorf.getId());
-						tmp.setAttackedAt(new LocalDateTime());
-
-						serviceBabarendorf.updateDorf(tmp);
 					}
 				}
 			}
 			if (!Buttons.X_KOORDINATE.isPresent(1))
 				Buttons.AUF_WELTKARTE_SUCHEN.click();
-			
-			if (serviceEigenesDorf.findByName("A001").size() != 0) {
+
+			if (account.getErstesDorf() != null) {
 				Buttons.X_KOORDINATE.clear();
-				Buttons.X_KOORDINATE.sendText(serviceEigenesDorf.findByName("A001").get(0).getX());
+				Buttons.X_KOORDINATE
+						.sendText(serviceEigenesDorf.findByName(account.getErstesDorf().getName()).get(0).getX());
 				Buttons.Y_KOORDINATE.clear();
-				Buttons.Y_KOORDINATE.sendText(serviceEigenesDorf.findByName("A001").get(0).getY());
+				Buttons.Y_KOORDINATE
+						.sendText(serviceEigenesDorf.findByName(account.getErstesDorf().getName()).get(0).getY());
 				Buttons.JUMP_TO.click();
 				Main.sleep(1);
 				if (Buttons.ACTIVE_VILLAGE.isPresent(5)) {
@@ -220,12 +247,24 @@ public class Main {
 			}
 
 			// checkDoerfer(600, dorfListe, this);
-			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(15); stop > System.nanoTime();) {
+			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(30); stop > System.nanoTime();) {
 
 				PointService servicePoint = (PointService) context.getBean("pointService");
 				ProvinzService serviceProvinz = (ProvinzService) context.getBean("provinzService");
 
-				for (TB2.NewStructure.common.hibernate.model.Point point : servicePoint.findAll()) {
+				List<TB2.NewStructure.common.hibernate.model.Point> points = servicePoint.findAll();
+
+				for (int i = 0; i < points.size(); i++) {
+					if (points.get(i).isChecked()
+							&& points.get(i).getCheckedAt().plusHours(5).isBefore(new LocalDateTime())) {
+						points.remove(i);
+						i--;
+
+					}
+
+				}
+
+				for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
 					if (Buttons.COMPLETE_BUILDING.isPresent()) {
 						Buttons.COMPLETE_BUILDING.click();
 					}
@@ -234,66 +273,165 @@ public class Main {
 						Buttons.AUF_WELTKARTE_SUCHEN.click();
 
 					Buttons.X_KOORDINATE.clear();
-					Buttons.X_KOORDINATE.sendText(point.getX());
+					Buttons.X_KOORDINATE.sendText(points.get(i).getX());
 					Buttons.Y_KOORDINATE.clear();
-					Buttons.Y_KOORDINATE.sendText(point.getY());
+					Buttons.Y_KOORDINATE.sendText(points.get(i).getY());
 					Buttons.JUMP_TO.click();
 
-					if (Buttons.ACTIVE_VILLAGE.isPresent() || Buttons.DORFINFORMATIONEN.isPresent()
-							|| Buttons.DORFINFORMATIONEN1_2.isPresent() && Buttons.GRUPPEN_HINZUFUEGEN.isPresent()
-							|| Buttons.GRUPPEN_HINZUFUEGEN1_2.isPresent()
-									&& Buttons.NACHRICHT_SENDEN.isNOTPresent(500, TimeUnit.MILLISECONDS)) {
-						Buttons.DORFINFORMATIONEN.click();
-						Buttons.DORFINFORMATIONEN1_2.click();
+					if (Buttons.MENUE_MITTE.isPresent(2)
+							&& !Buttons.MENUE_MITTE.getAttribute("tooltip-content").equals("Rohstofflager")
+							&& !Buttons.MENUE_MITTE.getAttribute("tooltip-content").equals("Freund einladen")) {
 
-						String dorfname = Buttons.DORFINFORMATIONEN_NAME.getText().split(" ")[0];
-						int dorfpunkte = Integer.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+						String dorfname = Buttons.MENUE_MITTE.getAttribute("tooltip-content");
 
-						serviceEigenesDorf.saveDorf(
-								new EigenesDorf(point.getX(), point.getY(), dorfname, dorfpunkte, "Rammboss"));
+						if (Buttons.DORFINFORMATIONEN.isPresentByCSSSelector("div", "tooltip-content",
+								"Dorfinformationen", 2000)
+								&& Buttons.GRUPPEN_HINZUFUEGEN.isPresentByCSSSelector("div", "tooltip-content",
+										"Gruppen hinzufügen", 2000)
+								&& !Buttons.NACHRICHT_SENDEN.isPresentByCSSSelector("div", "tooltip-content",
+										"Nachricht senden", 2000)
+								&& !Buttons.PRODUKTION_STEIGERN.isPresentByCSSSelector("div", "tooltip-content",
+										"Produktion steigern", 2000)) {
 
-						System.out.println("Eigenes Dorf hinzugefügt");
+							Buttons.DORFINFORMATIONEN
+									.getWebelementsByAttribute("div", "tooltip-content", "Dorfinformationen").click();
 
-						Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+							if (Buttons.DORFINFORMATIONEN_NAME.isPresent()) {
+								int dorfpunkte = Integer
+										.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+								Dorf tmp = serviceDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
 
-					} else if (Buttons.PRODUKTION_STEIGERN.isPresent() || Buttons.PRODUKTION_STEIGERN2.isPresent()) {
-						Buttons.DORFINFORMATIONEN.click();
-						Buttons.DORFINFORMATIONEN1_2.click();
+								EigenesDorf eigen = new EigenesDorf(points.get(i).getX(), points.get(i).getY(),
+										dorfname, dorfpunkte, account.getSpielername());
+								if (!tmp.equals(eigen)) {
 
-						int dorfpunkte = Integer.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+									EigenesDorf eigenALT = serviceEigenesDorf.findByXandY(points.get(i).getX(),
+											points.get(i).getY());
 
-						serviceBabarendorf.saveDorf(new Barbarendorf(point.getX(), point.getY(), dorfpunkte));
-						System.out.println("Barbarendorf hinzugefügt");
+									if (eigenALT.getX() == -1) {
+										serviceEigenesDorf.saveDorf(new EigenesDorf(points.get(i).getX(),
+												points.get(i).getY(), dorfname, dorfpunkte, account.getSpielername()));
+										System.out.println("Eigenes Dorf hinzugefügt");
+									} else {
+										eigenALT.setPunkte(dorfpunkte);
+										eigenALT.setName(dorfname);
+										serviceEigenesDorf.updateDorf(eigenALT);
+										System.out.println("Eigenes Dorf geupdated");
 
-						Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+									}
 
-					} else if (Buttons.NACHRICHT_SENDEN.isPresent() || Buttons.NACHRICHT_SENDEN2.isPresent()) {
-						Buttons.DORFINFORMATIONEN.click();
-						Buttons.DORFINFORMATIONEN1_2.click();
+								}
 
-						String dorfname = Buttons.DORFINFORMATIONEN_NAME.getText().split(" ")[0];
-						int dorfpunkte = Integer.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+							}
 
-						serviceDorf.saveDorf(new Dorf(point.getX(), point.getY(), dorfname, dorfpunkte));
-						System.out.println(" Dorf Gegner hinzugefügt");
+							Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
-						Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+						} else if (Buttons.PRODUKTION_STEIGERN
+								.getWebelementsByAttribute("div", "tooltip-content", "Produktion steigern")
+								.isDisplayed()) {
 
-					} else {
-						Buttons.OBERFLAECHE.click();
+							Buttons.DORFINFORMATIONEN
+									.getWebelementsByAttribute("div", "tooltip-content", "Dorfinformationen").click();
 
-						if (Buttons.PROVINZ_BUTTON_PROVINZDOERVER.isPresent()) {
-							serviceProvinz.saveProvinz(new Provinz(point.getX(), point.getY(),
-									Buttons.PROVINZ_NAME.getText(), new LocalDateTime()));
+							if (Buttons.DORFINFORMATIONEN_PUNKTE.isPresent()) {
 
-							System.out.println("Provinz hinzugefügt");
+								int dorfpunkte = Integer
+										.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+
+								Dorf tmp = serviceDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
+								Barbarendorf baba = new Barbarendorf(points.get(i).getX(), points.get(i).getY(),
+										dorfname, dorfpunkte);
+
+								if (!tmp.equals(baba)) {
+
+									Barbarendorf eigenALT = serviceBabarendorf.findByXandY(points.get(i).getX(),
+											points.get(i).getY());
+
+									if (eigenALT.getX() == -1) {
+										serviceBabarendorf.saveDorf(baba);
+										System.out.println("Barbarendorf hinzugefügt");
+									} else {
+										eigenALT.setPunkte(dorfpunkte);
+										eigenALT.setName(dorfname);
+										serviceBabarendorf.updateDorf(eigenALT);
+										System.out.println("Babarendorf updated");
+
+									}
+
+								}
+
+							}
+
+							Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+						} else if (Buttons.NACHRICHT_SENDEN
+								.getWebelementsByAttribute("div", "tooltip-content", "Nachricht senden")
+								.isDisplayed()) {
+
+							Buttons.DORFINFORMATIONEN
+									.getWebelementsByAttribute("div", "tooltip-content", "Dorfinformationen").click();
+
+							if (Buttons.DORFINFORMATIONEN_NAME.isPresent()) {
+								int dorfpunkte = Integer
+										.parseInt(Buttons.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+								Dorf tmp = serviceDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
+								Dorf dorf = new Dorf(points.get(i).getX(), points.get(i).getY(), dorfname, dorfpunkte);
+
+								if (!tmp.equals(dorf)) {
+									Dorf eigenALT = serviceDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
+
+									if (eigenALT.getX() == -1) {
+										serviceDorf.saveDorf(dorf);
+										System.out.println(" Dorf Gegner hinzugefügt");
+									} else {
+										eigenALT.setPunkte(dorfpunkte);
+										eigenALT.setName(dorfname);
+										serviceDorf.updateDorf(eigenALT);
+										System.out.println("Dorf Gegner updated");
+
+									}
+
+								}
+
+							}
 
 							Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
 
 						}
+					} else {
+						Buttons.OBERFLAECHE.click();
+
+						if (Buttons.PROVINZ_BUTTON_PROVINZDOERVER.isPresent()) {
+
+							Provinz tmp = serviceProvinz.findByXandY(points.get(i).getX(), points.get(i).getY());
+
+							Provinz pNeu = new Provinz(points.get(i).getX(), points.get(i).getY(),
+									Buttons.PROVINZ_NAME.getText(), new LocalDateTime());
+
+							if (!tmp.equals(pNeu)) {
+								Provinz eigenALT = serviceProvinz.findByXandY(points.get(i).getX(),
+										points.get(i).getY());
+
+								if (eigenALT.getX() == -1) {
+									serviceProvinz.saveProvinz(pNeu);
+									System.out.println("Provinz hinzugefügt");
+
+								} else {
+									eigenALT.setName(Buttons.PROVINZ_NAME.getText());
+									serviceProvinz.updateProvinz(eigenALT);
+									System.out.println("Provinz updated");
+
+								}
+
+							}
+
+							Buttons.OBERFLAECHE.sendText(Keys.ESCAPE);
+						} else {
+							// System.out.println("Nichts gefunden");
+						}
 					}
 
-					TB2.NewStructure.common.hibernate.model.Point p = servicePoint.findById(point.getId());
+					TB2.NewStructure.common.hibernate.model.Point p = servicePoint.findById(points.get(i).getId());
 					p.setChecked(true);
 					p.setCheckedAt(new LocalDateTime());
 
@@ -308,6 +446,7 @@ public class Main {
 			serviceEigenesDorf = (EigenesDorfService) context.getBean("eigenesDorfService");
 			serviceBabarendorf = (BarbarendorfService) context.getBean("barbarenDorfService");
 
+			Main.eigene = serviceEigenesDorf.findByName(account.getSpielername());
 			dorfListe = serviceDorf.findAll();
 			barbarendoerfer = serviceBabarendorf.findAll();
 
@@ -327,13 +466,16 @@ public class Main {
 		}
 		sleep(5);
 
-		Buttons.SPEICHER.click();
-		Buttons.SPEICHER1.click();
-		sleep(1);
+		Buttons.SPEICHER.getWebelementsByText("span", "Speicher").click();
+		Buttons.SPEICHER.getWebelementsByAttribute("div", "tooltip-content", "Speicher").click();
 
-		Buttons.SPEICHER2.click();
-		Buttons.SPEICHER2_1.click();
-		Buttons.SPEICHER2_3.click();
+		// Buttons.SPEICHER.click();
+		// Buttons.SPEICHER1.click();
+		// sleep(1);
+		//
+		// Buttons.SPEICHER2.click();
+		// Buttons.SPEICHER2_1.click();
+		// Buttons.SPEICHER2_3.click();
 
 		sleep(1);
 		int max = 100;
@@ -358,7 +500,7 @@ public class Main {
 		Buttons.REKRUTIERUNGSSCHEIFE.click();
 		int anzahl = 50;
 		if ((currentHolz >= max || currentLehm >= max || currentEisen >= max)
-				&& Integer.parseInt(Buttons.PROVIANT.getText()) > anzahl
+				&& Integer.parseInt(Buttons.PROVIANT.getText().replace(".", "")) > anzahl
 				|| Buttons.KASERNENSLOT1.compareAttribute("tooltip-content", "Kaserne öffnen")) {
 			System.out.println("Baue " + anzahl + " axtkämpfer");
 			baueAxt(anzahl);
@@ -493,11 +635,11 @@ public class Main {
 
 	}
 
-	private static List<Barbarendorf> getFarmableBabas(List<Barbarendorf> babas) {
+	private static List<Barbarendorf> getFarmableBabas(List<Barbarendorf> babas, EigenesDorf eigene2) {
 		List<Barbarendorf> tmp = new ArrayList<Barbarendorf>();
 		for (Barbarendorf barbarendorf : babas) {
 
-			if (barbarendorf.isFarmable()) {
+			if (barbarendorf.isFarmable(eigene2)) {
 				tmp.add(barbarendorf);
 			}
 
@@ -539,7 +681,7 @@ public class Main {
 
 			if (tmp < 500) {
 				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.clear();
-				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.sendText(20);
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.sendText(50);
 
 			}
 			// SPEER
@@ -552,7 +694,7 @@ public class Main {
 			if (tmp < 500) {
 				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
 
-				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(10);
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(20);
 
 			}
 			// SCHWERT
@@ -565,7 +707,7 @@ public class Main {
 			if (tmp < 500) {
 				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.clear();
 
-				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(10);
+				Buttons.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(20);
 
 			}
 
@@ -636,7 +778,7 @@ public class Main {
 						int x = Integer.parseInt(test[0] + test[1] + test[2]);
 						int y = Integer.parseInt(test[6] + test[7] + test[8]);
 
-						EigenesDorf village = new EigenesDorf(x, y, name, punkte, "Rammboss");
+						EigenesDorf village = new EigenesDorf(x, y, name, punkte, account.getSpielername());
 
 						serviceEigenesDorf.saveDorf(village);
 
