@@ -74,7 +74,7 @@ public class Main {
 
 		Login.LOGIN.setCriteria(account.getWelt());
 
-		if (Login.LOGIN.isPresent(Duration.ofSeconds(8))) {
+		if (Login.LOGIN.isPresent(Duration.ofSeconds(30))) {
 			sleep(1);
 			Login.LOGIN.click();
 		}
@@ -106,7 +106,7 @@ public class Main {
 
 	private void runTask() {
 		this.login();
-		if (MainToolbar.BELOHNUNG_ANNEHMEN.isPresent()) {
+		if (MainToolbar.BELOHNUNG_ANNEHMEN.isPresent(Duration.ofSeconds(3))) {
 			MainToolbar.BELOHNUNG_ANNEHMEN.click();
 			sleep(5);
 
