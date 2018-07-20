@@ -3,6 +3,7 @@ package TB2.NewStructure.common.hibernate.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +34,7 @@ public class BarbarendorfDaoImpl extends AbstractDao implements BarbarendorfDao 
 	public Barbarendorf findById(int id) {
 		// Criteria criteria = getSession().createCriteria(Dorf.class);
 		// return criteria.add(Restrictions.like("id", id)).list();
+		
 		return (Barbarendorf) getSession().get(Barbarendorf.class, id);
 	}
 

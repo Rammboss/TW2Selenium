@@ -20,7 +20,6 @@ public class PointServiceImpl implements PointService {
 	@Autowired
 	private PointDao dao;
 
-
 	public List<Point> findByName(String name) {
 		return dao.findByName(name);
 	}
@@ -42,6 +41,11 @@ public class PointServiceImpl implements PointService {
 
 	public List<Point> findAll() {
 		return dao.findAll();
+	}
+
+	public void initPoints() {
+		dao.initPoints();
+
 	}
 
 }

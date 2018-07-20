@@ -3,7 +3,7 @@ package TB2.NewStructure.common.Auftraege;
 import org.openqa.selenium.WebDriver;
 
 
-public interface AuftragInterface extends Comparable<AuftragInterface>{
+public interface AuftragInterface {
 	
 	public void run(WebDriver driver);
 	

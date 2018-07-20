@@ -17,6 +17,7 @@ public class DorfServiceImpl implements DorfService {
 	private DorfDao dao;
 
 	public List<Dorf> findByName(String name) {
+		
 		return dao.findByName(name);
 	}
 

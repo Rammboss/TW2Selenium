@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  
 @Configuration
 @EnableTransactionManagement
-@ComponentScan({ "TB2.NewStructure.common.hibernate.configuration" })
 //@PropertySource(value = { "classpath:application.properties" })
 public class HibernateConfiguration {
  
@@ -29,7 +29,7 @@ public class HibernateConfiguration {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] { "TB2.NewStructure.common.hibernate.model" });
+        sessionFactory.setPackagesToScan(new String[] { "TB2.NewStructure.common.hibernate" });
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
      }
@@ -41,6 +41,7 @@ public class HibernateConfiguration {
         dataSource.setUrl("jdbc:mysql://192.168.0.220:3306/DatabasedBot");
         dataSource.setUsername("bot");
         dataSource.setPassword("kalterhund");
+        
         return dataSource;
     }
      
@@ -50,6 +51,7 @@ public class HibernateConfiguration {
         properties.put("hibernate.hbm2ddl.auto", "update");
         properties.put("hibernate.show_sql", false);
         properties.put("hibernate.format_sql", false);
+        properties.put("hibernate.jdbc.batch_size", 50);
         return properties;        
     }
      

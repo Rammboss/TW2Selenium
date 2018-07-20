@@ -14,4 +14,6 @@ public interface PointDao {
 	void updatePoint(Point dorf);
 
 	List<Point> findAll();
+
+	void initPoints();
 }

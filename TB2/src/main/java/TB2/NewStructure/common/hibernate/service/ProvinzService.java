@@ -17,5 +17,6 @@ public interface ProvinzService {
 	List<Provinz> findAll();
 
 	Provinz findByXandY(int x, int y);
+	
 
 }

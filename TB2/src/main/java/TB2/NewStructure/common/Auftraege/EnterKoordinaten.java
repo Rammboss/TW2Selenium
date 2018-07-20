@@ -2,6 +2,8 @@ package TB2.NewStructure.common.Auftraege;
 
 import java.awt.Point;
 
+import org.openqa.selenium.WebDriver;
+
 public class EnterKoordinaten extends OpenSeachOnMap {
 
 	private Point farm;
@@ -12,22 +14,22 @@ public class EnterKoordinaten extends OpenSeachOnMap {
 	}
 
 	@Override
-	public void run(MouseRobot robot) {
-		super.run(robot);
+	public void run(WebDriver driver) {
+		super.run(driver);
 
 		if (Buttons.ENTER_X.check()) {
-			robot.doubleClick(Buttons.ENTER_X);
-			robot.enterKoordinate(farm.x);
+			driver.doubleClick(Buttons.ENTER_X);
+			driver.enterKoordinate(farm.x);
 
 		}
 		MouseRobot.wait(Utils.DELAY_TASTENDRUCK);
 
 		if (Buttons.ENTER_Y.check()) {
-			robot.doubleClick(Buttons.ENTER_Y);
-			robot.enterKoordinate(farm.y);
+			driver.doubleClick(Buttons.ENTER_Y);
+			driver.enterKoordinate(farm.y);
 		}
 		MouseRobot.wait(Utils.DELAY_TASTENDRUCK);
-		robot.click(Buttons.SEARCH_VIllAGE);
+		driver.click(Buttons.SEARCH_VIllAGE);
 
 		MouseRobot.wait(2000); // **********Warte auf GUI***********
 	}

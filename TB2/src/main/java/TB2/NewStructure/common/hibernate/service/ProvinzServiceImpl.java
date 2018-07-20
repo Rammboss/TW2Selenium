@@ -25,7 +25,7 @@ public class ProvinzServiceImpl implements ProvinzService {
 	public void saveProvinz(Provinz dorf) {
 		dao.saveProvinz(dorf);
 
-	}
+	} 
 
 	public void updateProvinz(Provinz dorf) {
 		dao.updateProvinz(dorf);
@@ -44,4 +44,6 @@ public class ProvinzServiceImpl implements ProvinzService {
 	public Provinz findByXandY(int x, int y) {
 		return dao.findByXandY(x, y);
 	}
+
+	
 }

@@ -116,6 +116,13 @@ public class Point {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Point [id=" + id + ", x=" + x + ", y=" + y + ", checked=" + checked + ", checkedAt=" + checkedAt + "]";
+	}
+	
+	
 	
 	
 
