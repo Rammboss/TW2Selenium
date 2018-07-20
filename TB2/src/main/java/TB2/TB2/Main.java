@@ -524,7 +524,7 @@ public class Main {
 	private void disableSound() {
 		MainToolbar.EINSTELLUNGEN.click();
 		Einstellungen.EINSTELLUNGEN_SPIEL.click();
-		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("end");
+		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("start");
 		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_ANNIMATION1.click();
 		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.scrollToElement("start");
 		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.click();
