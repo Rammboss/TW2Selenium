@@ -46,7 +46,7 @@ public class Main {
 		System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
-		account = new Account("Rammboss", "kalterhund", "Gaillard");
+		 account = new Account("Rammboss", "kalterhund", "Gaillard");
 		// account = new Account("DerZurecker", "aleyotmi1", "Gaillard");
 		// account = new Account("Don Porro", "Kacklappen", "Gaillard");
 	}
@@ -608,7 +608,6 @@ public class Main {
 		sleep(1);
 		if (verbleibendeAngriffe > 0) {
 			// Barbaren
-
 			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.clear();
 			int tmp = Integer.parseInt(MainToolbar.ANZAHL_AXT.getText().replace(".", ""));
 
@@ -619,28 +618,28 @@ public class Main {
 				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.sendText(50);
 
 			}
-			// SPEER
+			// SPEER Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", "")) / verbleibendeAngriffe
 			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
-			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", "")) / verbleibendeAngriffe);
+			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(0);
 
 			tmp = Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", ""));
 
 			if (tmp < 500) {
 				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
 
-				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(20);
+				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(0);
 
 			}
-			// SCHWERT
+			// SCHWERT Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", "")) / verbleibendeAngriffe
 			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.clear();
-			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", "")) / verbleibendeAngriffe);
+			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(0);
 
 			tmp = Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", ""));
 
 			if (tmp < 500) {
 				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.clear();
 
-				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(20);
+				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(0);
 
 			}
 
