@@ -775,6 +775,7 @@ public class Main {
 		if (driver == null) {
 			Main.driver = new FirefoxDriver();
 			driver.get("https://de.tribalwars2.com/");
+			driver.manage().window().maximize();
 			login();
 		}
 
