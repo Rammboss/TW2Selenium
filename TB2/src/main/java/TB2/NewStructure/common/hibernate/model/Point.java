@@ -1,5 +1,7 @@
 package TB2.NewStructure.common.hibernate.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,9 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDateTime;
 
 @Entity
 @Table(name = "Point")
@@ -30,7 +29,6 @@ public class Point {
 	private boolean checked;
 
 	@Column(name = "CHECKEDAT")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
 	private LocalDateTime checkedAt;
 
 	public Point(int x, int y, boolean checked, LocalDateTime checkedAt) {
@@ -121,9 +119,5 @@ public class Point {
 	public String toString() {
 		return "Point [id=" + id + ", x=" + x + ", y=" + y + ", checked=" + checked + ", checkedAt=" + checkedAt + "]";
 	}
-	
-	
-	
-	
 
 }

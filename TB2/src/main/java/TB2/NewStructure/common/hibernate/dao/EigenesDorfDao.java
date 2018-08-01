@@ -1,26 +1,20 @@
 package TB2.NewStructure.common.hibernate.dao;
 
 import java.util.List;
+import java.util.Optional;
 
-import TB2.NewStructure.common.hibernate.model.Barbarendorf;
-import TB2.NewStructure.common.hibernate.model.Dorf;
+import org.springframework.data.repository.CrudRepository;
+
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
-import TB2.NewStructure.common.hibernate.model.Provinz;
 
-public interface EigenesDorfDao {
-
-	void saveDorf(EigenesDorf dorf);
+public interface EigenesDorfDao extends CrudRepository<EigenesDorf, Integer> {
 
 	EigenesDorf findBySpielerAndName(String name, String spieler);
 
 	List<EigenesDorf> findBySpieler(String spieler);
 
-	EigenesDorf findById(int id);
-
-	void updateDorf(EigenesDorf dorf);
+	Optional<EigenesDorf> findByXAndY(int x, int y);
 
 	List<EigenesDorf> findAll();
-
-	EigenesDorf findByXandY(int x, int y);
 
 }

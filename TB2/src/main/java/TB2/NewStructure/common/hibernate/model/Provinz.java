@@ -1,5 +1,7 @@
 package TB2.NewStructure.common.hibernate.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,9 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDateTime;
 
 @Entity
 @Table(name = "Provinz")
@@ -31,7 +30,6 @@ public class Provinz {
 	private String name;
 
 	@Column(name = "SCANNEDAT")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
 	private LocalDateTime scannedAt;
 
 	public Provinz(int x, int y, String name, LocalDateTime scannedAt) {
@@ -117,7 +115,5 @@ public class Provinz {
 			return false;
 		return true;
 	}
-	
-	
 
 }

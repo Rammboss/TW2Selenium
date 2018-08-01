@@ -1,27 +1,17 @@
 package TB2.NewStructure.common.hibernate.dao;
 
 import java.util.List;
+import java.util.Optional;
 
-import TB2.NewStructure.common.hibernate.model.Barbarendorf;
+import org.springframework.data.repository.CrudRepository;
+
 import TB2.NewStructure.common.hibernate.model.Dorf;
 
-
-public interface DorfDao {
-
-	void saveDorf(Dorf dorf);
+public interface DorfDao extends CrudRepository<Dorf, Integer> {
 
 	List<Dorf> findByName(String name);
-	
-	Dorf findById(int id);
 
-	void updateDorf(Dorf dorf);
-	
+	Optional<Dorf> findByXAndY(int x, int y);
+
 	List<Dorf> findAll();
-	
-	Dorf findByXandY(int x, int y);
-
-	
-	
-
-
 }

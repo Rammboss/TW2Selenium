@@ -1,21 +1,16 @@
 package TB2.NewStructure.common.hibernate.dao;
 
 import java.util.List;
+import java.util.Optional;
 
-import TB2.NewStructure.common.hibernate.model.Dorf;
+import org.springframework.data.repository.CrudRepository;
+
 import TB2.NewStructure.common.hibernate.model.Provinz;
 
-public interface ProvinzDao {
-	void saveProvinz(Provinz dorf);
-
+public interface ProvinzDao extends CrudRepository<Provinz, Integer> {
 	List<Provinz> findByName(String name);
 
-	Provinz findById(int id);
-
-	void updateProvinz(Provinz dorf);
+	Optional<Provinz> findByXAndY(int x, int y);
 
 	List<Provinz> findAll();
-	
-	Provinz findByXandY(int x, int y);
-
 }

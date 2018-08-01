@@ -15,14 +15,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.ElementsAreNotCompareabele;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 
 public class Button {
+
+	private static Logger logger = LoggerFactory.getLogger(Button.class);
+
 	public static int BY_CLASS_NAME = 1;
-	
+
 	public static int BY_CSS_SELECTOR_WITH_CRITERIA = 2;
 	public static int BY_CSS_SELECTOR = 22;
 
@@ -85,9 +90,7 @@ public class Button {
 
 			return true;
 		} catch (TimeoutException e) {
-			// System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden
-			// werden!");
-			e.printStackTrace();
+			logger.debug("Button:" + getLabel() + " konnte nicht geklickt werden!", e);
 			return false;
 		}
 	}
@@ -100,9 +103,7 @@ public class Button {
 
 			return true;
 		} catch (TimeoutException e) {
-			// System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden
-			// werden!");
-			// e.printStackTrace();
+			logger.debug("Button:" + getLabel() + " konnte nicht gefunden werden!", e);
 			return false;
 		}
 	}
@@ -116,8 +117,7 @@ public class Button {
 
 			return true;
 		} catch (TimeoutException e) {
-			// System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden werden!");
-			// e.printStackTrace();
+			logger.debug("Button:" + getLabel() + " konnte nicht gefunden werden!", e);
 			return false;
 		}
 	}
@@ -143,8 +143,7 @@ public class Button {
 
 			return true;
 		} catch (TimeoutException e) {
-			System.out.println("Button:" + getLabel() + " konnte nicht gefunden werden!");
-			e.printStackTrace();
+			logger.debug("Button:" + getLabel() + " konnte nicht gefunden werden!", e);
 			return false;
 		}
 	}
@@ -289,12 +288,10 @@ public class Button {
 			try {
 				getWebelement().click();
 			} catch (ElementClickInterceptedException e) {
-				System.out.println("Button konnte nicht geklickt werden!");
-				e.printStackTrace();
+				logger.error("Button konnte nicht geklickt werden!", e);
 			}
 		} else {
-			System.out.println("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
-			throw new ElementisNotClickable();
+			throw new ElementisNotClickable("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
 		}
 
 	}

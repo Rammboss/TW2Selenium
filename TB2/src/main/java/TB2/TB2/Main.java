@@ -1,17 +1,25 @@
 package TB2.TB2;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-import org.joda.time.LocalDateTime;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.stereotype.Component;
 
 import TB2.NewStructure.common.Menus.Dorfansicht;
 import TB2.NewStructure.common.Menus.Dorfinformationen;
@@ -32,25 +40,27 @@ import TB2.NewStructure.common.Menus.VorlangeErstellenOderAendern;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.configuration.AppConfig;
-import TB2.NewStructure.common.hibernate.dao.PointDaoImpl;
+import TB2.NewStructure.common.hibernate.dao.BarbarendorfDao;
+import TB2.NewStructure.common.hibernate.dao.DorfDao;
+import TB2.NewStructure.common.hibernate.dao.EigenesDorfDao;
+import TB2.NewStructure.common.hibernate.dao.PointDao;
+import TB2.NewStructure.common.hibernate.dao.ProvinzDao;
 import TB2.NewStructure.common.hibernate.model.Barbarendorf;
 import TB2.NewStructure.common.hibernate.model.Dorf;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.hibernate.model.Point;
 import TB2.NewStructure.common.hibernate.model.Provinz;
-import TB2.NewStructure.common.hibernate.service.BarbarendorfService;
-import TB2.NewStructure.common.hibernate.service.DorfService;
-import TB2.NewStructure.common.hibernate.service.EigenesDorfService;
-import TB2.NewStructure.common.hibernate.service.PointService;
-import TB2.NewStructure.common.hibernate.service.ProvinzService;
 
+@Component
 public class Main {
+
+	private static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	static {
 		System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
-		account = new Account("Rammboss", "kalterhund", "Gaillard");
+		account = new Account("Rammboss", "kalterhund", "Gaillard", new EigenesDorf(583, 567, "A005", 2088, "Rammboss"));
 		// account = new Account("DerZurecker", "aleyotmi1", "Gaillard");
 		// account = new Account("Don Porro", "Kacklappen", "Gaillard");
 	}
@@ -65,8 +75,58 @@ public class Main {
 
 	public List<Barbarendorf> babas;
 
+	@Autowired
+	private DorfDao dorfDao;
+
+	@Autowired
+	private PointDao pointDao;
+
+	@Autowired
+	private ProvinzDao provinzDao;
+
+	@Autowired
+	private EigenesDorfDao eigenesDorfDao;
+
+	@Autowired
+	private BarbarendorfDao barbarendorfDao;
+
 	public Main() {
 		Main.index = 0;
+	}
+
+	public static boolean isodd(int value) {
+		return value % 2 != 0;
+	}
+
+	public static int getDistance(int x1, int x2, int y1, int y2) {
+		double z1 = isodd(y1) ? x1 + 0.5 : x1 - 0.5;
+		double z2 = isodd(y2) ? x2 + 0.5 : x2 - 0.5;
+
+		double d1 = Math.sqrt(Math.pow((z1 - z2), 2) + 0.75 * Math.pow(y1 - y2, 2));
+		double d2 = Math.sqrt(Math.pow((x1 - x2), 2) + 0.75 * Math.pow((y1 - y2), 2));
+		int erg = (int) ((d1 + d2) / 2 * 10000);
+		return erg;
+	}
+
+	public List<Point> checkAndInitPoints() {
+		List<Point> pointlist = new ArrayList<Point>();
+
+		if (pointDao.count() == 0) {
+			for (int x = 0; x <= 1000; x++) {
+
+				for (int y = 0; y <= 1000; y++) {
+					pointlist.add(new Point(x, y, false));
+				}
+
+			}
+
+			logger.info("Speichere Points....");
+			pointDao.saveAll(pointlist);
+		} else {
+			pointlist = pointDao.findAll();
+		}
+
+		return pointlist;
 	}
 
 	public void login() throws ElementisNotClickable {
@@ -92,20 +152,27 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		Main app = new Main();
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+		Main app = context.getBean(Main.class);
+
 		while (true) {
 			try {
 				app.restartDriver();
-				app.runTask();
-			} catch (Exception e) {
-				System.out.println("Ein unerwarteter Fehler ist aufgetreten! Treiber wird in 5 sekunden neu gestartet!");
-				e.printStackTrace();
+				app.runTask(app.checkAndInitPoints());
+			} catch (Throwable e) {
+				logger.info("Ein unerwarteter Fehler ist aufgetreten! Treiber wird in 5 sekunden neu gestartet!");
 
+				context.close();
+				context = new AnnotationConfigApplicationContext(AppConfig.class);
+				app = context.getBean(Main.class);
+
+				logger.error("main error", e);
 			}
 		}
 	}
 
-	private void runTask() throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
+	private void runTask(List<Point> points) throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
 
 		if (MainToolbar.BELOHNUNG_ANNEHMEN.isPresent(Duration.ofSeconds(3))) {
 			MainToolbar.BELOHNUNG_ANNEHMEN.click();
@@ -115,14 +182,9 @@ public class Main {
 
 		this.disableSound();
 
-		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		DorfService serviceDorf = (DorfService) context.getBean("dorfService");
-		EigenesDorfService serviceEigenesDorf = (EigenesDorfService) context.getBean("eigenesDorfService");
-		BarbarendorfService serviceBabarendorf = (BarbarendorfService) context.getBean("barbarenDorfService");
-
-		Main.eigene = serviceEigenesDorf.findBySpieler(account.getSpielername());
-		List<Dorf> dorfListe = serviceDorf.findAll();
-		List<Barbarendorf> barbarendoerfer = serviceBabarendorf.findAll();
+		Main.eigene = eigenesDorfDao.findBySpieler(account.getSpielername());
+		List<Dorf> dorfListe = dorfDao.findAll();
+		List<Barbarendorf> barbarendoerfer = barbarendorfDao.findAll();
 		if (Main.eigene.size() != 0) {
 			account.setErstesDorf(Main.eigene.get(0));
 
@@ -131,9 +193,9 @@ public class Main {
 		if (Main.eigene.size() == 0 || dorfListe.size() == 0) {
 			ausgehendenAngriffeVerbergen();
 
-			Main.eigene = serviceEigenesDorf.findBySpieler(account.getSpielername());
-			dorfListe = serviceDorf.findAll();
-			barbarendoerfer = serviceBabarendorf.findAll();
+			Main.eigene = eigenesDorfDao.findBySpieler(account.getSpielername());
+			dorfListe = dorfDao.findAll();
+			barbarendoerfer = barbarendorfDao.findAll();
 
 			ausgehendenAngriffeVerbergen();
 
@@ -193,7 +255,7 @@ public class Main {
 
 		while (true) {
 
-			barbarendoerfer = serviceBabarendorf.findAll();
+			barbarendoerfer = barbarendorfDao.findAll();
 
 			rohstoffeCheckenUndAxtBauen();
 
@@ -208,35 +270,36 @@ public class Main {
 				MainToolbar.AUF_WELTKARTE_SUCHEN.click();
 			if (Main.eigene.size() != 0) {
 
-				int counter = 0;
-				System.out.println("Farmen vorhanden: " + getFarmableBabas(this.babas, Main.eigene.get(counter)).size());
+				final AtomicInteger counter = new AtomicInteger();
 
-				for (Barbarendorf dorf : getFarmableBabas(this.babas, Main.eigene.get(counter))) {
+				List<Barbarendorf> farmableBarb = babas.stream().filter(x -> x.isFarmable(eigene.get(counter.get()))).collect(Collectors.toList());
+
+				for (Barbarendorf dorf : farmableBarb) {
 					Koordinaten.X_KOORDINATE.clear();
 					Koordinaten.X_KOORDINATE.sendText(dorf.getX());
 					Koordinaten.Y_KOORDINATE.clear();
 					Koordinaten.Y_KOORDINATE.sendText(dorf.getY());
 					Koordinaten.JUMP_TO.click();
 
-					if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2)) && dorf.isFarmable(Main.eigene.get(counter))) {
+					if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2)) && dorf.isFarmable(Main.eigene.get(counter.get()))) {
 						sleep(1);
 						MainToolbar.OBERFLAECHE.sendText(1);
 
 						if (MainToolbar.ERROR_50_ANGRIFFE.isPresent(Duration.ofMillis(500))) {
 							sleep(5); // instead of click on message, because causes errors
 
-							if (counter >= Main.eigene.size() - 1) {
+							if (counter.get() >= Main.eigene.size() - 1) {
 								break;
 							} else {
 
 								// Eigenes Dorf wechseln
-								counter++;
+								counter.incrementAndGet();
 								if (!Koordinaten.X_KOORDINATE.isPresent(Duration.ofSeconds(1)))
 									MainToolbar.AUF_WELTKARTE_SUCHEN.click();
 								Koordinaten.X_KOORDINATE.clear();
-								Koordinaten.X_KOORDINATE.sendText(Main.eigene.get(counter).getX());
+								Koordinaten.X_KOORDINATE.sendText(Main.eigene.get(counter.get()).getX());
 								Koordinaten.Y_KOORDINATE.clear();
-								Koordinaten.Y_KOORDINATE.sendText(Main.eigene.get(counter).getY());
+								Koordinaten.Y_KOORDINATE.sendText(Main.eigene.get(counter.get()).getY());
 								Koordinaten.JUMP_TO.click();
 								if (Dorfoptionen.ACTIVE_VILLAGE.isPresent(Duration.ofSeconds(5))) {
 									Dorfoptionen.ACTIVE_VILLAGE.click();
@@ -253,16 +316,16 @@ public class Main {
 							}
 
 						} else {
-							Barbarendorf tmp = serviceBabarendorf.findById(dorf.getId());
-							tmp.setAttackedAt(new LocalDateTime());
+							Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
+							tmp.setAttackedAt(LocalDateTime.now());
 
-							serviceBabarendorf.updateDorf(tmp);
+							barbarendorfDao.save(tmp);
 						}
 					}
 					// wenn ein Barbarendorf kein Barbarendorf mehr ist
 					if (Dorfoptionen.NACHRICHT_SENDEN.isPresent()) {
-						System.out.println("Dorf: " + dorf.getName() + " ist kein Barbarendorf mehr, wird entfernt! ");
-						serviceBabarendorf.deleteDorf(dorf);
+						logger.info("Dorf: " + dorf.getName() + " ist kein Barbarendorf mehr, wird entfernt! ");
+						barbarendorfDao.delete(dorf);
 
 					}
 				}
@@ -272,9 +335,9 @@ public class Main {
 
 			if (account.getErstesDorf() != null) {
 				Koordinaten.X_KOORDINATE.clear();
-				Koordinaten.X_KOORDINATE.sendText(serviceEigenesDorf.findBySpielerAndName(account.getErstesDorf().getName(), account.getSpielername()).getX());
+				Koordinaten.X_KOORDINATE.sendText(account.getErstesDorf().getX());
 				Koordinaten.Y_KOORDINATE.clear();
-				Koordinaten.Y_KOORDINATE.sendText(serviceEigenesDorf.findBySpielerAndName(account.getErstesDorf().getName(), account.getSpielername()).getY());
+				Koordinaten.Y_KOORDINATE.sendText(account.getErstesDorf().getY());
 				Koordinaten.JUMP_TO.click();
 				Main.sleep(1);
 				if (Dorfoptionen.ACTIVE_VILLAGE.isPresent(Duration.ofSeconds(5))) {
@@ -286,28 +349,23 @@ public class Main {
 			// checke die Points
 			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(5); stop > System.nanoTime();) {
 
-				PointService servicePoint = (PointService) context.getBean("pointService");
-				ProvinzService serviceProvinz = (ProvinzService) context.getBean("provinzService");
-
-				List<Point> points = servicePoint.findAll();
-
 				points.sort(new Comparator<Point>() {
 
 					public int compare(Point o1, Point o2) {
-						return PointDaoImpl.getDistance((int) o1.getX(), 570, (int) o1.getY(), 583) - PointDaoImpl.getDistance((int) o2.getX(), 570, (int) o2.getY(), 583);
+						return getDistance((int) o1.getX(), 570, (int) o1.getY(), 583) - getDistance((int) o2.getX(), 570, (int) o2.getY(), 583);
 					}
 				});
 
-				for (int i = 0; i < points.size(); i++) {
-					if (points.get(i).isChecked() && points.get(i).getCheckedAt().plusHours(48).isAfter(new LocalDateTime())) {
-						points.remove(i);
-						i--;
-
+				for (Iterator<Point> it = points.iterator(); it.hasNext();) {
+					Point p = it.next();
+					if (p.isChecked() && p.getCheckedAt().plusHours(48).isAfter(LocalDateTime.now())) {
+						it.remove();
 					}
-
 				}
 
 				for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
+					Point currentPoint = points.get(i);
+
 					if (MainToolbar.COMPLETE_BUILDING.isPresent()) {
 						MainToolbar.COMPLETE_BUILDING.click();
 					}
@@ -316,13 +374,12 @@ public class Main {
 						MainToolbar.AUF_WELTKARTE_SUCHEN.click();
 
 					Koordinaten.X_KOORDINATE.clear();
-					Koordinaten.X_KOORDINATE.sendText(points.get(i).getX());
+					Koordinaten.X_KOORDINATE.sendText(currentPoint.getX());
 					Koordinaten.Y_KOORDINATE.clear();
-					Koordinaten.Y_KOORDINATE.sendText(points.get(i).getY());
+					Koordinaten.Y_KOORDINATE.sendText(currentPoint.getY());
 					Koordinaten.JUMP_TO.click();
 
-					if (Dorfoptionen.MENUE_MITTE.isPresent(Duration.ofSeconds(2)) && !Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content").equals("Rohstofflager")
-							&& !Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content").equals("Freund einladen")) {
+					if (Dorfoptionen.MENUE_MITTE.isPresent(Duration.ofSeconds(2)) && !Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content").equals("Rohstofflager") && !Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content").equals("Freund einladen")) {
 
 						String dorfname = Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content");
 
@@ -333,147 +390,112 @@ public class Main {
 
 							if (Dorfinformationen.DORFINFORMATIONEN_NAME.isPresent()) {
 								int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
-								Dorf tmp = serviceDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
 
-								EigenesDorf eigen = new EigenesDorf(points.get(i).getX(), points.get(i).getY(), dorfname, dorfpunkte, account.getSpielername());
-								if (!tmp.equals(eigen)) {
+								Optional<EigenesDorf> eigenAltOptional = eigenesDorfDao.findByXAndY(currentPoint.getX(), currentPoint.getY());
 
-									EigenesDorf eigenALT = serviceEigenesDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
-
-									if (eigenALT.getX() == -1) {
-										serviceEigenesDorf.saveDorf(new EigenesDorf(points.get(i).getX(), points.get(i).getY(), dorfname, dorfpunkte, account.getSpielername()));
-										System.out.println("Eigenes Dorf hinzugefügt");
-									} else {
-										eigenALT.setPunkte(dorfpunkte);
-										eigenALT.setName(dorfname);
-										serviceEigenesDorf.updateDorf(eigenALT);
-										System.out.println("Eigenes Dorf geupdated");
-
-									}
-
-								}
-
+								eigenAltOptional.ifPresentOrElse(x -> {
+									x.setPunkte(dorfpunkte);
+									x.setName(dorfname);
+									eigenesDorfDao.save(x);
+									logger.info("Eigenes Dorf geupdated");
+								}, () -> {
+									eigenesDorfDao.save(new EigenesDorf(currentPoint.getX(), currentPoint.getY(), dorfname, dorfpunkte, account.getSpielername()));
+									logger.info("Eigenes Dorf hinzugefügt");
+								});
 							}
-
-							MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-						} else if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2))) {
-
-							Dorfoptionen.DORFINFORMATIONEN.click();
-
-							if (Dorfinformationen.DORFINFORMATIONEN_PUNKTE.isPresent()) {
-
-								int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
-
-								Dorf tmp = serviceDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
-								Barbarendorf baba = new Barbarendorf(points.get(i).getX(), points.get(i).getY(), dorfname, dorfpunkte);
-
-								if (!tmp.equals(baba)) {
-
-									Barbarendorf eigenALT = serviceBabarendorf.findByXandY(points.get(i).getX(), points.get(i).getY());
-
-									if (eigenALT.getX() == -1) {
-										serviceBabarendorf.saveDorf(baba);
-										System.out.println("Barbarendorf hinzugefügt");
-									} else {
-										eigenALT.setPunkte(dorfpunkte);
-										eigenALT.setName(dorfname);
-										serviceBabarendorf.updateDorf(eigenALT);
-										System.out.println("Babarendorf updated");
-
-									}
-
-								}
-
-							}
-
-							MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-						} else if (Dorfoptionen.NACHRICHT_SENDEN.isPresent(Duration.ofSeconds(2))) {
-
-							Dorfoptionen.DORFINFORMATIONEN.click();
-
-							if (Dorfinformationen.DORFINFORMATIONEN_NAME.isPresent()) {
-								int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
-								Dorf tmp = serviceDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
-								Dorf dorf = new Dorf(points.get(i).getX(), points.get(i).getY(), dorfname, dorfpunkte);
-
-								if (!tmp.equals(dorf)) {
-									Dorf eigenALT = serviceDorf.findByXandY(points.get(i).getX(), points.get(i).getY());
-
-									if (eigenALT.getX() == -1) {
-										serviceDorf.saveDorf(dorf);
-										System.out.println(" Dorf Gegner hinzugefügt");
-									} else {
-										eigenALT.setPunkte(dorfpunkte);
-										eigenALT.setName(dorfname);
-										serviceDorf.updateDorf(eigenALT);
-										System.out.println("Dorf Gegner updated");
-
-									}
-
-								}
-
-							}
-
-							MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
 						}
+
+						MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+					} else if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2))) {
+
+						String dorfname = Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content");
+
+						Dorfoptionen.DORFINFORMATIONEN.click();
+
+						if (Dorfinformationen.DORFINFORMATIONEN_PUNKTE.isPresent()) {
+
+							int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+
+							Optional<Barbarendorf> eigenALT = barbarendorfDao.findByXAndY(currentPoint.getX(), currentPoint.getY());
+
+							eigenALT.ifPresentOrElse(x -> {
+								x.setPunkte(dorfpunkte);
+								x.setName(dorfname);
+								barbarendorfDao.save(x);
+								logger.info("Babarendorf updated");
+							}, () -> {
+								barbarendorfDao.save(new Barbarendorf(currentPoint.getX(), currentPoint.getY(), dorfname, dorfpunkte));
+								logger.info("Barbarendorf hinzugefügt");
+							});
+						}
+
+						MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+					} else if (Dorfoptionen.NACHRICHT_SENDEN.isPresent(Duration.ofSeconds(2))) {
+
+						String dorfname = Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content");
+
+						Dorfoptionen.DORFINFORMATIONEN.click();
+
+						if (Dorfinformationen.DORFINFORMATIONEN_NAME.isPresent()) {
+							int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
+
+							Optional<Dorf> eigenALT = dorfDao.findByXAndY(currentPoint.getX(), currentPoint.getY());
+
+							eigenALT.ifPresentOrElse(x -> {
+								x.setPunkte(dorfpunkte);
+								x.setName(dorfname);
+								dorfDao.save(x);
+								logger.info("Dorf Gegner updated");
+							}, () -> {
+								dorfDao.save(new Dorf(currentPoint.getX(), currentPoint.getY(), dorfname, dorfpunkte));
+								logger.info(" Dorf Gegner hinzugefügt");
+							});
+						}
+
+						MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
+
 					} else {
 						MainToolbar.OBERFLAECHE.clickCoords(0, 0);
 
 						if (Provinzansicht.PROVINZ_BUTTON_PROVINZDOERVER.isPresent()) {
 
-							Provinz tmp = serviceProvinz.findByXandY(points.get(i).getX(), points.get(i).getY());
+							Optional<Provinz> eigenALT = provinzDao.findByXAndY(currentPoint.getX(), currentPoint.getY());
 
-							Provinz pNeu = new Provinz(points.get(i).getX(), points.get(i).getY(), Provinzansicht.PROVINZ_NAME.getText(), new LocalDateTime());
+							String provinzName = Provinzansicht.PROVINZ_NAME.getText();
 
-							if (!tmp.equals(pNeu)) {
-								Provinz eigenALT = serviceProvinz.findByXandY(points.get(i).getX(), points.get(i).getY());
-
-								if (eigenALT.getX() == -1) {
-									serviceProvinz.saveProvinz(pNeu);
-									System.out.println("Provinz hinzugefügt");
-
-								} else {
-									eigenALT.setName(Provinzansicht.PROVINZ_NAME.getText());
-									serviceProvinz.updateProvinz(eigenALT);
-									System.out.println("Provinz updated");
-
-								}
-
-							}
+							eigenALT.ifPresentOrElse(x -> {
+								x.setName(provinzName);
+								provinzDao.save(x);
+								logger.info("Provinz updated");
+							}, () -> {
+								provinzDao.save(new Provinz(currentPoint.getX(), currentPoint.getY(), provinzName, LocalDateTime.now()));
+								logger.info("Provinz hinzugefügt");
+							});
 
 							MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-						} else {
-							// System.out.println("Nichts gefunden");
+
 						}
+
+						currentPoint.setChecked(true);
+						currentPoint.setCheckedAt(LocalDateTime.now());
+
+						pointDao.save(currentPoint);
+
+						logger.info("Update:" + currentPoint);
 					}
 
-					Point p = servicePoint.findById(points.get(i).getId());
-					p.setChecked(true);
-					p.setCheckedAt(new LocalDateTime());
-
-					servicePoint.updatePoint(p);
-
-					System.out.println("Update:" + p);
+					// sleep(5);
 				}
 
-				sleep(5);
+				Main.eigene = eigenesDorfDao.findBySpieler(account.getSpielername());
+				dorfListe = dorfDao.findAll();
+				barbarendoerfer = barbarendorfDao.findAll();
+
+				logger.info("Driver wird neugestartet!");
+				this.restartDriver();
 			}
-			context.close();
-
-			context = new AnnotationConfigApplicationContext(AppConfig.class);
-			serviceDorf = (DorfService) context.getBean("dorfService");
-			serviceEigenesDorf = (EigenesDorfService) context.getBean("eigenesDorfService");
-			serviceBabarendorf = (BarbarendorfService) context.getBean("barbarenDorfService");
-
-			Main.eigene = serviceEigenesDorf.findBySpieler(account.getSpielername());
-			dorfListe = serviceDorf.findAll();
-			barbarendoerfer = serviceBabarendorf.findAll();
-
-			System.out.println("Driver wird neugestartet!");
-			this.restartDriver();
 		}
 	}
 
@@ -515,10 +537,10 @@ public class Main {
 		int anzahl = 50;
 		if ((currentHolz >= max || currentLehm >= max || currentEisen >= max) && Integer.parseInt(MainToolbar.PROVIANT.getText().replace(".", "")) > anzahl
 				|| MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen")) {
-			System.out.println("Baue " + anzahl + " axtkämpfer");
+			logger.info("Baue " + anzahl + " axtkämpfer");
 			// baueAxt(anzahl);
 		} else {
-			System.out.println("Vorraussetzungen für " + anzahl + " axtkämpfer nicht erfüllt!");
+			logger.info("Vorraussetzungen für " + anzahl + " axtkämpfer nicht erfüllt!");
 
 		}
 
@@ -532,8 +554,8 @@ public class Main {
 		sleep(1);
 		Kaserne.KASERNE_AXTKAEMPFER.scrollToElement("start");
 		sleep(1);
-		System.out.println(Kaserne.KASERNE_AXTKAEMPFER_NICHT_VORHANDEN.isPresent());
-		System.out.println(Kaserne.KASERNE_AXTKAEMPFER.isPresent());
+		logger.info("" + Kaserne.KASERNE_AXTKAEMPFER_NICHT_VORHANDEN.isPresent());
+		logger.info("" + Kaserne.KASERNE_AXTKAEMPFER.isPresent());
 
 		if (Kaserne.KASERNE_AXTKAEMPFER.isPresent() && !Kaserne.KASERNE_AXTKAEMPFER_NICHT_VORHANDEN.isPresent()) {
 			Kaserne.KASERNE_AXTKAEMPFER.click();
@@ -594,7 +616,7 @@ public class Main {
 
 				String[] zeit = Rohstofflager.ROHSTOFFLAGER_STARTEN_ZEIT.getText().split(":");
 				ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
-				System.out.println("Dauer von neuem Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
+				logger.info("Dauer von neuem Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
 
 				Rohstofflager.ROHSTOFFLAGER_STARTEN.click();
 
@@ -613,7 +635,7 @@ public class Main {
 
 			String[] zeit = Rohstofflager.AKTUELLE_PRODUKTION_ZEIT.getText().split(":");
 			ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
-			System.out.println("Dauer von aktuellem Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
+			logger.info("Dauer von aktuellem Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
 			MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
 
 			return ges;
@@ -631,21 +653,9 @@ public class Main {
 		int rowCount = Einheiten.TABLE_UNITS_ROWS.getWebelements().size();
 
 		MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-		System.out.println("Anzahl der bisherigen Angriffe: " + rowCount);
+		logger.info("Anzahl der bisherigen Angriffe: " + rowCount);
 		return rowCount;
 
-	}
-
-	private static List<Barbarendorf> getFarmableBabas(List<Barbarendorf> babas, EigenesDorf eigene2) {
-		List<Barbarendorf> tmp = new ArrayList<Barbarendorf>();
-		for (Barbarendorf barbarendorf : babas) {
-
-			if (barbarendorf.isFarmable(eigene2)) {
-				tmp.add(barbarendorf);
-			}
-
-		}
-		return tmp;
 	}
 
 	private void ausgehendenAngriffeVerbergen() throws ElementisNotClickable {
@@ -670,7 +680,7 @@ public class Main {
 
 		int verbleibendeAngriffe = 50 - anzahlAngriffe;
 
-		System.out.println("Verbleibende Angriffe: " + verbleibendeAngriffe);
+		logger.info("Verbleibende Angriffe: " + verbleibendeAngriffe);
 		sleep(1);
 		if (verbleibendeAngriffe > 0) {
 			// Barbaren
@@ -722,7 +732,7 @@ public class Main {
 				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(100);
 
 			}
-			
+
 			// Paladin
 
 			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_PALADIN.clear();
@@ -783,6 +793,46 @@ public class Main {
 
 	public static WebDriver getDriver() {
 		return Main.driver;
+	}
+
+	public DorfDao getDorfDao() {
+		return dorfDao;
+	}
+
+	public void setDorfDao(DorfDao dorfDao) {
+		this.dorfDao = dorfDao;
+	}
+
+	public PointDao getPointDao() {
+		return pointDao;
+	}
+
+	public void setPointDao(PointDao pointDao) {
+		this.pointDao = pointDao;
+	}
+
+	public ProvinzDao getProvinzDao() {
+		return provinzDao;
+	}
+
+	public void setProvinzDao(ProvinzDao provinzDao) {
+		this.provinzDao = provinzDao;
+	}
+
+	public EigenesDorfDao getEigenesDorfDao() {
+		return eigenesDorfDao;
+	}
+
+	public void setEigenesDorfDao(EigenesDorfDao eigenesDorfDao) {
+		this.eigenesDorfDao = eigenesDorfDao;
+	}
+
+	public BarbarendorfDao getBarbarendorfDao() {
+		return barbarendorfDao;
+	}
+
+	public void setBarbarendorfDao(BarbarendorfDao barbarendorfDao) {
+		this.barbarendorfDao = barbarendorfDao;
 	}
 
 }

@@ -1,14 +1,12 @@
 package TB2.NewStructure.common.hibernate.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDateTime;
 
 @Entity
 @Table(name = "Barbarendorf")
@@ -16,7 +14,6 @@ import org.joda.time.LocalDateTime;
 public class Barbarendorf extends Dorf {
 
 	@Column(name = "LASTATTACK")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
 	private LocalDateTime attackedAt;
 
 	private static final int FARM_INTERVALL = 60;
@@ -25,14 +22,14 @@ public class Barbarendorf extends Dorf {
 
 	public Barbarendorf(int x, int y, int punkte) {
 		super(x, y, "Barbarendorf", punkte);
-		LocalDateTime tmp = new LocalDateTime(System.currentTimeMillis());
+		LocalDateTime tmp = LocalDateTime.now();
 		this.attackedAt = tmp.minusMinutes(90);
 
 	}
 
 	public Barbarendorf(int x, int y, String name, int punkte) {
 		super(x, y, name, punkte);
-		LocalDateTime tmp = new LocalDateTime(System.currentTimeMillis());
+		LocalDateTime tmp = LocalDateTime.now();
 		this.attackedAt = tmp.minusMinutes(90);
 
 	}
@@ -42,9 +39,8 @@ public class Barbarendorf extends Dorf {
 	}
 
 	public boolean isFarmable(EigenesDorf attacker) {
-		
-		return this.getAttackedAt().plusMinutes(FARM_INTERVALL).isBefore(new LocalDateTime())
-				&& getDistance(attacker.getX(), this.getX(), attacker.getY(), this.getY()) < MAX_DISTANCE;
+
+		return this.getAttackedAt().plusMinutes(FARM_INTERVALL).isBefore(LocalDateTime.now()) && getDistance(attacker.getX(), this.getX(), attacker.getY(), this.getY()) < MAX_DISTANCE;
 
 	}
 
