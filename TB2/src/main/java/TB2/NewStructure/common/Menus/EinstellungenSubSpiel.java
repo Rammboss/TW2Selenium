@@ -14,6 +14,9 @@ public class EinstellungenSubSpiel extends AbstractMenue {
 	public static Button EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN = new Button("Einstellungen Spiel Tab Ausgehende Befehle Anzeigen",
 			"/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[2]/tbody/tr[8]/td[2]/label", Button.BY_XPATH);
 
+	public static Button EINSTELLUNGEN_SPIEL_TIPPS_EINSCHALTEN = new Button("Einstellungen Spiel Tipps anzeigen ein/aus",
+			"/html/body/div[2]/section/div/div/div[2]/div/div[2]/table[1]/tbody/tr[3]/td[2]/label", Button.BY_XPATH);
+
 	@Override
 	public void openMenu() {
 		// TODO Auto-generated method stub

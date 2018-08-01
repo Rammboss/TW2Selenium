@@ -29,6 +29,11 @@ public class BarbarendorfDaoImpl extends AbstractDao implements BarbarendorfDao 
 		getSession().update(dorf);
 
 	}
+	
+	public void deleteDorf(Barbarendorf dorf) {
+		getSession().delete(dorf);
+
+	}
 
 	@SuppressWarnings("unchecked")
 	public Barbarendorf findById(int id) {

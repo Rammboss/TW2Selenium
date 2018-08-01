@@ -47,4 +47,10 @@ public class BarbarendorfServiceImpl implements BarbarendorfService {
 		return dao.findByXandY(x, y);
 	}
 
+	@Override
+	public void deleteDorf(Barbarendorf dorf) {
+		dao.deleteDorf(dorf);
+		
+	}
+
 }

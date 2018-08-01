@@ -19,9 +19,9 @@ public class Barbarendorf extends Dorf {
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
 	private LocalDateTime attackedAt;
 
-	private static final int FARM_INTERVALL = 50;
+	private static final int FARM_INTERVALL = 60;
 
-	private static final int MAX_DISTANCE = 405955;
+	private static final int MAX_DISTANCE = 505955;
 
 	public Barbarendorf(int x, int y, int punkte) {
 		super(x, y, "Barbarendorf", punkte);
@@ -42,9 +42,7 @@ public class Barbarendorf extends Dorf {
 	}
 
 	public boolean isFarmable(EigenesDorf attacker) {
-		// System.out.println(
-		// getDistance(attacker.getX(), this.getX(), attacker.getY(), this.getY()) + " <
-		// " + MAX_DISTANCE);
+		
 		return this.getAttackedAt().plusMinutes(FARM_INTERVALL).isBefore(new LocalDateTime())
 				&& getDistance(attacker.getX(), this.getX(), attacker.getY(), this.getY()) < MAX_DISTANCE;
 

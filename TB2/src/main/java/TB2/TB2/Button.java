@@ -16,8 +16,13 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 
+import TB2.NewStructure.common.exceptions.ElementisNotClickable;
+import TB2.NewStructure.common.exceptions.ElementsAreNotCompareabele;
+import TB2.NewStructure.common.exceptions.NoElementTextFound;
+
 public class Button {
 	public static int BY_CLASS_NAME = 1;
+	
 	public static int BY_CSS_SELECTOR_WITH_CRITERIA = 2;
 	public static int BY_CSS_SELECTOR = 22;
 
@@ -97,7 +102,7 @@ public class Button {
 		} catch (TimeoutException e) {
 			// System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden
 			// werden!");
-			e.printStackTrace();
+			// e.printStackTrace();
 			return false;
 		}
 	}
@@ -111,8 +116,8 @@ public class Button {
 
 			return true;
 		} catch (TimeoutException e) {
-			System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden werden!");
-			e.printStackTrace();
+			// System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden werden!");
+			// e.printStackTrace();
 			return false;
 		}
 	}
@@ -138,17 +143,17 @@ public class Button {
 
 			return true;
 		} catch (TimeoutException e) {
-			System.out.println("Button:" + this.getLabel() + " konnte nicht gefunden werden!");
+			System.out.println("Button:" + getLabel() + " konnte nicht gefunden werden!");
 			e.printStackTrace();
 			return false;
 		}
 	}
 
-	public String getText() {
+	public String getText() throws NoElementTextFound {
 		if (isPresent(Duration.ofSeconds(waitForClick)))
 			return getWebelement().getText();
 
-		return "Nichts gefunden";
+		throw new NoElementTextFound();
 
 	}
 
@@ -278,7 +283,7 @@ public class Button {
 		return Main.getDriver().findElements(By.xpath(xpath));
 	}
 
-	public void click() {
+	public void click() throws ElementisNotClickable {
 
 		if (isPresent(Duration.ofSeconds(5))) {
 			try {
@@ -288,12 +293,13 @@ public class Button {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("##ACHTUNG##: Element " + getText() + " konnte nicht gelklickt werden!");
+			System.out.println("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
+			throw new ElementisNotClickable();
 		}
 
 	}
 
-	public void click(int seconds) {
+	public void click(int seconds) throws ElementisNotClickable, NoElementTextFound {
 
 		if (isPresent(Duration.ofSeconds(seconds))) {
 			click();
@@ -313,7 +319,7 @@ public class Button {
 
 	}
 
-	public boolean compareAttribute(String attr, String value) {
+	public boolean compareAttribute(String attr, String value) throws ElementsAreNotCompareabele {
 
 		String tmp = this.getWebelement().getAttribute(attr);
 
@@ -322,7 +328,7 @@ public class Button {
 
 		}
 		// falls element nicht existiert etc
-		return false;
+		throw new ElementsAreNotCompareabele();
 
 	}
 

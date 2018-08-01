@@ -14,6 +14,9 @@ public class Dorfoptionen extends AbstractMenue {
 	public static Button NACHRICHT_SENDEN = new Button("Nachricht senden 1", "div", "tooltip-content", "Nachricht senden", Button.BY_CSS_SELECTOR);
 	public static Button NEXT_VILLAGE = new Button("Nextes Dorf", "//*[@id=\"switch-village-next\"]", Button.BY_XPATH);
 
+	
+	public static Button TRUPPEN_SCHICKEN = new Button("Truppen schicken", "div", "tooltip-content", "Truppen schicken", Button.BY_CSS_SELECTOR);
+
 	@Override
 	public void openMenu() {
 		// TODO Auto-generated method stub

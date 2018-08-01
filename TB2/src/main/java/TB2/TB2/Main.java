@@ -2,6 +2,7 @@ package TB2.TB2;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +29,10 @@ import TB2.NewStructure.common.Menus.Sammelplatz;
 import TB2.NewStructure.common.Menus.Speicher;
 import TB2.NewStructure.common.Menus.UebersichtVorlangenliste;
 import TB2.NewStructure.common.Menus.VorlangeErstellenOderAendern;
+import TB2.NewStructure.common.exceptions.ElementisNotClickable;
+import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.configuration.AppConfig;
+import TB2.NewStructure.common.hibernate.dao.PointDaoImpl;
 import TB2.NewStructure.common.hibernate.model.Barbarendorf;
 import TB2.NewStructure.common.hibernate.model.Dorf;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
@@ -46,7 +50,7 @@ public class Main {
 		System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
 		System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
-		 account = new Account("Rammboss", "kalterhund", "Gaillard");
+		account = new Account("Rammboss", "kalterhund", "Gaillard");
 		// account = new Account("DerZurecker", "aleyotmi1", "Gaillard");
 		// account = new Account("Don Porro", "Kacklappen", "Gaillard");
 	}
@@ -65,8 +69,7 @@ public class Main {
 		Main.index = 0;
 	}
 
-	public void login() {
-		driver.get("https://de.tribalwars2.com/");
+	public void login() throws ElementisNotClickable {
 
 		Login.SPIELERNAME.sendText(account.getSpielername());
 		Login.PASSWORT.sendText(account.getPasswort());
@@ -90,7 +93,6 @@ public class Main {
 	public static void main(String[] args) {
 
 		Main app = new Main();
-
 		while (true) {
 			try {
 				app.restartDriver();
@@ -99,13 +101,12 @@ public class Main {
 				System.out.println("Ein unerwarteter Fehler ist aufgetreten! Treiber wird in 5 sekunden neu gestartet!");
 				e.printStackTrace();
 
-				sleep(5);
 			}
 		}
 	}
 
-	private void runTask() {
-		this.login();
+	private void runTask() throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
+
 		if (MainToolbar.BELOHNUNG_ANNEHMEN.isPresent(Duration.ofSeconds(3))) {
 			MainToolbar.BELOHNUNG_ANNEHMEN.click();
 			sleep(5);
@@ -128,14 +129,13 @@ public class Main {
 		}
 
 		if (Main.eigene.size() == 0 || dorfListe.size() == 0) {
-			this.ausgehendenAngriffeVerbergen();
+			ausgehendenAngriffeVerbergen();
 
-			// dorfListe = this.initProvinzen(provinzen);
 			Main.eigene = serviceEigenesDorf.findBySpieler(account.getSpielername());
 			dorfListe = serviceDorf.findAll();
 			barbarendoerfer = serviceBabarendorf.findAll();
 
-			this.ausgehendenAngriffeVerbergen();
+			ausgehendenAngriffeVerbergen();
 
 		}
 		if (Main.eigene.size() != 0) {
@@ -153,31 +153,53 @@ public class Main {
 
 		}
 
-		MainToolbar.AUF_WELTKARTE_SUCHEN.click();
-
-		Koordinaten.X_KOORDINATE.clear();
-		Koordinaten.X_KOORDINATE.sendText(584);
-		Koordinaten.Y_KOORDINATE.clear();
-		Koordinaten.Y_KOORDINATE.sendText(568);
-		Koordinaten.JUMP_TO.click();
-		sleep(1);
-
-		MainToolbar.OBERFLAECHE.clickCoords(0, 0);
+		// Angriff timen
+		// if (!Koordinaten.X_KOORDINATE.isPresent(Duration.ofSeconds(1)))
+		// MainToolbar.AUF_WELTKARTE_SUCHEN.click();
+		//
+		// Koordinaten.X_KOORDINATE.clear();
+		// Koordinaten.X_KOORDINATE.sendText(590);
+		// Koordinaten.Y_KOORDINATE.clear();
+		// Koordinaten.Y_KOORDINATE.sendText(557);
+		// Koordinaten.JUMP_TO.click();
+		//
+		// Dorfoptionen.TRUPPEN_SCHICKEN.click(2);
+		//
+		// List<WebElement> list =
+		// TruppenSchicken.EINHEITEN_TABELLE.getWebelement().findElements(By.tagName("li"));
+		//
+		// for (WebElement webElement : list) {
+		// if (webElement.getAttribute("innerHTML").contains("Axtkämpfer")) {
+		//
+		// List<WebElement> axt = webElement.findElements(By.tagName("input"));
+		// axt.get(1).click();
+		// axt.get(1).sendKeys("1000");
+		// }
+		// }
+		//
+		// MainToolbar.AUF_WELTKARTE_SUCHEN.click();
+		//
+		// Koordinaten.X_KOORDINATE.clear();
+		// Koordinaten.X_KOORDINATE.sendText(584);
+		// Koordinaten.Y_KOORDINATE.clear();
+		// Koordinaten.Y_KOORDINATE.sendText(568);
+		// Koordinaten.JUMP_TO.click();
+		// sleep(1);
+		//
+		// MainToolbar.OBERFLAECHE.clickCoords(0, 0);
 
 		// Befehle wieder anzeigen
-		this.babas = barbarendoerfer;
+		babas = barbarendoerfer;
 
 		while (true) {
 
-			this.disableSound();
-
 			barbarendoerfer = serviceBabarendorf.findAll();
 
-			this.rohstoffeCheckenUndAxtBauen();
+			rohstoffeCheckenUndAxtBauen();
 
-			this.initVorlagen(this.getAnzahlAngriffe());
+			initVorlagen(this.getAnzahlAngriffe());
 
-			this.rohstofflagerCheck();
+			rohstofflagerCheck(false);
 
 			// Koordinaten eingen
 			MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
@@ -195,11 +217,8 @@ public class Main {
 					Koordinaten.Y_KOORDINATE.clear();
 					Koordinaten.Y_KOORDINATE.sendText(dorf.getY());
 					Koordinaten.JUMP_TO.click();
-					Main.sleep(300, TimeUnit.MILLISECONDS);
-					// if (Buttons.PRODUKTION_STEIGERN.isPresent(1000, TimeUnit.MILLISECONDS)
-					// || Buttons.PRODUKTION_STEIGERN2.isPresent(1000, TimeUnit.MILLISECONDS) &&
-					// dorf.isFarmable(Main.eigene.get(counter))) {
-					if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(1)) && dorf.isFarmable(Main.eigene.get(counter))) {
+
+					if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2)) && dorf.isFarmable(Main.eigene.get(counter))) {
 						sleep(1);
 						MainToolbar.OBERFLAECHE.sendText(1);
 
@@ -225,9 +244,9 @@ public class Main {
 								}
 
 								sleep(1);
-								this.rohstoffeCheckenUndAxtBauen();
+								// rohstoffeCheckenUndAxtBauen();
 
-								this.initVorlagen(this.getAnzahlAngriffe());
+								initVorlagen(getAnzahlAngriffe());
 
 								if (!Koordinaten.X_KOORDINATE.isPresent(Duration.ofSeconds(1)))
 									MainToolbar.AUF_WELTKARTE_SUCHEN.click();
@@ -239,6 +258,12 @@ public class Main {
 
 							serviceBabarendorf.updateDorf(tmp);
 						}
+					}
+					// wenn ein Barbarendorf kein Barbarendorf mehr ist
+					if (Dorfoptionen.NACHRICHT_SENDEN.isPresent()) {
+						System.out.println("Dorf: " + dorf.getName() + " ist kein Barbarendorf mehr, wird entfernt! ");
+						serviceBabarendorf.deleteDorf(dorf);
+
 					}
 				}
 			}
@@ -259,12 +284,19 @@ public class Main {
 
 			}
 			// checke die Points
-			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(20); stop > System.nanoTime();) {
+			for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(5); stop > System.nanoTime();) {
 
 				PointService servicePoint = (PointService) context.getBean("pointService");
 				ProvinzService serviceProvinz = (ProvinzService) context.getBean("provinzService");
 
 				List<Point> points = servicePoint.findAll();
+
+				points.sort(new Comparator<Point>() {
+
+					public int compare(Point o1, Point o2) {
+						return PointDaoImpl.getDistance((int) o1.getX(), 570, (int) o1.getY(), 583) - PointDaoImpl.getDistance((int) o2.getX(), 570, (int) o2.getY(), 583);
+					}
+				});
 
 				for (int i = 0; i < points.size(); i++) {
 					if (points.get(i).isChecked() && points.get(i).getCheckedAt().plusHours(48).isAfter(new LocalDateTime())) {
@@ -445,7 +477,7 @@ public class Main {
 		}
 	}
 
-	private void rohstoffeCheckenUndAxtBauen() {
+	private void rohstoffeCheckenUndAxtBauen() throws ElementisNotClickable, NoElementTextFound {
 		// Rohstoffe checken
 		sleep(1);
 
@@ -484,7 +516,7 @@ public class Main {
 		if ((currentHolz >= max || currentLehm >= max || currentEisen >= max) && Integer.parseInt(MainToolbar.PROVIANT.getText().replace(".", "")) > anzahl
 				|| MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen")) {
 			System.out.println("Baue " + anzahl + " axtkämpfer");
-			baueAxt(anzahl);
+			// baueAxt(anzahl);
 		} else {
 			System.out.println("Vorraussetzungen für " + anzahl + " axtkämpfer nicht erfüllt!");
 
@@ -494,7 +526,7 @@ public class Main {
 
 	}
 
-	private void baueAxt(int anzahl) {
+	private void baueAxt(int anzahl) throws ElementisNotClickable {
 
 		MainToolbar.OBERFLAECHE.sendText("b");
 		sleep(1);
@@ -521,9 +553,10 @@ public class Main {
 
 	}
 
-	private void disableSound() {
+	private void disableSound() throws ElementisNotClickable {
 		MainToolbar.EINSTELLUNGEN.click();
 		Einstellungen.EINSTELLUNGEN_SPIEL.click();
+		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_TIPPS_EINSCHALTEN.click();
 		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("start");
 		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_ANNIMATION1.click();
 		EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.scrollToElement("start");
@@ -538,27 +571,60 @@ public class Main {
 
 	}
 
-	private void rohstofflagerCheck() {
+	private int rohstofflagerCheck(boolean push) throws ElementisNotClickable, NoElementTextFound {
 		// Rohstofflager farmen
+		int ges = 0;
+
 		MainToolbar.OBERFLAECHE.sendText("d");
-		if (Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.isPresent(Duration.ofMillis(300))) {
+
+		if (Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.isPresent(Duration.ofMillis(2000))) {
 			Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.click();
+			Main.sleep(5);
 		}
-		Main.sleep(1);
-		if (Rohstofflager.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.isPresent(Duration.ofMillis(300))) {
-			Rohstofflager.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click();
-		}
-		Main.sleep(1);
-		if (Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofMillis(300))) {
-			Rohstofflager.ROHSTOFFLAGER_STARTEN.scrollToElement("end");
-			Rohstofflager.ROHSTOFFLAGER_STARTEN.click();
+		if (!Rohstofflager.AKTUELLE_PRODUKTION.getAttribute("innerHTML").contains("Aktuelle Produktion")) {
+
+			Main.sleep(1);
+			if (Rohstofflager.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.isPresent(Duration.ofMillis(300))) {
+				Rohstofflager.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click();
+			}
+
+			Main.sleep(1);
+			if (Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofMillis(300))) {
+				Rohstofflager.ROHSTOFFLAGER_STARTEN.scrollToElement("end");
+
+				String[] zeit = Rohstofflager.ROHSTOFFLAGER_STARTEN_ZEIT.getText().split(":");
+				ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
+				System.out.println("Dauer von neuem Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
+
+				Rohstofflager.ROHSTOFFLAGER_STARTEN.click();
+
+				MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+				return ges;
+			}
+			if (push && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%")) {
+				if (!Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofSeconds(2))) {
+					Rohstofflager.ITEMS_VERWENDEN.click(2);
+					Rohstofflager.BENUTZEN.click(2);
+					Rohstofflager.GEGENSTAND_BENUTZEN.click(2);
+				}
+			}
+		} else {
+
+			String[] zeit = Rohstofflager.AKTUELLE_PRODUKTION_ZEIT.getText().split(":");
+			ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
+			System.out.println("Dauer von aktuellem Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
+			MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+			return ges;
 		}
 
 		MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
+		return ges;
 
 	}
 
-	private int getAnzahlAngriffe() {
+	private int getAnzahlAngriffe() throws ElementisNotClickable {
 		MainToolbar.EINHEITEN_UEBERSICHT.click();
 		sleep(2);
 
@@ -582,7 +648,7 @@ public class Main {
 		return tmp;
 	}
 
-	private void ausgehendenAngriffeVerbergen() {
+	private void ausgehendenAngriffeVerbergen() throws ElementisNotClickable {
 		MainToolbar.EINSTELLUNGEN.click();
 		Einstellungen.EINSTELLUNGEN_SPIEL.click();
 
@@ -596,7 +662,7 @@ public class Main {
 
 	}
 
-	private void initVorlagen(int anzahlAngriffe) {
+	private void initVorlagen(int anzahlAngriffe) throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
 		MainToolbar.OBERFLAECHE.sendText("r");
 		Sammelplatz.GLOBALE_VORLAGENLISTE.click();
 		UebersichtVorlangenliste.GLOBALE_VORLAGENLISTE_STATUS.click();
@@ -615,36 +681,52 @@ public class Main {
 
 			if (tmp < 500) {
 				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.clear();
-				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.sendText(50);
+				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_AXT.sendText(100);
 
 			}
-			// SPEER Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", "")) / verbleibendeAngriffe
+
+			// Leichte Kavellerie
+			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_LKAV.clear();
+			tmp = Integer.parseInt(MainToolbar.ANZAHL_LKAV.getText().replace(".", ""));
+
+			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_LKAV.sendText(tmp / verbleibendeAngriffe);
+
+			if (tmp < 500) {
+				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_LKAV.clear();
+				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_LKAV.sendText(15);
+
+			}
+
+			// SPEER
 			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
-			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(0);
+			//
+			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", "")) / verbleibendeAngriffe);
 
 			tmp = Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", ""));
 
 			if (tmp < 500) {
 				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.clear();
 
-				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(0);
+				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SPEER.sendText(50);
 
 			}
-			// SCHWERT Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", "")) / verbleibendeAngriffe
+			// SCHWERT
 			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.clear();
-			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(0);
+			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", "")) / verbleibendeAngriffe);
 
 			tmp = Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", ""));
 
 			if (tmp < 500) {
 				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.clear();
 
-				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(0);
+				VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_SCHWERT.sendText(100);
 
 			}
+			
+			// Paladin
 
 			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_PALADIN.clear();
-			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_PALADIN.sendText(1);
+			VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_ANZAHL_PALADIN.sendText(0);
 		}
 
 		VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_1.scrollToElement("end");
@@ -678,12 +760,24 @@ public class Main {
 		}
 	}
 
-	public void restartDriver() {
+	public void restartDriver() throws ElementisNotClickable {
+
 		if (driver != null) {
-			driver.quit();
+
+			driver.navigate().refresh();
+			sleep(5);
+
+			Login.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
+
+			sleep(2);
 		}
 
-		Main.driver = new FirefoxDriver();
+		if (driver == null) {
+			Main.driver = new FirefoxDriver();
+			driver.get("https://de.tribalwars2.com/");
+			login();
+		}
+
 	}
 
 	public static WebDriver getDriver() {

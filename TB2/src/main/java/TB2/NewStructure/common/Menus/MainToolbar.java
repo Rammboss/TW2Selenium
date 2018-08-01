@@ -26,7 +26,9 @@ public class MainToolbar extends AbstractMenue {
 	public static Button ANZAHL_SPEER = new Button("Anzahl Speerträger", "/html/body/div[2]/div[12]/div/ul/li[1]/div/div", Button.BY_XPATH);
 	public static Button ANZAHL_SCHWERT = new Button("Anzahl Speerträger", "/html/body/div[2]/div[12]/div/ul/li[2]/div/div", Button.BY_XPATH);
 	public static Button ANZAHL_AXT = new Button("Anzahl Axtkämpfer", "/html/body/div[2]/div[12]/div/ul/li[3]/div/div", Button.BY_XPATH);
+	public static Button ANZAHL_LKAV = new Button("Anzahl Axtkämpfer", "/html/body/div[2]/div[12]/div/ul/li[5]/div/div", Button.BY_XPATH);
 
+	
 	public static Button EINSTELLUNGEN = new Button("Einstellungen öffnen", "/html/body/div[2]/footer/div/div[2]/div[2]/ul/li[10]/a", Button.BY_XPATH);
 
 	public static Button ERROR_50_ANGRIFFE = new Button("50 Angriffe", "/html/body/div[2]/div[7]/div/div[3]/div", Button.BY_XPATH);
