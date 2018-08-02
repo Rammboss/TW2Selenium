@@ -1,20 +1,12 @@
 package TB2.NewStructure.common.hibernate.model;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Dorf")
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+//@Inheritance(strategy = InheritanceType.JOINED)
+//@MappedSuperclass
+//@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class Dorf {
 
 	@Id

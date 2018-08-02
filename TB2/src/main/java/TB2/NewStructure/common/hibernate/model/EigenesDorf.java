@@ -1,56 +1,107 @@
 package TB2.NewStructure.common.hibernate.model;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "EigenesDorf")
-@DiscriminatorValue("EigenesDorf")
-public class EigenesDorf extends Dorf {
+//@PrimaryKeyJoinColumn(name = "dorf_id")
+//@DiscriminatorValue("EigenesDorf")
+public class EigenesDorf {
 
-	@Column(name = "SPIELER")
-	private String spieler;
 
-	public EigenesDorf(int x, int y, String name, int punkte, String spieler) {
-		super(x, y, name, punkte);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-		this.spieler = spieler;
+    @Column(name = "X", nullable = false)
+    private int x;
+    @Column(name = "Y", nullable = false)
+    private int y;
 
-	}
+    @Column(name = "NAME")
+    private String name;
 
-	public EigenesDorf() {
-		super(500, 500, "test", 300);
-		
-		this.spieler = null;
-	}
+    @Column(name = "PUNKTE")
+    private int punkte;
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((spieler == null) ? 0 : spieler.hashCode());
-		return result;
-	}
+    @Column(name = "SPIELER")
+    private String spieler;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EigenesDorf other = (EigenesDorf) obj;
-		if (spieler == null) {
-			if (other.spieler != null)
-				return false;
-		} else if (!spieler.equals(other.spieler))
-			return false;
-		return true;
-	}
-	
-	
+    public EigenesDorf(int x, int y, String name, int punkte, String spieler) {
+        this.x = x;
+        this.y = y;
+        this.name = name;
+        this.punkte = punkte;
+        this.spieler = spieler;
+    }
 
+    public EigenesDorf() {
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EigenesDorf that = (EigenesDorf) o;
+        return x == that.x &&
+                y == that.y &&
+                punkte == that.punkte &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(spieler, that.spieler);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, name, punkte, spieler);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPunkte() {
+        return punkte;
+    }
+
+    public void setPunkte(int punkte) {
+        this.punkte = punkte;
+    }
+
+    public String getSpieler() {
+        return spieler;
+    }
+
+    public void setSpieler(String spieler) {
+        this.spieler = spieler;
+    }
 }

@@ -4,7 +4,9 @@ import TB2.TB2.Button;
 
 public class Dorfoptionen extends AbstractMenue {
 
-	public static Button MENUE_MITTE = new Button("Menu Mitte", "/html/body/div[2]/div[9]/div[4]/div/div[1]", Button.BY_XPATH);
+	//public static Button MENUE_MITTE = new Button("Menu Mitte", "/html/body/div[2]/div[9]/div[4]/div/div[1]", Button.BY_XPATH);
+	public static Button MENUE_MITTE = new Button("Menue Mitte", "div","class", "menu-highlight", Button.BY_CSS_SELECTOR );
+
 	public static Button PRODUKTION_STEIGERN = new Button("Produktion steigern", "div", "tooltip-content", "Produktion steigern", Button.BY_CSS_SELECTOR);
 	public static Button DORFINFORMATIONEN = new Button("Dorf Infos", "div", "tooltip-content", "Dorfinformationen", Button.BY_CSS_SELECTOR);
 
