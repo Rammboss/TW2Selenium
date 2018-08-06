@@ -125,7 +125,7 @@ public class Main {
                 //Main.sleep(app.rohstofflagerCheck(true));
                 app.runTask(app.checkAndInitPoints());
             } catch (Throwable e) {
-                logger.info("Ein unerwarteter Fehler ist aufgetreten! Treiber wird in 5 sekunden neu gestartet!");
+                logger.info("Ein unerwarteter Fehler ist aufgetreten! Treiber wird in 55 sekunden neu gestartet!");
 
                 context.close();
                 context = new AnnotationConfigApplicationContext(AppConfig.class);
