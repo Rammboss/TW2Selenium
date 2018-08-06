@@ -1,0 +1,8 @@
+package TB2.NewStructure.common.units;
+
+public enum Units {
+
+
+    AXT, BERITTINER_BOGEN, BOGEN, KATAPULT, LKAV, RAMMEN, SKAV, SCHWERT, SPEER, BERSERKER, PALADIN, TREBUCHET, ADELSGESCHLECHT
+
+}
