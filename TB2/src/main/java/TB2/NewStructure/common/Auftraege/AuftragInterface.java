@@ -1,20 +1,27 @@
 package TB2.NewStructure.common.Auftraege;
 
+import TB2.NewStructure.common.exceptions.ElementisNotClickable;
+import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import org.openqa.selenium.WebDriver;
+
+import java.time.LocalTime;
 
 
 public interface AuftragInterface {
-	
-	public void run(WebDriver driver);
-	
-	public boolean check();
-	public int getPriority();
 
-	public void setPriority(int priority);
-	
-	public long getTime();
-	public void setTime(long time);
-	
+    void run(WebDriver driver) throws ElementisNotClickable, NoElementTextFound;
+
+    boolean check() throws NoElementTextFound;
+
+    int getPriority();
+
+    void setPriority(int priority);
+
+    void setStartTime(LocalTime time);
+
+    LocalTime getStartTime();
+
+    void getAvgRunTime();
 
 
 }

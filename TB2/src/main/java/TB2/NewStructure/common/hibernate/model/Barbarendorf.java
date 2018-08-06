@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "Barbarendorf")
 //@PrimaryKeyJoinColumn(name = "dorf_id")
 //@DiscriminatorValue("Barbarendorf")
-public class Barbarendorf {
+public class Barbarendorf implements KoordinatenInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,8 @@ public class Barbarendorf {
     @Column(name = "LASTATTACK")
     private LocalDateTime attackedAt;
 
-    private static final int FARM_INTERVALL = 60;
+
+    private static final int FARM_INTERVALL = 90;
 
     private static final int MAX_DISTANCE = 505955;
 
@@ -47,7 +48,7 @@ public class Barbarendorf {
 
     public boolean isFarmable(EigenesDorf attacker) {
 
-        return this.getAttackedAt().plusMinutes(FARM_INTERVALL).isBefore(LocalDateTime.now()) && getDistance(attacker.getX(), this.getX(), attacker.getY(), this.getY()) < MAX_DISTANCE;
+        return this.getAttackedAt().plusMinutes(FARM_INTERVALL).isBefore(LocalDateTime.now()) && new DistanceCalculator(attacker, this).getDistance() < MAX_DISTANCE;
 
     }
 
@@ -113,33 +114,6 @@ public class Barbarendorf {
 
     public void setPunkte(int punkte) {
         this.punkte = punkte;
-    }
-
-    public long compareTwoTimeStamps(Timestamp currentTime, Timestamp oldTime) {
-        long milliseconds1 = oldTime.getTime();
-        long milliseconds2 = currentTime.getTime();
-
-        long diff = milliseconds2 - milliseconds1;
-        long diffSeconds = diff / 1000;
-        long diffMinutes = diff / (60 * 1000);
-        long diffHours = diff / (60 * 60 * 1000);
-        long diffDays = diff / (24 * 60 * 60 * 1000);
-
-        return diffMinutes;
-    }
-
-    public boolean isodd(int value) {
-        return value % 2 != 0;
-    }
-
-    public int getDistance(int x1, int x2, int y1, int y2) {
-        double z1 = isodd(y1) ? x1 + 0.5 : x1 - 0.5;
-        double z2 = isodd(y2) ? x2 + 0.5 : x2 - 0.5;
-
-        double d1 = Math.sqrt(Math.pow((z1 - z2), 2) + 0.75 * Math.pow(y1 - y2, 2));
-        double d2 = Math.sqrt(Math.pow((x1 - x2), 2) + 0.75 * Math.pow((y1 - y2), 2));
-        int erg = (int) ((d1 + d2) / 2 * 10000);
-        return erg;
     }
 
 }

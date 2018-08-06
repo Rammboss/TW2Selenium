@@ -7,7 +7,7 @@ import java.util.Objects;
 @Table(name = "EigenesDorf")
 //@PrimaryKeyJoinColumn(name = "dorf_id")
 //@DiscriminatorValue("EigenesDorf")
-public class EigenesDorf {
+public class EigenesDorf implements KoordinatenInterface {
 
 
     @Id
@@ -50,6 +50,20 @@ public class EigenesDorf {
                 punkte == that.punkte &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(spieler, that.spieler);
+    }
+
+    public boolean isOdd(int value) {
+        return value % 2 != 0;
+    }
+
+    public int getDistance(int x1, int x2, int y1, int y2) {
+        double z1 = isOdd(y1) ? x1 + 0.5 : x1 - 0.5;
+        double z2 = isOdd(y2) ? x2 + 0.5 : x2 - 0.5;
+
+        double d1 = Math.sqrt(Math.pow((z1 - z2), 2) + 0.75 * Math.pow(y1 - y2, 2));
+        double d2 = Math.sqrt(Math.pow((x1 - x2), 2) + 0.75 * Math.pow((y1 - y2), 2));
+        int erg = (int) ((d1 + d2) / 2 * 10000);
+        return erg;
     }
 
     @Override
