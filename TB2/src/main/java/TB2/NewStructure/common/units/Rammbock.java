@@ -2,6 +2,8 @@ package TB2.NewStructure.common.units;
 
 
 public class Rammbock {
+    public static Units TYPE = Units.RAMMEN;
+
     private final int holzKosten = 300;
     private final int lehmKosten = 200;
     private final int eisenKosten = 200;
@@ -17,6 +19,9 @@ public class Rammbock {
     private final int tragekapazitaet = 0;
 
     private int geschwindigkeitMin = 24;
+
+    public Rammbock() {
+    }
 
     public Rammbock(int bauzeitSEC, int geschwindigkeitMin) {
         this.bauzeitSEC = bauzeitSEC;

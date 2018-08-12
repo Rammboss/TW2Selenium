@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 public interface AuftragInterface {
 
-    void run(WebDriver driver) throws ElementisNotClickable, NoElementTextFound;
+    void run() throws ElementisNotClickable, NoElementTextFound;
 
     boolean check() throws NoElementTextFound;
 

@@ -27,15 +27,17 @@ public class EnterKoordinaten implements AuftragInterface {
     private static int successfulRuns;
     private static int failedRuns;
 
-    public EnterKoordinaten(KoordinatenInterface point) {
+    public EnterKoordinaten(KoordinatenInterface point) throws ElementisNotClickable {
 
         this.priority = 1;
         this.point = point;
         this.startTime = LocalTime.now();
 
+        run();
+
     }
 
-    public void run(WebDriver driver) throws ElementisNotClickable {
+    public void run() throws ElementisNotClickable {
 
         if (Koordinaten.X_KOORDINATE.isNOTPresent(Duration.ofMillis(500)) & Koordinaten.Y_KOORDINATE.isNOTPresent(Duration.ofMillis(500))) {
             MainToolbar.AUF_WELTKARTE_SUCHEN.click();

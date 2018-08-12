@@ -7,9 +7,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import TB2.NewStructure.common.Auftraege.EnterKoordinaten;
-import TB2.NewStructure.common.Auftraege.InitVorlagen;
-import TB2.NewStructure.common.Auftraege.SelectOwnVillage;
+import TB2.NewStructure.common.Auftraege.*;
+import TB2.NewStructure.common.Menus.*;
 import TB2.NewStructure.common.hibernate.model.*;
 import TB2.NewStructure.common.units.Units;
 import org.openqa.selenium.Keys;
@@ -22,21 +21,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
-import TB2.NewStructure.common.Menus.Dorfansicht;
-import TB2.NewStructure.common.Menus.Dorfinformationen;
-import TB2.NewStructure.common.Menus.Dorfoptionen;
-import TB2.NewStructure.common.Menus.Einheiten;
-import TB2.NewStructure.common.Menus.Einstellungen;
-import TB2.NewStructure.common.Menus.EinstellungenSubSpiel;
-import TB2.NewStructure.common.Menus.Kaserne;
-import TB2.NewStructure.common.Menus.Login;
-import TB2.NewStructure.common.Menus.MainToolbar;
-import TB2.NewStructure.common.Menus.Provinzansicht;
-import TB2.NewStructure.common.Menus.Rohstofflager;
-import TB2.NewStructure.common.Menus.Sammelplatz;
-import TB2.NewStructure.common.Menus.Speicher;
-import TB2.NewStructure.common.Menus.UebersichtVorlangenliste;
-import TB2.NewStructure.common.Menus.VorlangeErstellenOderAendern;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.configuration.AppConfig;
@@ -55,7 +39,7 @@ public class Main {
         System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
         System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
 
-        account = new Account("Rammboss", "kalterhund", "Gaillard", new EigenesDorf(583, 567, "A005", 2088, "Rammboss"));
+        account = new Account("Rammboss", "kalterhund", "Gaillard", new EigenesDorf(583, 567, "A001", 4205, "Rammboss"));
         // account = new Account("DerZurecker", "aleyotmi1", "Gaillard", new EigenesDorf(574,576, "Geil 001",4108,"DerZurecker"));
         // account = new Account("Don Porro", "Kacklappen", "Gaillard");
     }
@@ -66,7 +50,7 @@ public class Main {
 
     public static int index;
 
-    public static List<EigenesDorf> eigene;
+    public static List<EigenesDorf> ownVillages;
 
     public List<Barbarendorf> babas;
 
@@ -121,11 +105,11 @@ public class Main {
         while (true) {
             try {
                 app.restartDriver();
-                //sleep(20);
                 //Main.sleep(app.rohstofflagerCheck(true));
+                app.disableSound();
                 app.runTask(app.checkAndInitPoints());
             } catch (Throwable e) {
-                logger.info("Ein unerwarteter Fehler ist aufgetreten! Treiber wird in 55 sekunden neu gestartet!");
+                logger.info("Ein unerwarteter Fehler ist aufgetreten! Treiber wird neu gestartet!");
 
                 context.close();
                 context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -140,30 +124,15 @@ public class Main {
 
         MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
 
-        disableSound();
 
-        eigene = eigenesDorfDao.findBySpieler(account.getSpielername());
+        GetOwnVillages getOwn = new GetOwnVillages(account);
+        Main.ownVillages = getOwn.getOwnVillages();
         List<Dorf> dorfListe = dorfDao.findAll();
         List<Barbarendorf> barbarendoerfer = barbarendorfDao.findAll();
 
-        if (Main.eigene.size() != 0) {
-            account.setErstesDorf(Main.eigene.get(0));
 
-        }
+        new SelectOwnVillage(Main.ownVillages.get(0));
 
-        if (Main.eigene.size() == 0 || dorfListe.size() == 0) {
-            ausgehendenAngriffeVerbergen();
-
-            Main.eigene = eigenesDorfDao.findBySpieler(account.getSpielername());
-            dorfListe = dorfDao.findAll();
-            barbarendoerfer = barbarendorfDao.findAll();
-
-            ausgehendenAngriffeVerbergen();
-
-        }
-        if (Main.eigene.size() != 0) {
-            new SelectOwnVillage(Main.eigene.get(0)).run(Main.getDriver());
-        }
 
         // Angriff timen
         // if (!Koordinaten.X_KOORDINATE.isPresent(Duration.ofSeconds(1)))
@@ -203,76 +172,32 @@ public class Main {
         // Befehle wieder anzeigen
         babas = barbarendoerfer;
 
+        List<Units> farmableUnits = new ArrayList<>();
+        farmableUnits.add(Units.SPEER);
+        farmableUnits.add(Units.AXT);
+        farmableUnits.add(Units.LKAV);
+        farmableUnits.add(Units.BERITTINER_BOGEN);
+        farmableUnits.add(Units.SKAV);
+
+        //findOwnVillage("A001").setBlockAttacks(true);
+
+
         while (true) {
+            new RohstofflagerFarmen(Main.ownVillages.get(0), false);
 
-//            barbarendoerfer = barbarendorfDao.findAll();
-
-            // rohstoffeCheckenUndAxtBauen();
-
-            initVorlagen(getAnzahlAngriffe());
-
-            rohstofflagerCheck(true);
-
-            // Koordinaten eingen
-            MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-            if (Main.eigene.size() != 0) {
-
-                final AtomicInteger counter = new AtomicInteger();
-
-                List<Barbarendorf> farmableBarb = babas.stream().filter(x -> x.isFarmable(eigene.get(counter.get()))).collect(Collectors.toList());
-
-                for (Barbarendorf dorf : farmableBarb) {
-                    new EnterKoordinaten(dorf).run(Main.getDriver());
-
-                    if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2))) {
-                        sleep(1);
-                        MainToolbar.OBERFLAECHE.sendText(1);
-
-                        if (MainToolbar.ERROR_50_ANGRIFFE.isPresent(Duration.ofMillis(1000))) {
-                            MainToolbar.ERROR_50_ANGRIFFE.click(); // instead of click on message, because causes errors
-
-                            if (counter.get() >= Main.eigene.size() - 1) {
-                                break;
-                            } else {
-
-                                // Eigenes Dorf wechseln
-                                counter.incrementAndGet();
-                                new SelectOwnVillage(Main.eigene.get(counter.get())).run(Main.getDriver());
-                                sleep(1);
-                                rohstofflagerCheck(true);
-                                // rohstoffeCheckenUndAxtBauen();
-
-                                initVorlagen(getAnzahlAngriffe());
-                            }
-
-                        } else {
-                            Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
-                            tmp.setAttackedAt(LocalDateTime.now());
-
-                            barbarendorfDao.save(tmp);
-                        }
-                    }
-                    // wenn ein Barbarendorf kein Barbarendorf mehr ist
-                    if (Dorfoptionen.NACHRICHT_SENDEN.isPresent()) {
-                        logger.info("Dorf: " + dorf.getName() + " ist kein Barbarendorf mehr, wird entfernt! ");
-                        barbarendorfDao.delete(dorf);
-
-                    }
+            for (EigenesDorf own : Main.ownVillages) {
+                if (!own.isBlockAttacks()) {
+                    new FarmWithVillage(farmableUnits, own, barbarendoerfer, barbarendorfDao);
                 }
             }
 
 
-            if (account.getErstesDorf() != null) {
-                new SelectOwnVillage(account.getErstesDorf()).run(Main.getDriver());
-
-            }
             // checke die Points
-            for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(5); stop > System.nanoTime(); ) {
+            for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(10); stop > System.nanoTime(); ) {
 
-                points.sort(Comparator.comparingInt(o -> new DistanceCalculator(o, account.getErstesDorf()).getDistance()));
+                points.sort(Comparator.comparingInt(o -> new DistanceCalculator(o, Main.ownVillages.get(0)).getDistance()));
 
-                points.removeIf(p -> p.isChecked() && p.getCheckedAt().plusHours(48).isAfter(LocalDateTime.now()));
+                points.removeIf(p -> p.isChecked() && p.getCheckedAt().plusDays(4).isAfter(LocalDateTime.now()));
 
                 for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
                     Point currentPoint = points.get(i);
@@ -281,7 +206,7 @@ public class Main {
                         MainToolbar.COMPLETE_BUILDING.click();
                     }
 
-                    new EnterKoordinaten(currentPoint).run(Main.getDriver());
+                    new EnterKoordinaten(currentPoint);
 
                     if (Dorfoptionen.MENUE_MITTE.isPresent(Duration.ofSeconds(2)) && !Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content").equals("Rohstofflager")
                             && !Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content").equals("Freund einladen")) {
@@ -389,10 +314,9 @@ public class Main {
                     pointDao.save(currentPoint);
 
                     logger.info("Update:" + currentPoint);
-                    // sleep(5);
                 }
 
-                Main.eigene = eigenesDorfDao.findBySpieler(account.getSpielername());
+                Main.ownVillages = new GetOwnVillages(account).getOwnVillages();
                 dorfListe = dorfDao.findAll();
 
                 barbarendoerfer = barbarendorfDao.findAll();
@@ -400,7 +324,7 @@ public class Main {
 
 
                 logger.info("Driver wird neugestartet!");
-                this.restartDriver();
+                restartDriver();
             }
         }
     }
@@ -497,70 +421,6 @@ public class Main {
 
     }
 
-    private int rohstofflagerCheck(boolean push) throws ElementisNotClickable, NoElementTextFound {
-        // Rohstofflager farmen
-        int ges = 0;
-
-        MainToolbar.OBERFLAECHE.sendText("d");
-
-        if (Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.isPresent(Duration.ofMillis(2000))) {
-            Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.click();
-            Rohstofflager.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click(Duration.ofSeconds(5));
-
-
-        }
-        if (!Rohstofflager.AKTUELLE_PRODUKTION.getAttribute("innerHTML").contains("Aktuelle Produktion")) {
-
-            if (push && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%")) {
-                if (!Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofSeconds(2))) {
-                    Rohstofflager.ITEMS_VERWENDEN.click(Duration.ofSeconds(2));
-                    Rohstofflager.BENUTZEN.click(Duration.ofSeconds(2));
-                    Rohstofflager.GEGENSTAND_BENUTZEN.click(Duration.ofSeconds(2));
-                }
-            }
-            Main.sleep(1);
-            if (Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofMillis(300))) {
-                Rohstofflager.ROHSTOFFLAGER_STARTEN.scrollToElement("end");
-
-                String[] zeit = Rohstofflager.ROHSTOFFLAGER_STARTEN_ZEIT.getText().split(":");
-                ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
-                logger.info("Dauer von neuem Rohstofflage Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
-
-                Rohstofflager.ROHSTOFFLAGER_STARTEN.click();
-
-                MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-                return ges;
-            }
-
-        } else {
-
-            String[] zeit = Rohstofflager.AKTUELLE_PRODUKTION_ZEIT.getText().split(":");
-            ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
-            logger.info("Dauer von aktuellem Rohstofflager Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
-            MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-            return ges;
-        }
-
-        MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-        return ges;
-
-    }
-
-    private int getAnzahlAngriffe() throws ElementisNotClickable {
-        MainToolbar.EINHEITEN_UEBERSICHT.click();
-
-        Einheiten.TABLE_UNITS_ROWS.isPresent(Duration.ofSeconds(5));
-
-        int rowCount = Einheiten.TABLE_UNITS_ROWS.getWebelements().size();
-
-        MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-        logger.info("Anzahl der bisherigen Angriffe: " + rowCount);
-        return rowCount;
-
-    }
-
     private void ausgehendenAngriffeVerbergen() throws ElementisNotClickable {
         MainToolbar.EINSTELLUNGEN.click();
         Einstellungen.EINSTELLUNGEN_SPIEL.click();
@@ -587,7 +447,8 @@ public class Main {
         logger.info("Verbleibende Angriffe: " + verbleibendeAngriffe);
         sleep(1);
         if (verbleibendeAngriffe > 0) {
-            // Barbaren
+
+            // Axtkämpfer
             VorlangeErstellenOderAendern.ANZAHL_AXT.clear();
             int tmp = Integer.parseInt(MainToolbar.ANZAHL_AXT.getText().replace(".", ""));
 
@@ -611,19 +472,31 @@ public class Main {
 
             }
 
+            // berittene Bögen
+            VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.clear();
+            tmp = Integer.parseInt(MainToolbar.ANZAHL_BERITTENER_BOGEN.getText().replace(".", ""));
+
+            VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.sendText(tmp / verbleibendeAngriffe);
+
+            if (tmp < 500) {
+                VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.clear();
+                VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.sendText(30);
+
+            }
+
             // SPEER
             VorlangeErstellenOderAendern.ANZAHL_SPEER.clear();
-            //
-            VorlangeErstellenOderAendern.ANZAHL_SPEER.sendText(0);
-
             tmp = Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", ""));
+
+            VorlangeErstellenOderAendern.ANZAHL_SPEER.sendText(tmp / verbleibendeAngriffe);
 
             if (tmp < 500) {
                 VorlangeErstellenOderAendern.ANZAHL_SPEER.clear();
 
-                VorlangeErstellenOderAendern.ANZAHL_SPEER.sendText(0);
+                VorlangeErstellenOderAendern.ANZAHL_SPEER.sendText(100);
 
             }
+
             // SCHWERT
             VorlangeErstellenOderAendern.ANZAHL_SCHWERT.clear();
             VorlangeErstellenOderAendern.ANZAHL_SCHWERT.sendText(0);
@@ -659,7 +532,7 @@ public class Main {
 
     }
 
-    static void sleep(int sec) {
+    public static void sleep(int sec) {
         try {
             TimeUnit.SECONDS.sleep(sec);
         } catch (InterruptedException e1) {
@@ -695,6 +568,20 @@ public class Main {
             account.login();
         }
 
+    }
+
+    public EigenesDorf findOwnVillage(String name) {
+        if (Main.ownVillages.isEmpty())
+            return null;
+
+        for (EigenesDorf own : Main.ownVillages) {
+
+            if (own.getName().equals(name)) {
+                return own;
+            }
+
+        }
+        return null;
     }
 
     public static WebDriver getDriver() {

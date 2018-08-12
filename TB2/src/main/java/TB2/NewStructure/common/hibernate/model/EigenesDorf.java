@@ -28,12 +28,15 @@ public class EigenesDorf implements KoordinatenInterface {
     @Column(name = "SPIELER")
     private String spieler;
 
+    private boolean blockAttacks;
+
     public EigenesDorf(int x, int y, String name, int punkte, String spieler) {
         this.x = x;
         this.y = y;
         this.name = name;
         this.punkte = punkte;
         this.spieler = spieler;
+        this.blockAttacks = false;
     }
 
     public EigenesDorf() {
@@ -117,5 +120,13 @@ public class EigenesDorf implements KoordinatenInterface {
 
     public void setSpieler(String spieler) {
         this.spieler = spieler;
+    }
+
+    public boolean isBlockAttacks() {
+        return blockAttacks;
+    }
+
+    public void setBlockAttacks(boolean blockAttacks) {
+        this.blockAttacks = blockAttacks;
     }
 }

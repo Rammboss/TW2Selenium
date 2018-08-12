@@ -21,7 +21,7 @@ public class VorlangeErstellenOderAendern extends AbstractMenue {
             "div", "class", "ff-cell-fix cell-space-44x44", "Axtkämpfer", Button.BY_CSS_SELECTOR_WITH_CRITERIA);
 
     public static Button ANZAHL_BOGEN = new Button("Globale Vorlagenliste Anzahl Bogenschütze ",
-            "div", "class", "ff-cell-fix cell-space-44x44", "Bogenschütze ", Button.BY_CSS_SELECTOR_WITH_CRITERIA);
+            "div", "class", "ff-cell-fix cell-space-44x44", "Bogenschütze", Button.BY_CSS_SELECTOR_WITH_CRITERIA);
 
     public static Button ANZAHL_LKAV = new Button("Globale Vorlagenliste Anzahl Leichte Kavallerie",
             "div", "class", "ff-cell-fix cell-space-44x44", "Leichte Kavallerie", Button.BY_CSS_SELECTOR_WITH_CRITERIA);

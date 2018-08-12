@@ -2,10 +2,12 @@ package TB2.NewStructure.common.Auftraege;
 
 import TB2.NewStructure.common.Menus.Einheiten;
 import TB2.NewStructure.common.Menus.MainToolbar;
+import TB2.NewStructure.common.Menus.Overview;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.hibernate.model.KoordinatenInterface;
+import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -28,28 +30,42 @@ public class AnzahlBisherigeAngriffe implements AuftragInterface {
     private static int successfulRuns;
     private static int failedRuns;
 
-    public AnzahlBisherigeAngriffe(EigenesDorf dorf) {
+    public AnzahlBisherigeAngriffe(EigenesDorf dorf) throws NoElementTextFound, ElementisNotClickable {
 
         this.priority = 1;
         this.own = dorf;
         this.startTime = LocalTime.now();
 
+        run();
+
     }
 
-    public void run(WebDriver driver) throws NoElementTextFound, ElementisNotClickable {
-        new SelectOwnVillage(own).run(driver);
+    public void run() throws NoElementTextFound, ElementisNotClickable {
+        new SelectOwnVillage(own);
 
-        MainToolbar.EINHEITEN_UEBERSICHT.click();
+        MainToolbar.UEBERSICHTEN.click();
 
-        Einheiten.TABLE_UNITS_ROWS.isPresent(Duration.ofSeconds(5));
+        if (!Overview.NUR_AKTUELLES_DORF.isPresent()) {
+            Overview.BEFEHLE.click();
+        }
+        if (Overview.NUR_AKTUELLES_DORF.getAttribute("class").equals("box-border-dark")) {
+            Overview.NUR_AKTUELLES_DORF.click();
+        }
+        int currentAttackCount = Overview.TABLE.getWebelements().size();
 
-        int rowCount = Einheiten.TABLE_UNITS_ROWS.getWebelements().size();
+        if (Overview.SEITE2.isPresent()) {
+            Overview.SEITE2.click();
+
+            currentAttackCount += Overview.TABLE.getWebelements().size();
+
+        }
+
+        logger.info("Anzahl der bisherigen Angriffe: " + currentAttackCount);
+
+        setAnzahlAngriffe(currentAttackCount);
+
 
         MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-        logger.info("Anzahl der bisherigen Angriffe: " + rowCount);
-
-        setAnzahlAngriffe(rowCount);
-
 
     }
 

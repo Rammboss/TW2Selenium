@@ -2,6 +2,8 @@ package TB2.NewStructure.common.units;
 
 
 public class Bogenschuetze {
+    public static Units TYPE = Units.BOGEN;
+
     private final int holzKosten = 80;
     private final int lehmKosten = 30;
     private final int eisenKosten = 60;
@@ -17,6 +19,9 @@ public class Bogenschuetze {
     private final int tragekapazitaet = 10;
 
     private int geschwindigkeitMin = 14;
+
+    public Bogenschuetze() {
+    }
 
     public Bogenschuetze(int bauzeitSEC, int geschwindigkeitMin) {
         this.bauzeitSEC = bauzeitSEC;

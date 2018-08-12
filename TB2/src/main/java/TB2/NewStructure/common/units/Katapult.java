@@ -2,6 +2,8 @@ package TB2.NewStructure.common.units;
 
 
 public class Katapult {
+    public static Units TYPE = Units.KATAPULT;
+
     private final int holzKosten = 320;
     private final int lehmKosten = 400;
     private final int eisenKosten = 100;
@@ -17,6 +19,9 @@ public class Katapult {
     private final int tragekapazitaet = 0;
 
     private int geschwindigkeitMin = 24;
+
+    public Katapult() {
+    }
 
     public Katapult(int bauzeitSEC, int geschwindigkeitMin) {
         this.bauzeitSEC = bauzeitSEC;

@@ -2,6 +2,8 @@ package TB2.NewStructure.common.units;
 
 
 public class LeichteKavallerie {
+    public static Units TYPE = Units.LKAV;
+
     private final int holzKosten = 125;
     private final int lehmKosten = 100;
     private final int eisenKosten = 250;
@@ -17,6 +19,9 @@ public class LeichteKavallerie {
     private final int tragekapazitaet = 50;
 
     private int geschwindigkeitMin = 8;
+
+    public LeichteKavallerie() {
+    }
 
     public LeichteKavallerie(int bauzeitSEC, int geschwindigkeitMin) {
         this.bauzeitSEC = bauzeitSEC;

@@ -2,6 +2,8 @@ package TB2.NewStructure.common.units;
 
 
 public class Axtkaempfer {
+    public static Units TYPE = Units.AXT;
+
     private final int holzKosten = 60;
     private final int lehmKosten = 30;
     private final int eisenKosten = 40;
@@ -17,6 +19,10 @@ public class Axtkaempfer {
     private final int tragekapazitaet = 20;
 
     private int geschwindigkeitMin = 14;
+
+    public Axtkaempfer() {
+
+    }
 
     public Axtkaempfer(int bauzeitSEC, int geschwindigkeitMin) {
         this.bauzeitSEC = bauzeitSEC;

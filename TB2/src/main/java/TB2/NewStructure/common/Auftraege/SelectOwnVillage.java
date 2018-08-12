@@ -28,21 +28,23 @@ public class SelectOwnVillage implements AuftragInterface {
     private static int successfulRuns;
     private static int failedRuns;
 
-    public SelectOwnVillage(EigenesDorf own) {
+    public SelectOwnVillage(EigenesDorf own) throws NoElementTextFound, ElementisNotClickable {
 
         this.priority = 1;
         this.own = own;
         this.startTime = LocalTime.now();
 
+        run();
+
     }
 
-    public void run(WebDriver driver) throws ElementisNotClickable, NoElementTextFound {
+    public void run() throws ElementisNotClickable, NoElementTextFound {
         String tmp = MainToolbar.CURRENT_VILLAGE_KOORDS.getText().replace("(", "").replace(")", "");
         String[] coords = tmp.split("\\|");
         String currentName = MainToolbar.CURRENT_VILLAGE_NAME.getText();
 
         if (!currentName.equals(own.getName()) || !coords[0].equals("" + own.getX()) || !coords[1].equals("" + own.getY())) {
-            new EnterKoordinaten(own).run(Main.getDriver());
+            new EnterKoordinaten(own);
 
             Dorfoptionen.ACTIVE_VILLAGE.click(Duration.ofSeconds(10));
         }

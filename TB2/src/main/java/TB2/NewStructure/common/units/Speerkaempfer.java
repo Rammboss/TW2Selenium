@@ -2,6 +2,8 @@ package TB2.NewStructure.common.units;
 
 
 public class Speerkaempfer {
+    public static Units TYPE = Units.SPEER;
+
     private final int holzKosten = 50;
     private final int lehmKosten = 30;
     private final int eisenKosten = 20;
@@ -17,6 +19,9 @@ public class Speerkaempfer {
     private final int tragekapazitaet = 25;
 
     private int geschwindigkeitMin = 14;
+
+    public Speerkaempfer() {
+    }
 
     public Speerkaempfer(int bauzeitSEC, int geschwindigkeitMin) {
         this.bauzeitSEC = bauzeitSEC;

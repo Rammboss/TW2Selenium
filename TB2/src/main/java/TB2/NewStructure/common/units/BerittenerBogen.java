@@ -2,6 +2,8 @@ package TB2.NewStructure.common.units;
 
 
 public class BerittenerBogen {
+    public static Units TYPE = Units.BERITTINER_BOGEN;
+
     private final int holzKosten = 250;
     private final int lehmKosten = 200;
     private final int eisenKosten = 100;
@@ -17,6 +19,9 @@ public class BerittenerBogen {
     private final int tragekapazitaet = 50;
 
     private int geschwindigkeitMin = 8;
+
+    public BerittenerBogen() {
+    }
 
     public BerittenerBogen(int bauzeitSEC, int geschwindigkeitMin) {
         this.bauzeitSEC = bauzeitSEC;

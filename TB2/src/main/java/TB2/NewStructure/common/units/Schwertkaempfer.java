@@ -2,6 +2,8 @@ package TB2.NewStructure.common.units;
 
 
 public class Schwertkaempfer {
+    public static Units TYPE = Units.SCHWERT;
+
     private final int holzKosten = 30;
     private final int lehmKosten = 30;
     private final int eisenKosten = 70;
@@ -17,6 +19,9 @@ public class Schwertkaempfer {
     private final int tragekapazitaet = 15;
 
     private int geschwindigkeitMin = 18;
+
+    public Schwertkaempfer() {
+    }
 
     public Schwertkaempfer(int bauzeitSEC, int geschwindigkeitMin) {
         this.bauzeitSEC = bauzeitSEC;
