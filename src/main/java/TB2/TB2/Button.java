@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
-import TB2.NewStructure.common.exceptions.ElementsAreNotCompareabele;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 
 public class Button {
@@ -221,6 +220,8 @@ public class Button {
                         return webElement;
                     }
                 }
+                return null;
+
             case 22:
                 list = driver.findElements(By.cssSelector("" + getType() + "[" + getAttribute() + "='" + getAttributeValue() + "']"));
 
@@ -232,6 +233,8 @@ public class Button {
                         return webElement;
                     }
                 }
+                return null;
+
             case 3:
                 return driver.findElement(By.id(getXpath()));
             case 4:
@@ -271,6 +274,7 @@ public class Button {
                         return webElement;
                     }
                 }
+                return null;
             case 22:
                 list = element.findElements(By.cssSelector("" + btn.getType() + "[" + btn.getAttribute() + "='" + btn.getAttributeValue() + "']"));
 
@@ -279,6 +283,8 @@ public class Button {
                         return webElement;
                     }
                 }
+                return null;
+
             case 3:
                 return element.findElement(By.id(btn.getXpath()));
             case 4:
@@ -324,26 +330,19 @@ public class Button {
         return Main.getDriver().findElements(By.xpath(xpath));
     }
 
-    public void click() throws ElementisNotClickable {
+    public void click() throws ElementisNotClickable, ElementClickInterceptedException {
 
         if (isPresent(Duration.ofSeconds(5))) {
-            try {
-                getWebelement(Main.getDriver()).click();
-            } catch (ElementClickInterceptedException e) {
-                logger.error("Button konnte nicht geklickt werden!", e);
-            }
+            getWebelement(Main.getDriver()).click();
         } else {
             throw new ElementisNotClickable("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
         }
-
     }
 
     public void click(Duration time) throws ElementisNotClickable {
-
         if (isPresent(time)) {
             click();
         }
-
     }
 
     public void scrollToElement(String topaligin) {

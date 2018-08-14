@@ -7,6 +7,9 @@ public class Overview extends AbstractMenue {
     public static Button DOERFER = new Button("Befehle", "div", "class", "tab", "Dörfer", Button.BY_CSS_SELECTOR_WITH_CRITERIA);
 
     public static Button NUR_AKTUELLES_DORF = new Button("Nur aktuelles Dorf", "div", "tooltip-content", "Nur aktuelles Dorf", Button.BY_CSS_SELECTOR);
+    public static Button UNTERSTUETZUNG = new Button("Unterstützung ein-/ausblenden", "div", "tooltip-content", "Unterstützung", Button.BY_CSS_SELECTOR);
+    public static Button UMSIEDELUNG = new Button("Umsiedelung ein-/ausblenden", "div", "tooltip-content", "Umsiedlung", Button.BY_CSS_SELECTOR);
+
     public static Button TABLE = new Button("Seite 1 Table", "/html/body/div[2]/section/div/div[3]/div/div/div/div[2]/div[1]/div/div/div[1]/table/tbody/tr", Button.BY_XPATH);
 
     public static Button SEITE2 = new Button("Seite 1 Table", "div", "class", "btn-page btn-orange", "2", Button.BY_CSS_SELECTOR_WITH_CRITERIA);

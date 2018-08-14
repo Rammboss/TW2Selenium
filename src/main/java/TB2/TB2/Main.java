@@ -11,11 +11,13 @@ import TB2.NewStructure.common.Auftraege.*;
 import TB2.NewStructure.common.Menus.*;
 import TB2.NewStructure.common.hibernate.model.*;
 import TB2.NewStructure.common.units.Units;
+import org.hibernate.exception.JDBCConnectionException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -97,23 +99,33 @@ public class Main {
 
 
     public static void main(String[] args) {
-
-        AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        Main app = context.getBean(Main.class);
+        AbstractApplicationContext context = null;
+        Main app = null;
 
         while (true) {
             try {
+                if (context == null || app == null) {
+                    context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+                    app = context.getBean(Main.class);
+                }
                 app.restartDriver();
+                MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
+
                 //Main.sleep(app.rohstofflagerCheck(true));
                 app.disableSound();
                 app.runTask(app.checkAndInitPoints());
+            } catch (BeanCreationException e) {
+                logger.info("Der Pi erstellt gerade ein Backup, warte 10 minuten!");
+                sleep(10, TimeUnit.MINUTES);
             } catch (Throwable e) {
                 logger.info("Ein unerwarteter Fehler ist aufgetreten! Treiber wird neu gestartet!");
-
-                context.close();
-                context = new AnnotationConfigApplicationContext(AppConfig.class);
-                app = context.getBean(Main.class);
+                if (context != null) {
+                    context.close();
+                    context = new AnnotationConfigApplicationContext(AppConfig.class);
+                }
+                if (app != null)
+                    app = context.getBean(Main.class);
 
                 logger.error("main error", e);
             }
@@ -121,8 +133,6 @@ public class Main {
     }
 
     private void runTask(List<Point> points) throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
-
-        MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
 
 
         GetOwnVillages getOwn = new GetOwnVillages(account);

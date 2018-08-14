@@ -130,7 +130,7 @@ public class FarmWithVillage implements AuftragInterface {
 
             logger.info("Angriffe mit Kavallerie: " + attacksForKav);
 
-            if (attacksForKav > 0) {
+            if (attacksForKav > 0 && proviantKavellerie > 0) {
                 HashMap<Units, Integer> kavUnits = new HashMap<>();
 
                 kavUnits.put(Units.LKAV, units.get(Units.LKAV) / attacksForKav);
@@ -153,7 +153,7 @@ public class FarmWithVillage implements AuftragInterface {
 
             // farme mit Restruppen
             logger.info("Angriffe mit Resttruppen: " + remainingAttacks);
-            if (remainingAttacks > 0) {
+            if (remainingAttacks > 0 && proviantRest > 0) {
                 HashMap<Units, Integer> restUnits = new HashMap<>();
 
                 restUnits.put(Units.SPEER, units.get(Units.SPEER) / remainingAttacks);
@@ -181,8 +181,10 @@ public class FarmWithVillage implements AuftragInterface {
     public int farmBabas(int counter) throws ElementisNotClickable {
 
         int counterStart = counter;
+        logger.info("Barbarendörferanzahl:" + barbarendorfDao.findAll().size());
 
         List<Barbarendorf> farmableBarb = getBabas().stream().filter(x -> x.isFarmable(own)).sorted(Comparator.comparingInt(o -> new DistanceCalculator(o, own).getDistance())).collect(Collectors.toList());
+        logger.info("Barbarendörferanzahl die Vorraussetzungen erfüllen:" + farmableBarb.size());
 
         for (Barbarendorf dorf : farmableBarb) {
             if (counter <= 0) {

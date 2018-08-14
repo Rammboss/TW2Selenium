@@ -51,6 +51,14 @@ public class AnzahlBisherigeAngriffe implements AuftragInterface {
         if (Overview.NUR_AKTUELLES_DORF.getAttribute("class").equals("box-border-dark")) {
             Overview.NUR_AKTUELLES_DORF.click();
         }
+
+        if (Overview.UNTERSTUETZUNG.getAttribute("class").equals("box-border-dark active")) {
+            Overview.UNTERSTUETZUNG.click();
+        }
+        if (Overview.UMSIEDELUNG.getAttribute("class").equals("box-border-dark active")) {
+            Overview.UMSIEDELUNG.click();
+        }
+
         int currentAttackCount = Overview.TABLE.getWebelements().size();
 
         if (Overview.SEITE2.isPresent()) {
