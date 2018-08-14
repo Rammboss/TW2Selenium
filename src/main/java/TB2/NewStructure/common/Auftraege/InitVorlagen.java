@@ -29,7 +29,7 @@ public class InitVorlagen implements AuftragInterface {
     private static int successfulRuns;
     private static int failedRuns;
 
-    public InitVorlagen(EigenesDorf own, Map<Units, Integer> units ) throws NoElementTextFound, ElementisNotClickable {
+    public InitVorlagen(EigenesDorf own, Map<Units, Integer> units) throws NoElementTextFound, ElementisNotClickable {
 
         this.priority = 1;
         this.own = own;
@@ -46,7 +46,7 @@ public class InitVorlagen implements AuftragInterface {
         UebersichtVorlangenliste.FARM_EDIT.click();
 
 
-        VorlangeErstellenOderAendern.ANZAHL_SPEER.isPresent();
+        VorlangeErstellenOderAendern.ANZAHL_SPEER.isPresent(Duration.ofMinutes(1));
 
         VorlangeErstellenOderAendern.ANZAHL_SPEER.clear();
         VorlangeErstellenOderAendern.ANZAHL_SCHWERT.clear();
