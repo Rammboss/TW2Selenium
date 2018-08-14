@@ -12,6 +12,7 @@ import org.openqa.selenium.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,6 +37,7 @@ public class GetOwnVillages implements AuftragInterface {
 
 
         MainToolbar.PROFIL.click();
+        PlayerProfil.PLAYERNAME.isPresent(Duration.ofMinutes(1));
         PlayerProfil.TABLE_OWN_VILLAGES.isPresent();
         WebElement element = PlayerProfil.TABLE_OWN_VILLAGES.getWebelement(Main.driver);
 

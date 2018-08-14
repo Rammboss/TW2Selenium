@@ -152,7 +152,7 @@ public class Main {
         // Koordinaten.X_KOORDINATE.sendText(590);
         // Koordinaten.Y_KOORDINATE.clear();
         // Koordinaten.Y_KOORDINATE.sendText(557);
-        // Koordinaten.JUMP_TO.click();
+        // Koordinaten.JUMP_TO_VILLAGE.click();
         //
         // Dorfoptionen.TRUPPEN_SCHICKEN.click(2);
         //
@@ -174,7 +174,7 @@ public class Main {
         // Koordinaten.X_KOORDINATE.sendText(584);
         // Koordinaten.Y_KOORDINATE.clear();
         // Koordinaten.Y_KOORDINATE.sendText(568);
-        // Koordinaten.JUMP_TO.click();
+        // Koordinaten.JUMP_TO_VILLAGE.click();
         // sleep(1);
         //
         // MainToolbar.OBERFLAECHE.clickCoords(0, 0);

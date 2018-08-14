@@ -6,8 +6,6 @@ import TB2.NewStructure.common.Menus.MainToolbar;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.KoordinatenInterface;
-import TB2.TB2.Main;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,12 +40,14 @@ public class EnterKoordinaten implements AuftragInterface {
         if (Koordinaten.X_KOORDINATE.isNOTPresent(Duration.ofMillis(500)) & Koordinaten.Y_KOORDINATE.isNOTPresent(Duration.ofMillis(500))) {
             MainToolbar.AUF_WELTKARTE_SUCHEN.click();
         }
+        if (Koordinaten.X_KOORDINATE.isPresent() && Koordinaten.Y_KOORDINATE.isPresent() && Koordinaten.JUMP_TO_VILLAGE.isPresent()){
+            Koordinaten.X_KOORDINATE.clear();
+            Koordinaten.X_KOORDINATE.sendText(point.getX());
+            Koordinaten.Y_KOORDINATE.clear();
+            Koordinaten.Y_KOORDINATE.sendText(point.getY());
+            Koordinaten.JUMP_TO_VILLAGE.click();
+        }
 
-        Koordinaten.X_KOORDINATE.clear();
-        Koordinaten.X_KOORDINATE.sendText(point.getX());
-        Koordinaten.Y_KOORDINATE.clear();
-        Koordinaten.Y_KOORDINATE.sendText(point.getY());
-        Koordinaten.JUMP_TO.click();
 
 
     }
