@@ -1,5 +1,6 @@
 package TB2.TB2;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -12,9 +13,13 @@ import TB2.NewStructure.common.Menus.*;
 import TB2.NewStructure.common.hibernate.model.*;
 import TB2.NewStructure.common.units.Units;
 import org.hibernate.exception.JDBCConnectionException;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
@@ -40,6 +45,9 @@ public class Main {
     static {
         System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
         System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
+
+//        System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+//        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
 
         account = new Account("Rammboss", "kalterhund", "Gaillard", new EigenesDorf(583, 567, "A001", 4205, "Rammboss"));
         // account = new Account("DerZurecker", "aleyotmi1", "Gaillard", new EigenesDorf(574,576, "Geil 001",4108,"DerZurecker"));
@@ -193,6 +201,8 @@ public class Main {
 
 
         while (true) {
+            System.gc();
+
             new RohstofflagerFarmen(Main.ownVillages.get(0), false);
 
             for (EigenesDorf own : Main.ownVillages) {
@@ -563,6 +573,22 @@ public class Main {
 
         if (driver != null) {
 
+//            Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+//            String browserName = cap.getBrowserName();
+//            if (browserName.equals("firefox")) {
+//                try {
+//                    Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
+//                    Runtime.getRuntime().exec("taskkill /F /IM plugin-container.exe");
+//                    Runtime.getRuntime().exec("taskkill /F /IM firefox.exe");
+//                    driver = null;
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                driver.quit();
+//                driver = null;
+//            }
+
             driver.navigate().refresh();
             sleep(5);
 
@@ -573,8 +599,10 @@ public class Main {
 
         if (driver == null) {
             Main.driver = new FirefoxDriver();
+            driver.manage().window().setPosition(new org.openqa.selenium.Point(2100, 0));
             driver.get("https://de.tribalwars2.com/");
             driver.manage().window().maximize();
+            System.gc();
             account.login();
         }
 
