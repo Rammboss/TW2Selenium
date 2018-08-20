@@ -9,7 +9,6 @@ import TB2.NewStructure.common.hibernate.model.Barbarendorf;
 import TB2.NewStructure.common.hibernate.model.DistanceCalculator;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.units.*;
-import TB2.TB2.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,26 +24,20 @@ import java.util.stream.Collectors;
 public class FarmWithVillage implements AuftragInterface {
     private static Logger logger = LoggerFactory.getLogger(FarmWithVillage.class);
 
-    private List<Units> units;
+    private List<Units> farmableUnits;
 
     private EigenesDorf own;
 
-    private List<Barbarendorf> babas;
 
     public List<Barbarendorf> getBabas() {
         return barbarendorfDao.findAll();
     }
 
-    public void setBabas(List<Barbarendorf> babas) {
-        this.babas = babas;
-    }
-
     private BarbarendorfDao barbarendorfDao;
 
-    public FarmWithVillage(List<Units> units, EigenesDorf own, List<Barbarendorf> babas, BarbarendorfDao barbarendorfDao) throws NoElementTextFound, ElementisNotClickable {
-        this.units = units;
+    public FarmWithVillage(List<Units> farmableUnits, EigenesDorf own, BarbarendorfDao barbarendorfDao) throws NoElementTextFound, ElementisNotClickable {
+        this.farmableUnits = farmableUnits;
         this.own = own;
-        this.babas = babas;
         this.barbarendorfDao = barbarendorfDao;
         run();
     }
@@ -53,132 +46,140 @@ public class FarmWithVillage implements AuftragInterface {
     public void run() throws NoElementTextFound, ElementisNotClickable {
         new SelectOwnVillage(own);
 
+        logger.info("Farme mit: " + own.getName());
+
         AnzahlBisherigeAngriffe attackCountTask = new AnzahlBisherigeAngriffe(own);
         int remainingAttacks = 50 - attackCountTask.getAnzahlAngriffe();
+        if (remainingAttacks >= 0) {
 
-        GetUnitsFormOwnVillage unitsTask = new GetUnitsFormOwnVillage(own);
-        HashMap<Units, Integer> units = unitsTask.getUnits();
+            GetUnitsFormOwnVillage unitsTask = new GetUnitsFormOwnVillage(own, farmableUnits);
+            HashMap<Units, Integer> units = unitsTask.getUnits();
 
-        int proviantKavellerie = 0;
-        int proviantRest = 0;
+            int proviantKavellerie = 0;
+            int proviantRest = 0;
 
-        //Berechne Proviant der Armee
-        for (Map.Entry<Units, Integer> entry : units.entrySet()) {
-            Units key = entry.getKey();
-            int value = entry.getValue();
+            //Berechne Proviant der Armee
+            for (Map.Entry<Units, Integer> entry : units.entrySet()) {
+                Units key = entry.getKey();
+                int value = entry.getValue();
 
-            switch (key) {
-                case SPEER: {
-                    proviantRest += value * new Speerkaempfer().getProviant();
-                    break;
+                switch (key) {
+                    case SPEER: {
+                        if (farmableUnits.contains(Units.SPEER))
+                            proviantRest += value * new Speerkaempfer().getProviant();
+                        break;
+                    }
+                    case SCHWERT: {
+                        if (farmableUnits.contains(Units.SCHWERT))
+                            proviantRest += value * new Schwertkaempfer().getProviant();
+                        break;
+                    }
+                    case AXT: {
+                        if (farmableUnits.contains(Units.AXT))
+                            proviantRest += value * new Axtkaempfer().getProviant();
+                        break;
+                    }
+                    case BOGEN: {
+                        if (farmableUnits.contains(Units.BOGEN))
+                            proviantRest += value * new Bogenschuetze().getProviant();
+                        break;
+                    }
+                    case LKAV: {
+                        if (farmableUnits.contains(Units.LKAV))
+                            proviantKavellerie += value * new LeichteKavallerie().getProviant();
+                        break;
+                    }
+                    case BERITTINER_BOGEN: {
+                        if (farmableUnits.contains(Units.BERITTINER_BOGEN))
+                            proviantKavellerie += value * new BerittenerBogen().getProviant();
+                        break;
+                    }
+                    case SKAV: {
+                        if (farmableUnits.contains(Units.SKAV))
+                            proviantKavellerie += value * new SchwereKavalerie().getProviant();
+                        break;
+                    }
+                    case RAMMEN: {
+                        if (farmableUnits.contains(Units.RAMMEN))
+                            proviantRest += value * new Rammbock().getProviant();
+                        break;
+                    }
+                    case KATAPULT: {
+                        if (farmableUnits.contains(Units.KATAPULT))
+                            proviantRest += value * new Katapult().getProviant();
+                        break;
+                    }
+                    case BERSERKER: {
+                        break;
+                    }
+                    case TREBUCHET: {
+                        break;
+                    }
+                    case ADELSGESCHLECHT: {
+                        break;
+                    }
+                    case PALADIN: {
+                        break;
+                    }
+                    default: {
+                        throw new IndexOutOfBoundsException();
+                    }
                 }
-                case SCHWERT: {
-                    proviantRest += value * new Schwertkaempfer().getProviant();
-                    break;
-                }
-                case AXT: {
-                    proviantRest += value * new Axtkaempfer().getProviant();
-                    break;
-                }
-                case BOGEN: {
-                    proviantRest += value * new Bogenschuetze().getProviant();
-                    break;
-                }
-                case LKAV: {
-                    proviantKavellerie += value * new LeichteKavallerie().getProviant();
-                    break;
-                }
-                case BERITTINER_BOGEN: {
-                    proviantKavellerie += value * new BerittenerBogen().getProviant();
-                    break;
-                }
-                case SKAV: {
-                    proviantKavellerie += value * new SchwereKavalerie().getProviant();
-                    break;
-                }
-                case RAMMEN: {
-                    proviantRest += value * new Rammbock().getProviant();
-                    break;
-                }
-                case KATAPULT: {
-                    proviantRest += value * new Katapult().getProviant();
-                    break;
-                }
-                case BERSERKER: {
-                    break;
-                }
-                case TREBUCHET: {
-                    break;
-                }
-                case ADELSGESCHLECHT: {
-                    break;
-                }
-                case PALADIN: {
-                    break;
-                }
-                default: {
-                    throw new IndexOutOfBoundsException();
-                }
+
+
             }
+            //farme mit Kavallerie
+            if ((proviantRest + proviantKavellerie) > 0) {
 
+                int attacksForKav = (int) (((double) proviantKavellerie / (proviantRest + proviantKavellerie)) * remainingAttacks);
+
+                logger.info("Angriffe mit Kavallerie: " + attacksForKav);
+
+                if (attacksForKav > 0 && proviantKavellerie > 0) {
+                    HashMap<Units, Integer> kavUnits = new HashMap<>();
+
+                    kavUnits.put(Units.LKAV, units.get(Units.LKAV) / attacksForKav);
+                    if ((units.get(Units.LKAV) / attacksForKav) < 20)
+                        kavUnits.put(Units.LKAV, 20);
+
+                    kavUnits.put(Units.SKAV, units.get(Units.SKAV) / attacksForKav);
+                    if ((units.get(Units.SKAV) / attacksForKav) < 20)
+                        kavUnits.put(Units.SKAV, 20);
+
+                    kavUnits.put(Units.BERITTINER_BOGEN, units.get(Units.BERITTINER_BOGEN) / attacksForKav);
+                    if ((units.get(Units.BERITTINER_BOGEN) / attacksForKav) < 20)
+                        kavUnits.put(Units.BERITTINER_BOGEN, 20);
+
+                    new InitVorlagen(own, kavUnits);
+                    remainingAttacks -= farmBabas(attacksForKav, true);
+
+
+                }
+
+                // farme mit Restruppen
+                logger.info("Angriffe mit Resttruppen: " + remainingAttacks);
+                if (remainingAttacks > 0 && proviantRest > 0) {
+                    HashMap<Units, Integer> restUnits = new HashMap<>();
+
+                    restUnits.put(Units.SPEER, units.get(Units.SPEER) / remainingAttacks);
+                    if ((units.get(Units.SPEER) / remainingAttacks) < 100)
+                        restUnits.put(Units.SPEER, 100);
+
+                    restUnits.put(Units.AXT, units.get(Units.AXT) / remainingAttacks);
+                    if ((units.get(Units.AXT) / remainingAttacks) < 100)
+                        restUnits.put(Units.AXT, 100);
+
+                    new InitVorlagen(own, restUnits);
+                    remainingAttacks -= farmBabas(remainingAttacks, false);
+                }
+                logger.info("Verbleibende Angriffe: " + remainingAttacks);
+            }
 
         }
-        //farme mit Kavallerie
-        if ((proviantRest + proviantKavellerie) > 0) {
-
-            int attacksForKav = (int) (((double) proviantKavellerie / (proviantRest + proviantKavellerie)) * remainingAttacks);
-
-            logger.info("Angriffe mit Kavallerie: " + attacksForKav);
-
-            if (attacksForKav > 0 && proviantKavellerie > 0) {
-                HashMap<Units, Integer> kavUnits = new HashMap<>();
-
-                kavUnits.put(Units.LKAV, units.get(Units.LKAV) / attacksForKav);
-                if ((units.get(Units.LKAV) / attacksForKav) < 20)
-                    kavUnits.put(Units.LKAV, 20);
-
-                kavUnits.put(Units.SKAV, units.get(Units.SKAV) / attacksForKav);
-                if ((units.get(Units.SKAV) / attacksForKav) < 20)
-                    kavUnits.put(Units.SKAV, 20);
-
-                kavUnits.put(Units.BERITTINER_BOGEN, units.get(Units.BERITTINER_BOGEN) / attacksForKav);
-                if ((units.get(Units.BERITTINER_BOGEN) / attacksForKav) < 20)
-                    kavUnits.put(Units.BERITTINER_BOGEN, 20);
-
-                new InitVorlagen(own, kavUnits);
-                remainingAttacks -= farmBabas(attacksForKav);
-
-
-            }
-
-            // farme mit Restruppen
-            logger.info("Angriffe mit Resttruppen: " + remainingAttacks);
-            if (remainingAttacks > 0 && proviantRest > 0) {
-                HashMap<Units, Integer> restUnits = new HashMap<>();
-
-                restUnits.put(Units.SPEER, units.get(Units.SPEER) / remainingAttacks);
-                if ((units.get(Units.SPEER) / remainingAttacks) < 100)
-                    restUnits.put(Units.SPEER, 100);
-
-                restUnits.put(Units.AXT, units.get(Units.AXT) / remainingAttacks);
-                if ((units.get(Units.AXT) / remainingAttacks) < 100)
-                    restUnits.put(Units.AXT, 100);
-
-                new InitVorlagen(own, restUnits);
-                remainingAttacks -= farmBabas(remainingAttacks);
-            }
-            logger.info("Verbleibende Angriffe: " + remainingAttacks);
-        }
-
-
     }
 
-    /**
-     * @param counter
-     * @return den StartCounter, wenn alles gefarmt wurde. den restlichen Counter, wenn er nicht bis zum Schluss farmt
-     * @throws ElementisNotClickable
-     */
-    public int farmBabas(int counter) throws ElementisNotClickable {
+
+    private int farmBabas(int counter, boolean isKav) throws ElementisNotClickable, NoElementTextFound {
 
         int counterStart = counter;
         logger.info("Barbarendörferanzahl:" + barbarendorfDao.findAll().size());
@@ -190,31 +191,71 @@ public class FarmWithVillage implements AuftragInterface {
             if (counter <= 0) {
                 return counterStart;
             }
-            if (MainToolbar.ERROR_50_ANGRIFFE.isPresent(Duration.ofMillis(600))) {
-                return counter;
-            }
+
             new EnterKoordinaten(dorf);
 
             if (Dorfoptionen.MENUE_MITTE.isPresent(Duration.ofSeconds(5))) {
                 if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent()) {
-                    Main.sleep(1);
+                    // einheiten bevor dem Angriff
+//                    int lkavBEFORE = Integer.parseInt(MainToolbar.ANZAHL_LKAV.getText().replace(".", ""));
+//                    int bkavBEFORE = Integer.parseInt(MainToolbar.ANZAHL_BERITTENER_BOGEN.getText().replace(".", ""));
+//                    int skavBEFORE = Integer.parseInt(MainToolbar.ANZAHL_SKAV.getText().replace(".", ""));
+//
+//                    int speerBEFORE = Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", ""));
+//                    int axtBEFORE = Integer.parseInt(MainToolbar.ANZAHL_AXT.getText().replace(".", ""));
+
+
                     MainToolbar.OBERFLAECHE.sendText(1);
+//                    long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(20);
+
+//                    if (isKav) {
+//                        int lkavAFTER = Integer.parseInt(MainToolbar.ANZAHL_LKAV.getText().replace(".", ""));
+//                        int bkavAFTER = Integer.parseInt(MainToolbar.ANZAHL_BERITTENER_BOGEN.getText().replace(".", ""));
+//                        int skavAFTER = Integer.parseInt(MainToolbar.ANZAHL_SKAV.getText().replace(".", ""));
+//
+//                        for (; lkavBEFORE == lkavAFTER && bkavBEFORE == bkavAFTER && skavBEFORE == skavAFTER && stop > System.nanoTime(); ) {
+//                            try {
+//                                Thread.sleep(100);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    } else {
+//                        int speerAFTER = Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", ""));
+//                        int axtAFTER = Integer.parseInt(MainToolbar.ANZAHL_AXT.getText().replace(".", ""));
+//                        for (; speerBEFORE == speerAFTER && axtBEFORE == axtAFTER && stop > System.nanoTime(); ) {
+//                            try {
+//                                Thread.sleep(100);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    }
+
+
                     counter--;
 
                     // Barbarendorf updaten
                     Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
                     tmp.setAttackedAt(LocalDateTime.now());
                     barbarendorfDao.save(tmp);
+
+                    if (!MainToolbar.ERROR_50_ANGRIFFE.isNOTPresent(Duration.ofMillis(1000))) {
+                        logger.info("Keine Truppen mehr vorhanden!");
+                        return counter;
+                    }
                 } else if (Dorfoptionen.NACHRICHT_SENDEN.isPresent()) {
-                    Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
-                    barbarendorfDao.delete(tmp);
-                    logger.info("Lösche Barbarendorf(Spieler)");
+//                    Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
+//                    barbarendorfDao.delete(tmp);
+//                    logger.info("Lösche Barbarendorf(Spieler)");
                 }
 
             } else {
-                Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
-                barbarendorfDao.delete(tmp);
-                logger.info("Lösche Barbarendorf, Dorf nicht vorhanden!!!");
+//                Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
+//                barbarendorfDao.delete(tmp);
+//                logger.info("Lösche Barbarendorf, Dorf nicht vorhanden!!!");
 
             }
         }
@@ -227,7 +268,7 @@ public class FarmWithVillage implements AuftragInterface {
     }
 
     @Override
-    public boolean check() throws NoElementTextFound {
+    public boolean check() {
         return false;
     }
 

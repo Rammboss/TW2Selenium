@@ -1,11 +1,10 @@
 package TB2.NewStructure.common.hibernate.dao;
 
-import java.util.List;
-import java.util.Optional;
-
+import TB2.NewStructure.common.hibernate.model.Provinz;
 import org.springframework.data.repository.CrudRepository;
 
-import TB2.NewStructure.common.hibernate.model.Provinz;
+import java.util.List;
+import java.util.Optional;
 
 public interface ProvinzDao extends CrudRepository<Provinz, Integer> {
 	List<Provinz> findByName(String name);

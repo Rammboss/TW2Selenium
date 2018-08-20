@@ -1,11 +1,10 @@
 package TB2.NewStructure.common.hibernate.dao;
 
-import java.util.List;
-import java.util.Optional;
-
+import TB2.NewStructure.common.hibernate.model.Barbarendorf;
 import org.springframework.data.repository.CrudRepository;
 
-import TB2.NewStructure.common.hibernate.model.Barbarendorf;
+import java.util.List;
+import java.util.Optional;
 
 public interface BarbarendorfDao extends CrudRepository<Barbarendorf, Integer> {
 

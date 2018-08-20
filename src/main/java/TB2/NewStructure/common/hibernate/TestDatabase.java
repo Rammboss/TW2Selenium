@@ -1,15 +1,14 @@
 package TB2.NewStructure.common.hibernate;
 
-import java.time.LocalDateTime;
-
+import TB2.NewStructure.common.hibernate.configuration.AppConfig;
+import TB2.NewStructure.common.hibernate.dao.PointDao;
+import TB2.NewStructure.common.hibernate.model.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import TB2.NewStructure.common.hibernate.configuration.AppConfig;
-import TB2.NewStructure.common.hibernate.dao.PointDao;
-import TB2.NewStructure.common.hibernate.model.Point;
+import java.time.LocalDateTime;
 
 public class TestDatabase {
 

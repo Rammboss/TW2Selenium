@@ -2,7 +2,6 @@ package TB2.NewStructure.common.Gebaeude;
 
 import TB2.NewStructure.common.Menus.Kaserne;
 import TB2.NewStructure.common.Menus.MainToolbar;
-import TB2.TB2.Button;
 
 public class Hauptgebaeude extends Building {
 

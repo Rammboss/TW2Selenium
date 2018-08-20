@@ -1,10 +1,8 @@
 package TB2.NewStructure.common.hibernate.model;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-import javax.persistence.*;
 
 @Entity
 @Table(name = "Barbarendorf")

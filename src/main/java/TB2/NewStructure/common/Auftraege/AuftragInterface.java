@@ -2,7 +2,6 @@ package TB2.NewStructure.common.Auftraege;
 
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
-import org.openqa.selenium.WebDriver;
 
 import java.time.LocalTime;
 

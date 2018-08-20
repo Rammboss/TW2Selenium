@@ -8,15 +8,25 @@ import TB2.NewStructure.common.units.Units;
 
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 
 public class GetUnitsFormOwnVillage implements AuftragInterface {
 
     private EigenesDorf own;
     private HashMap<Units, Integer> units;
+    private List<Units> farmableUnits;
 
     public GetUnitsFormOwnVillage(EigenesDorf own) throws NoElementTextFound, ElementisNotClickable {
         this.own = own;
         this.units = new HashMap<>();
+
+        run();
+    }
+
+    public GetUnitsFormOwnVillage(EigenesDorf own, List<Units> farmableUnits) throws NoElementTextFound, ElementisNotClickable {
+        this.own = own;
+        this.units = new HashMap<>();
+        this.farmableUnits = farmableUnits;
 
         run();
     }
@@ -28,25 +38,51 @@ public class GetUnitsFormOwnVillage implements AuftragInterface {
 
         HashMap<Units, Integer> tmp = new HashMap<>();
 
-        tmp.put(Units.SPEER, Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", "")));
-        tmp.put(Units.SCHWERT, Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", "")));
-        tmp.put(Units.AXT, Integer.parseInt(MainToolbar.ANZAHL_AXT.getText().replace(".", "")));
-        tmp.put(Units.BOGEN, Integer.parseInt(MainToolbar.ANZAHL_BOGEN.getText().replace(".", "")));
-        tmp.put(Units.LKAV, Integer.parseInt(MainToolbar.ANZAHL_LKAV.getText().replace(".", "")));
-        tmp.put(Units.BERITTINER_BOGEN, Integer.parseInt(MainToolbar.ANZAHL_BERITTENER_BOGEN.getText().replace(".", "")));
-        tmp.put(Units.SKAV, Integer.parseInt(MainToolbar.ANZAHL_SKAV.getText().replace(".", "")));
-        tmp.put(Units.RAMMEN, Integer.parseInt(MainToolbar.ANZAHL_RAMMEN.getText().replace(".", "")));
-        tmp.put(Units.KATAPULT, Integer.parseInt(MainToolbar.ANZAHL_KATAPULT.getText().replace(".", "")));
-        tmp.put(Units.BERSERKER, Integer.parseInt(MainToolbar.ANZAHL_BERSERKER.getText().replace(".", "")));
-        tmp.put(Units.TREBUCHET, Integer.parseInt(MainToolbar.ANZAHL_TREBUCHET.getText().replace(".", "")));
-        tmp.put(Units.ADELSGESCHLECHT, Integer.parseInt(MainToolbar.ANZAHL_ADELSGESCHLECHT.getText().replace(".", "")));
-        tmp.put(Units.PALADIN, Integer.parseInt(MainToolbar.ANZAHL_PALADIN.getText().replace(".", "")));
+        if (farmableUnits.contains(Units.SPEER))
+            tmp.put(Units.SPEER, Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.SCHWERT))
+            tmp.put(Units.SCHWERT, Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.AXT))
+            tmp.put(Units.AXT, Integer.parseInt(MainToolbar.ANZAHL_AXT.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.BOGEN))
+            tmp.put(Units.BOGEN, Integer.parseInt(MainToolbar.ANZAHL_BOGEN.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.LKAV))
+            tmp.put(Units.LKAV, Integer.parseInt(MainToolbar.ANZAHL_LKAV.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.BERITTINER_BOGEN))
+            tmp.put(Units.BERITTINER_BOGEN, Integer.parseInt(MainToolbar.ANZAHL_BERITTENER_BOGEN.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.SKAV))
+            tmp.put(Units.SKAV, Integer.parseInt(MainToolbar.ANZAHL_SKAV.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.RAMMEN))
+            tmp.put(Units.RAMMEN, Integer.parseInt(MainToolbar.ANZAHL_RAMMEN.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.KATAPULT))
+            tmp.put(Units.KATAPULT, Integer.parseInt(MainToolbar.ANZAHL_KATAPULT.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.BERSERKER))
+            tmp.put(Units.BERSERKER, Integer.parseInt(MainToolbar.ANZAHL_BERSERKER.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.TREBUCHET))
+            tmp.put(Units.TREBUCHET, Integer.parseInt(MainToolbar.ANZAHL_TREBUCHET.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.ADELSGESCHLECHT))
+            tmp.put(Units.ADELSGESCHLECHT, Integer.parseInt(MainToolbar.ANZAHL_ADELSGESCHLECHT.getText().replace(".", "")));
+
+        if (farmableUnits.contains(Units.PALADIN))
+            tmp.put(Units.PALADIN, Integer.parseInt(MainToolbar.ANZAHL_PALADIN.getText().replace(".", "")));
+
 
         setUnits(tmp);
     }
 
     @Override
-    public boolean check() throws NoElementTextFound {
+    public boolean check() {
         return false;
     }
 

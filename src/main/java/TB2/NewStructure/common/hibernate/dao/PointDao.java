@@ -1,10 +1,9 @@
 package TB2.NewStructure.common.hibernate.dao;
 
-import java.util.List;
-
+import TB2.NewStructure.common.hibernate.model.Point;
 import org.springframework.data.repository.CrudRepository;
 
-import TB2.NewStructure.common.hibernate.model.Point;
+import java.util.List;
 
 public interface PointDao extends CrudRepository<Point, Integer> {
 

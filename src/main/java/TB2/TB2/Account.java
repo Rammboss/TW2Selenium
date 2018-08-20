@@ -2,12 +2,12 @@ package TB2.TB2;
 
 import TB2.NewStructure.common.Menus.Login;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
-import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 public class Account {
+
+    public static int performaceMultiplier;
 
     private String spielername;
 
@@ -15,14 +15,18 @@ public class Account {
 
     private String welt;
 
-    private EigenesDorf erstesDorf;
-
-    public Account(String spielername, String passwort, String welt, EigenesDorf erstesDorf) {
+    public Account(int performaceMultiplier, String spielername, String passwort, String welt) {
         super();
+        if (performaceMultiplier < 1) {
+            Account.performaceMultiplier = 1;
+
+        } else {
+            Account.performaceMultiplier = performaceMultiplier;
+
+        }
         this.spielername = spielername;
         this.passwort = passwort;
         this.welt = welt;
-        this.erstesDorf = erstesDorf;
     }
 
     public void login() throws ElementisNotClickable {
@@ -50,32 +54,15 @@ public class Account {
         return spielername;
     }
 
-    public void setSpielername(String spielername) {
-        this.spielername = spielername;
-    }
-
     public String getPasswort() {
         return passwort;
-    }
-
-    public void setPasswort(String passwort) {
-        this.passwort = passwort;
-    }
-
-    public EigenesDorf getErstesDorf() {
-        return erstesDorf;
-    }
-
-    public void setErstesDorf(EigenesDorf erstesDorf) {
-        this.erstesDorf = erstesDorf;
     }
 
     public String getWelt() {
         return welt;
     }
 
-    public void setWelt(String welt) {
-        this.welt = welt;
+    public int getPerformaceMultiplikator() {
+        return performaceMultiplier;
     }
-
 }

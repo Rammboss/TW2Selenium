@@ -1,7 +1,5 @@
 package TB2.NewStructure.common.hibernate.model;
 
-import TB2.NewStructure.common.Menus.Koordinaten;
-
 public class DistanceCalculator {
 
     private KoordinatenInterface dorf1;

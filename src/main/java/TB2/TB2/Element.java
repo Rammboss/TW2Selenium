@@ -1,29 +1,21 @@
 package TB2.TB2;
 
-import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import TB2.NewStructure.common.exceptions.ElementisNotClickable;
+import TB2.NewStructure.common.exceptions.NoElementTextFound;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import TB2.NewStructure.common.exceptions.ElementisNotClickable;
-import TB2.NewStructure.common.exceptions.NoElementTextFound;
+import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class Button {
+public class Element {
 
-    private static Logger logger = LoggerFactory.getLogger(Button.class);
+    private static Logger logger = LoggerFactory.getLogger(Element.class);
 
     public static int BY_CLASS_NAME = 1;
 
@@ -50,11 +42,11 @@ public class Button {
 
     private int wayToSelect;
 
-    private Button button;
+    private Element element;
 
     private final int waitForClick = 5;
 
-    public Button(String label, String xpath, int wayToSelect) {
+    public Element(String label, String xpath, int wayToSelect) {
         super();
         this.label = label;
         this.xpath = xpath;
@@ -62,7 +54,7 @@ public class Button {
 
     }
 
-    public Button(String label, String type, String attribute, String attributeValue, String criteria, int wayToSelect) {
+    public Element(String label, String type, String attribute, String attributeValue, String criteria, int wayToSelect) {
         super();
         this.xpath = null;
         this.label = label;
@@ -73,7 +65,7 @@ public class Button {
         this.wayToSelect = wayToSelect;
     }
 
-    public Button(String label, String type, String attribute, String attributeValue, int wayToSelect) {
+    public Element(String label, String type, String attribute, String attributeValue, int wayToSelect) {
         super();
         this.xpath = null;
         this.label = label;
@@ -86,12 +78,12 @@ public class Button {
 
     public boolean isClickable() {
         try {
-            new FluentWait<WebDriver>(Main.getDriver()).withTimeout(Duration.ofSeconds(1)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
+            new FluentWait<>(Main.getDriver()).withTimeout(Duration.ofSeconds(2 * Account.performaceMultiplier)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
                     .until(ExpectedConditions.elementToBeClickable(getWebelement(Main.getDriver())));
 
             return true;
         } catch (TimeoutException e) {
-            logger.debug("Button:" + getLabel() + " konnte nicht geklickt werden!", e);
+            logger.debug("Element:" + getLabel() + " konnte nicht geklickt werden!", e);
             return false;
         }
     }
@@ -99,12 +91,12 @@ public class Button {
     public boolean isPresent() {
         try {
 
-            new FluentWait<WebDriver>(Main.getDriver()).withTimeout(Duration.ofMillis(500)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
+            new FluentWait<>(Main.getDriver()).withTimeout(Duration.ofMillis(500 * Account.performaceMultiplier)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
                     .until(ExpectedConditions.visibilityOfElementLocated((getLocator())));
 
             return true;
         } catch (TimeoutException e) {
-            logger.debug("Button:" + getLabel() + " konnte nicht gefunden werden!", e);
+            logger.debug("Element:" + getLabel() + " konnte nicht gefunden werden!", e);
             return false;
         }
     }
@@ -113,12 +105,12 @@ public class Button {
 
         try {
 
-            new FluentWait<WebDriver>(Main.getDriver()).withTimeout(timeout).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
+            new FluentWait<>(Main.getDriver()).withTimeout(Duration.ofSeconds(timeout.toSeconds() * Account.performaceMultiplier)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
                     .until(ExpectedConditions.visibilityOfElementLocated((getLocator())));
 
             return true;
         } catch (TimeoutException e) {
-            logger.debug("Button:" + getLabel() + " konnte nicht gefunden werden!", e);
+            logger.debug("Element:" + getLabel() + " konnte nicht gefunden werden!", e);
             return false;
         }
     }
@@ -139,18 +131,18 @@ public class Button {
 
         try {
 
-            new FluentWait<WebDriver>(Main.getDriver()).withTimeout(timeout).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
+            new FluentWait<>(Main.getDriver()).withTimeout(Duration.ofSeconds(timeout.toSeconds() * Account.performaceMultiplier)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
                     .until(ExpectedConditions.invisibilityOfElementLocated((getLocator())));
 
             return true;
         } catch (TimeoutException e) {
-            logger.debug("Button:" + getLabel() + " konnte nicht gefunden werden!", e);
+            logger.debug("Element:" + getLabel() + " konnte nicht gefunden werden!", e);
             return false;
         }
     }
 
     public String getText() throws NoElementTextFound {
-        if (isPresent(Duration.ofSeconds(waitForClick)))
+        if (isPresent(Duration.ofMillis(500)))
             return getWebelement(Main.getDriver()).getText();
 
         throw new NoElementTextFound();
@@ -158,36 +150,18 @@ public class Button {
     }
 
     public void sendText(String text) {
-        if (isPresent(Duration.ofSeconds(waitForClick)))
+        if (isPresent(Duration.ofMillis(500)))
             getWebelement(Main.getDriver()).sendKeys(text);
     }
 
-    public void sendText(double text) {
-        if (isPresent(Duration.ofSeconds(waitForClick)))
-            getWebelement(Main.getDriver()).sendKeys(text + "");
-    }
-
     public void sendText(int text) {
-        if (isPresent(Duration.ofSeconds(waitForClick)))
+        if (isPresent(Duration.ofMillis(500)))
             getWebelement(Main.getDriver()).sendKeys(text + "");
     }
 
     public void sendText(Keys escape) {
-        if (isPresent(Duration.ofSeconds(waitForClick)))
+        if (isPresent(Duration.ofMillis(500)))
             getWebelement(Main.getDriver()).sendKeys(escape);
-    }
-
-    public void sendText(Keys escape, int times) {
-        for (int i = 0; i <= times; i++) {
-            if (isPresent(Duration.ofSeconds(waitForClick)))
-                getWebelement(Main.getDriver()).sendKeys(escape);
-            try {
-                TimeUnit.MILLISECONDS.sleep(10);
-            } catch (InterruptedException e1) {
-                throw new RuntimeException(e1);
-            }
-        }
-
     }
 
     public boolean isDisplayed() {
@@ -214,8 +188,8 @@ public class Button {
 
                 for (WebElement webElement : list) {
                     if (webElement.getAttribute(getAttribute()).equals(getAttributeValue()) && webElement.getAttribute("innerHTML").contains(criteria)) {
-                        if (getButton() != null) {
-                            return getWebelement(webElement, getButton());
+                        if (getElement() != null) {
+                            return getWebelement(webElement, getElement());
                         }
                         return webElement;
                     }
@@ -227,8 +201,8 @@ public class Button {
 
                 for (WebElement webElement : list) {
                     if (webElement.getAttribute(getAttribute()).equals(getAttributeValue())) {
-                        if (getButton() != null) {
-                            return getWebelement(webElement, getButton());
+                        if (getElement() != null) {
+                            return getWebelement(webElement, getElement());
                         }
                         return webElement;
                     }
@@ -243,14 +217,14 @@ public class Button {
                 return null;
             case 6:
                 WebElement e = driver.findElement(By.tagName(getXpath()));
-                if (getButton() != null) {
-                    return getWebelement(e, getButton());
+                if (getElement() != null) {
+                    return getWebelement(e, getElement());
                 }
                 return e;
             case 7:
                 WebElement tmp = driver.findElement(By.xpath(getXpath()));
-                if (getButton() != null) {
-                    return getWebelement(tmp, getButton());
+                if (getElement() != null) {
+                    return getWebelement(tmp, getElement());
                 }
                 return tmp;
             default:
@@ -258,7 +232,7 @@ public class Button {
         }
     }
 
-    public WebElement getWebelement(WebElement element, Button btn) {
+    public WebElement getWebelement(WebElement element, Element btn) {
 
         List<WebElement> list;
 
@@ -347,7 +321,7 @@ public class Button {
 
     public void scrollToElement(String topaligin) {
         ((JavascriptExecutor) Main.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", getWebelement(Main.getDriver()));
-        Main.sleep(500, TimeUnit.MILLISECONDS);
+        isPresent(Duration.ofSeconds(5));
 
     }
 
@@ -365,12 +339,12 @@ public class Button {
 
     }
 
-    public Button getButton() {
-        return button;
+    public Element getElement() {
+        return element;
     }
 
-    public void setButton(Button button) {
-        this.button = button;
+    public void setElement(Element element) {
+        this.element = element;
     }
 
     public String getLabel() {

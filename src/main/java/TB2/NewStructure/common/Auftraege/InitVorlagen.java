@@ -1,13 +1,14 @@
 package TB2.NewStructure.common.Auftraege;
 
-import TB2.NewStructure.common.Menus.*;
+import TB2.NewStructure.common.Menus.MainToolbar;
+import TB2.NewStructure.common.Menus.Sammelplatz;
+import TB2.NewStructure.common.Menus.UebersichtVorlangenliste;
+import TB2.NewStructure.common.Menus.VorlangeErstellenOderAendern;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.units.Units;
-import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +47,7 @@ public class InitVorlagen implements AuftragInterface {
         UebersichtVorlangenliste.FARM_EDIT.click();
 
 
-        VorlangeErstellenOderAendern.ANZAHL_SPEER.isPresent(Duration.ofMinutes(1));
+        VorlangeErstellenOderAendern.ANZAHL_SPEER.isPresent(Duration.ofSeconds(2));
 
         VorlangeErstellenOderAendern.ANZAHL_SPEER.clear();
         VorlangeErstellenOderAendern.ANZAHL_SCHWERT.clear();
@@ -70,6 +71,7 @@ public class InitVorlagen implements AuftragInterface {
             switch (key) {
 
                 case SPEER: {
+
                     VorlangeErstellenOderAendern.ANZAHL_SPEER.sendText(value);
                     break;
                 }

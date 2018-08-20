@@ -1,6 +1,5 @@
 package TB2.NewStructure.common.Auftraege;
 
-import TB2.NewStructure.common.Menus.EinstellungenSubSpiel;
 import TB2.NewStructure.common.Menus.MainToolbar;
 import TB2.NewStructure.common.Menus.PlayerProfil;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
@@ -8,7 +7,10 @@ import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.TB2.Account;
 import TB2.TB2.Main;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

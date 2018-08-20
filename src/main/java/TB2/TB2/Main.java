@@ -1,23 +1,21 @@
 package TB2.TB2;
 
-import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
-import TB2.NewStructure.common.Auftraege.*;
+import TB2.NewStructure.common.Auftraege.CheckPoint;
+import TB2.NewStructure.common.Auftraege.FarmWithVillage;
+import TB2.NewStructure.common.Auftraege.GetOwnVillages;
+import TB2.NewStructure.common.Auftraege.RohstofflagerFarmen;
 import TB2.NewStructure.common.Menus.*;
-import TB2.NewStructure.common.hibernate.model.*;
+import TB2.NewStructure.common.exceptions.ElementisNotClickable;
+import TB2.NewStructure.common.exceptions.NoElementTextFound;
+import TB2.NewStructure.common.hibernate.configuration.AppConfig;
+import TB2.NewStructure.common.hibernate.dao.*;
+import TB2.NewStructure.common.hibernate.model.DistanceCalculator;
+import TB2.NewStructure.common.hibernate.model.EigenesDorf;
+import TB2.NewStructure.common.hibernate.model.Point;
 import TB2.NewStructure.common.units.Units;
-import org.hibernate.exception.JDBCConnectionException;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -28,14 +26,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
-import TB2.NewStructure.common.exceptions.ElementisNotClickable;
-import TB2.NewStructure.common.exceptions.NoElementTextFound;
-import TB2.NewStructure.common.hibernate.configuration.AppConfig;
-import TB2.NewStructure.common.hibernate.dao.BarbarendorfDao;
-import TB2.NewStructure.common.hibernate.dao.DorfDao;
-import TB2.NewStructure.common.hibernate.dao.EigenesDorfDao;
-import TB2.NewStructure.common.hibernate.dao.PointDao;
-import TB2.NewStructure.common.hibernate.dao.ProvinzDao;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class Main {
@@ -49,20 +46,15 @@ public class Main {
 //        System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
 //        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
 
-        account = new Account("Rammboss", "kalterhund", "Gaillard", new EigenesDorf(583, 567, "A001", 4205, "Rammboss"));
-        // account = new Account("DerZurecker", "aleyotmi1", "Gaillard", new EigenesDorf(574,576, "Geil 001",4108,"DerZurecker"));
-        // account = new Account("Don Porro", "Kacklappen", "Gaillard");
+        account = new Account(1, "Rammboss", "kalterhund", "Gaillard");
+
     }
 
     public static WebDriver driver;
 
     public static Account account;
 
-    public static int index;
-
     public static List<EigenesDorf> ownVillages;
-
-    public List<Barbarendorf> babas;
 
     @Autowired
     private DorfDao dorfDao;
@@ -80,7 +72,7 @@ public class Main {
     private BarbarendorfDao barbarendorfDao;
 
     public Main() {
-        Main.index = 0;
+
     }
 
 
@@ -122,7 +114,7 @@ public class Main {
 
                 //Main.sleep(app.rohstofflagerCheck(true));
                 app.disableSound();
-                app.runTask(app.checkAndInitPoints());
+                app.runTask();
             } catch (BeanCreationException e) {
                 logger.info("Der Pi erstellt gerade ein Backup, warte 10 minuten!");
                 sleep(10, TimeUnit.MINUTES);
@@ -140,16 +132,7 @@ public class Main {
         }
     }
 
-    private void runTask(List<Point> points) throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
-
-
-        GetOwnVillages getOwn = new GetOwnVillages(account);
-        Main.ownVillages = getOwn.getOwnVillages();
-        List<Dorf> dorfListe = dorfDao.findAll();
-        List<Barbarendorf> barbarendoerfer = barbarendorfDao.findAll();
-
-
-        new SelectOwnVillage(Main.ownVillages.get(0));
+    private void runTask() throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
 
 
         // Angriff timen
@@ -187,9 +170,6 @@ public class Main {
         //
         // MainToolbar.OBERFLAECHE.clickCoords(0, 0);
 
-        // Befehle wieder anzeigen
-        babas = barbarendoerfer;
-
         List<Units> farmableUnits = new ArrayList<>();
         farmableUnits.add(Units.SPEER);
         farmableUnits.add(Units.AXT);
@@ -197,7 +177,12 @@ public class Main {
         farmableUnits.add(Units.BERITTINER_BOGEN);
         farmableUnits.add(Units.SKAV);
 
-        //findOwnVillage("A001").setBlockAttacks(true);
+
+        GetOwnVillages getOwn = new GetOwnVillages(account);
+        Main.ownVillages = getOwn.getOwnVillages();
+
+
+        findOwnVillage("A001").setBlockAttacks(true);
 
 
         while (true) {
@@ -205,147 +190,30 @@ public class Main {
 
             new RohstofflagerFarmen(Main.ownVillages.get(0), false);
 
+            // mit den Eignenen Dörfer Farmen
             for (EigenesDorf own : Main.ownVillages) {
                 if (!own.isBlockAttacks()) {
-                    new FarmWithVillage(farmableUnits, own, barbarendoerfer, barbarendorfDao);
+                    new FarmWithVillage(farmableUnits, own, barbarendorfDao);
                 }
             }
 
 
-            // checke die Points
-            for (long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(10); stop > System.nanoTime(); ) {
+            // Points vorbereiten
+            List<Point> points = checkAndInitPoints();
+            points.sort(Comparator.comparingInt(o -> new DistanceCalculator(o, Main.ownVillages.get(0)).getDistance()));
+            points.removeIf(p -> p.isChecked() && p.getCheckedAt().plusDays(4).isAfter(LocalDateTime.now()));
+            System.gc(); // um Arbeitsspeicher zu leeren (byte[] - Array)!!!
 
-                points.sort(Comparator.comparingInt(o -> new DistanceCalculator(o, Main.ownVillages.get(0)).getDistance()));
+            // Punkte 10 minuten lang checken oder bis alle punkte durchlaufen sind
+            long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(10);
 
-                points.removeIf(p -> p.isChecked() && p.getCheckedAt().plusDays(4).isAfter(LocalDateTime.now()));
-
-                for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
-                    Point currentPoint = points.get(i);
-
-                    if (MainToolbar.COMPLETE_BUILDING.isPresent()) {
-                        MainToolbar.COMPLETE_BUILDING.click();
-                    }
-
-                    new EnterKoordinaten(currentPoint);
-
-                    if (Dorfoptionen.MENUE_MITTE.isPresent(Duration.ofSeconds(2)) && !Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content").equals("Rohstofflager")
-                            && !Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content").equals("Freund einladen")) {
-
-                        String dorfname = Dorfoptionen.MENUE_MITTE.getAttribute("tooltip-content");
-
-                        if (Dorfoptionen.DORFINFORMATIONEN.isPresent(Duration.ofSeconds(2)) && Dorfoptionen.GRUPPEN_HINZUFUEGEN.isPresent(Duration.ofSeconds(2))
-                                && !Dorfoptionen.NACHRICHT_SENDEN.isPresent(Duration.ofSeconds(2)) && !Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2))) {
-
-                            Dorfoptionen.DORFINFORMATIONEN.click();
-
-                            if (Dorfinformationen.DORFINFORMATIONEN_NAME.isPresent()) {
-                                int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
-
-                                Optional<EigenesDorf> eigenAltOptional = eigenesDorfDao.findByXAndY(currentPoint.getX(), currentPoint.getY());
-
-                                eigenAltOptional.ifPresentOrElse(x -> {
-                                    x.setPunkte(dorfpunkte);
-                                    x.setName(dorfname);
-                                    eigenesDorfDao.save(x);
-                                    logger.info("Eigenes Dorf geupdated");
-                                }, () -> {
-                                    eigenesDorfDao.save(new EigenesDorf(currentPoint.getX(), currentPoint.getY(), dorfname, dorfpunkte, account.getSpielername()));
-                                    logger.info("Eigenes Dorf hinzugefügt");
-                                });
-                            }
-
-                            MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-                        } else if (Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2))) {
-
-                            Dorfoptionen.DORFINFORMATIONEN.click();
-
-                            if (Dorfinformationen.DORFINFORMATIONEN_PUNKTE.isPresent()) {
-
-                                int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
-
-                                Optional<Barbarendorf> eigenALT = barbarendorfDao.findByXAndY(currentPoint.getX(), currentPoint.getY());
-
-                                eigenALT.ifPresentOrElse(x -> {
-                                    x.setPunkte(dorfpunkte);
-                                    x.setName(dorfname);
-                                    barbarendorfDao.save(x);
-                                    logger.info("Babarendorf updated");
-                                }, () -> {
-                                    barbarendorfDao.save(new Barbarendorf(currentPoint.getX(), currentPoint.getY(), dorfname, dorfpunkte, LocalDateTime.now()));
-                                    logger.info("Barbarendorf hinzugefügt");
-                                });
-                            }
-
-                            MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-                        } else if (Dorfoptionen.NACHRICHT_SENDEN.isPresent(Duration.ofSeconds(2))) {
-
-
-                            Dorfoptionen.DORFINFORMATIONEN.click();
-
-                            if (Dorfinformationen.DORFINFORMATIONEN_NAME.isPresent()) {
-                                int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
-
-                                Optional<Dorf> eigenALT = dorfDao.findByXAndY(currentPoint.getX(), currentPoint.getY());
-
-                                eigenALT.ifPresentOrElse(x -> {
-                                    x.setPunkte(dorfpunkte);
-                                    x.setName(dorfname);
-                                    dorfDao.save(x);
-                                    logger.info("Dorf Gegner updated");
-                                }, () -> {
-                                    dorfDao.save(new Dorf(currentPoint.getX(), currentPoint.getY(), dorfname, dorfpunkte));
-                                    logger.info(" Dorf Gegner hinzugefügt");
-                                });
-                            }
-
-                            MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-                        }
-                    } else {
-                        MainToolbar.OBERFLAECHE.clickCoords(0, 0);
-
-                        if (Provinzansicht.PROVINZ_BUTTON_PROVINZDOERVER.isPresent()) {
-
-                            Optional<Provinz> eigenALT = provinzDao.findByXAndY(currentPoint.getX(), currentPoint.getY());
-
-                            String provinzName = Provinzansicht.PROVINZ_NAME.getText();
-
-                            eigenALT.ifPresentOrElse(x -> {
-                                x.setName(provinzName);
-                                provinzDao.save(x);
-                                logger.info("Provinz updated");
-                            }, () -> {
-                                provinzDao.save(new Provinz(currentPoint.getX(), currentPoint.getY(), provinzName, LocalDateTime.now()));
-                                logger.info("Provinz hinzugefügt");
-                            });
-
-                            MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-                        }
-
-
-                    }
-
-                    currentPoint.setChecked(true);
-                    currentPoint.setCheckedAt(LocalDateTime.now());
-
-                    pointDao.save(currentPoint);
-
-                    logger.info("Update:" + currentPoint);
-                }
-
-                Main.ownVillages = new GetOwnVillages(account).getOwnVillages();
-                dorfListe = dorfDao.findAll();
-
-                barbarendoerfer = barbarendorfDao.findAll();
-                babas = barbarendoerfer;
-
-
-                logger.info("Driver wird neugestartet!");
-                restartDriver();
+            for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
+                new CheckPoint(points.get(i), barbarendorfDao, provinzDao, pointDao, eigenesDorfDao, dorfDao, account);
             }
+
+            logger.info("Driver wird neugestartet!");
+            restartDriver();
+
         }
     }
 
@@ -455,103 +323,6 @@ public class Main {
 
     }
 
-    private void initVorlagen(int anzahlAngriffe) throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
-
-        MainToolbar.OBERFLAECHE.sendText("r");
-        Sammelplatz.GLOBALE_VORLAGENLISTE.click();
-        UebersichtVorlangenliste.FARM_STATUS.click();
-        UebersichtVorlangenliste.FARM_EDIT.click();
-
-        int verbleibendeAngriffe = 50 - anzahlAngriffe;
-
-        logger.info("Verbleibende Angriffe: " + verbleibendeAngriffe);
-        sleep(1);
-        if (verbleibendeAngriffe > 0) {
-
-            // Axtkämpfer
-            VorlangeErstellenOderAendern.ANZAHL_AXT.clear();
-            int tmp = Integer.parseInt(MainToolbar.ANZAHL_AXT.getText().replace(".", ""));
-
-            VorlangeErstellenOderAendern.ANZAHL_AXT.sendText(tmp / verbleibendeAngriffe);
-
-            if (tmp < 500) {
-                VorlangeErstellenOderAendern.ANZAHL_AXT.clear();
-                VorlangeErstellenOderAendern.ANZAHL_AXT.sendText(100);
-
-            }
-
-            // Leichte Kavellerie
-            VorlangeErstellenOderAendern.ANZAHL_LKAV.clear();
-            tmp = Integer.parseInt(MainToolbar.ANZAHL_LKAV.getText().replace(".", ""));
-
-            VorlangeErstellenOderAendern.ANZAHL_LKAV.sendText(tmp / verbleibendeAngriffe);
-
-            if (tmp < 500) {
-                VorlangeErstellenOderAendern.ANZAHL_LKAV.clear();
-                VorlangeErstellenOderAendern.ANZAHL_LKAV.sendText(30);
-
-            }
-
-            // berittene Bögen
-            VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.clear();
-            tmp = Integer.parseInt(MainToolbar.ANZAHL_BERITTENER_BOGEN.getText().replace(".", ""));
-
-            VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.sendText(tmp / verbleibendeAngriffe);
-
-            if (tmp < 500) {
-                VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.clear();
-                VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.sendText(30);
-
-            }
-
-            // SPEER
-            VorlangeErstellenOderAendern.ANZAHL_SPEER.clear();
-            tmp = Integer.parseInt(MainToolbar.ANZAHL_SPEER.getText().replace(".", ""));
-
-            VorlangeErstellenOderAendern.ANZAHL_SPEER.sendText(tmp / verbleibendeAngriffe);
-
-            if (tmp < 500) {
-                VorlangeErstellenOderAendern.ANZAHL_SPEER.clear();
-
-                VorlangeErstellenOderAendern.ANZAHL_SPEER.sendText(100);
-
-            }
-
-            // SCHWERT
-            VorlangeErstellenOderAendern.ANZAHL_SCHWERT.clear();
-            VorlangeErstellenOderAendern.ANZAHL_SCHWERT.sendText(0);
-
-            tmp = Integer.parseInt(MainToolbar.ANZAHL_SCHWERT.getText().replace(".", ""));
-
-            if (tmp < 500) {
-                VorlangeErstellenOderAendern.ANZAHL_SCHWERT.clear();
-
-                VorlangeErstellenOderAendern.ANZAHL_SCHWERT.sendText(0);
-
-            }
-
-            // Paladin
-
-            VorlangeErstellenOderAendern.ANZAHL_PALADIN.clear();
-            VorlangeErstellenOderAendern.ANZAHL_PALADIN.sendText(0);
-        }
-
-        VorlangeErstellenOderAendern.HOTKEY_1.scrollToElement("end");
-        VorlangeErstellenOderAendern.HOTKEY_1.click();
-        VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_ANGRIFF.click();
-        VorlangeErstellenOderAendern.SPEICHERN.click();
-
-        UebersichtVorlangenliste.FARM_STATUS.isPresent();
-
-        if (UebersichtVorlangenliste.FARM_STATUS.getCSSClass().equals("switch switch-56x28 switch-horizontal")) {
-            UebersichtVorlangenliste.FARM_STATUS.click();
-        }
-
-        MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-        MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-    }
-
     public static void sleep(int sec) {
         try {
             TimeUnit.SECONDS.sleep(sec);
@@ -573,26 +344,26 @@ public class Main {
 
         if (driver != null) {
 
-//            Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
-//            String browserName = cap.getBrowserName();
-//            if (browserName.equals("firefox")) {
-//                try {
-//                    Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
-//                    Runtime.getRuntime().exec("taskkill /F /IM plugin-container.exe");
-//                    Runtime.getRuntime().exec("taskkill /F /IM firefox.exe");
-//                    driver = null;
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            } else {
-//                driver.quit();
-//                driver = null;
-//            }
+            Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+            String browserName = cap.getBrowserName();
+            if (browserName.equals("firefox")) {
+                try {
+                    Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
+                    Runtime.getRuntime().exec("taskkill /F /IM plugin-container.exe");
+                    Runtime.getRuntime().exec("taskkill /F /IM firefox.exe");
+                    driver = null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                driver.quit();
+                driver = null;
+            }
 
-            driver.navigate().refresh();
-            sleep(5);
+//            driver.navigate().refresh();
+//            sleep(5);
 
-            Login.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
+//            Login.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
 
             sleep(2);
         }
@@ -626,44 +397,5 @@ public class Main {
         return Main.driver;
     }
 
-    public DorfDao getDorfDao() {
-        return dorfDao;
-    }
-
-    public void setDorfDao(DorfDao dorfDao) {
-        this.dorfDao = dorfDao;
-    }
-
-    public PointDao getPointDao() {
-        return pointDao;
-    }
-
-    public void setPointDao(PointDao pointDao) {
-        this.pointDao = pointDao;
-    }
-
-    public ProvinzDao getProvinzDao() {
-        return provinzDao;
-    }
-
-    public void setProvinzDao(ProvinzDao provinzDao) {
-        this.provinzDao = provinzDao;
-    }
-
-    public EigenesDorfDao getEigenesDorfDao() {
-        return eigenesDorfDao;
-    }
-
-    public void setEigenesDorfDao(EigenesDorfDao eigenesDorfDao) {
-        this.eigenesDorfDao = eigenesDorfDao;
-    }
-
-    public BarbarendorfDao getBarbarendorfDao() {
-        return barbarendorfDao;
-    }
-
-    public void setBarbarendorfDao(BarbarendorfDao barbarendorfDao) {
-        this.barbarendorfDao = barbarendorfDao;
-    }
 
 }
