@@ -1,6 +1,9 @@
 package TB2.NewStructure.common.hibernate.model;
 
+import TB2.NewStructure.common.units.Units;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -31,6 +34,18 @@ public class EigenesDorf implements KoordinatenInterface {
     @Transient
     private boolean blockAttacks;
 
+    @Transient
+    private Units rekrutierungsEinheit;
+
+    @Transient
+    private int rekrutierungsAnzahl;
+
+    @Transient
+    private List<Units> farableUnits;
+
+    @Transient
+    private boolean allowedMuenzenPraegen;
+
     public EigenesDorf(int x, int y, String name, int punkte, String spieler) {
         this.x = x;
         this.y = y;
@@ -38,9 +53,20 @@ public class EigenesDorf implements KoordinatenInterface {
         this.punkte = punkte;
         this.spieler = spieler;
         this.blockAttacks = false;
+        this.rekrutierungsEinheit = null;
+        this.rekrutierungsAnzahl = 0;
+        this.allowedMuenzenPraegen = false;
+        farableUnits = null;
+
+
     }
 
     public EigenesDorf() {
+        this.blockAttacks = false;
+        this.rekrutierungsEinheit = null;
+        this.rekrutierungsAnzahl = 0;
+        this.allowedMuenzenPraegen = false;
+        farableUnits = null;
 
     }
 
@@ -129,5 +155,37 @@ public class EigenesDorf implements KoordinatenInterface {
 
     public void setBlockAttacks(boolean blockAttacks) {
         this.blockAttacks = blockAttacks;
+    }
+
+    public Units getRekrutierungsEinheit() {
+        return rekrutierungsEinheit;
+    }
+
+    public void setRekrutierungsEinheit(Units rekrutierungsEinheit) {
+        this.rekrutierungsEinheit = rekrutierungsEinheit;
+    }
+
+    public int getRekrutierungsAnzahl() {
+        return rekrutierungsAnzahl;
+    }
+
+    public void setRekrutierungsAnzahl(int rekrutierungsAnzahl) {
+        this.rekrutierungsAnzahl = rekrutierungsAnzahl;
+    }
+
+    public boolean isAllowedMuenzenPraegen() {
+        return allowedMuenzenPraegen;
+    }
+
+    public void setAllowedMuenzenPraegen(boolean allowedMuenzenPraegen) {
+        this.allowedMuenzenPraegen = allowedMuenzenPraegen;
+    }
+
+    public List<Units> getFarableUnits() {
+        return farableUnits;
+    }
+
+    public void setFarableUnits(List<Units> farableUnits) {
+        this.farableUnits = farableUnits;
     }
 }

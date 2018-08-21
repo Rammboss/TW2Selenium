@@ -9,14 +9,17 @@ public class Account {
 
     public static int performaceMultiplier;
 
+    private boolean zoomOut;
+
     private String spielername;
 
     private String passwort;
 
     private String welt;
 
-    public Account(int performaceMultiplier, String spielername, String passwort, String welt) {
+    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt) {
         super();
+        this.zoomOut = zoomOut;
         if (performaceMultiplier < 1) {
             Account.performaceMultiplier = 1;
 
@@ -64,5 +67,13 @@ public class Account {
 
     public int getPerformaceMultiplikator() {
         return performaceMultiplier;
+    }
+
+    public boolean isZoomOut() {
+        return zoomOut;
+    }
+
+    public void setZoomOut(boolean zoomOut) {
+        this.zoomOut = zoomOut;
     }
 }
