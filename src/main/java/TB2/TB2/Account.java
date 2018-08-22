@@ -19,10 +19,13 @@ public class Account {
 
     private boolean useSecondMonitor;
 
-    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt, boolean useSecondMonitor) {
+    private boolean woodPC;
+
+    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC) {
         super();
         this.zoomOut = zoomOut;
         this.useSecondMonitor = useSecondMonitor;
+        this.woodPC = woodPC;
         if (performaceMultiplier < 1) {
             Account.performaceMultiplier = 1;
 
@@ -86,5 +89,13 @@ public class Account {
 
     public void setUseSecondMonitor(boolean useSecondMonitor) {
         this.useSecondMonitor = useSecondMonitor;
+    }
+
+    public boolean isWoodPC() {
+        return woodPC;
+    }
+
+    public void setWoodPC(boolean woodPC) {
+        this.woodPC = woodPC;
     }
 }

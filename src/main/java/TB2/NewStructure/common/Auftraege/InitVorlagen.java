@@ -57,6 +57,7 @@ public class InitVorlagen implements AuftragInterface {
         VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.clear();
         VorlangeErstellenOderAendern.ANZAHL_SKAV.clear();
         VorlangeErstellenOderAendern.ANZAHL_RAMMEN.clear();
+        VorlangeErstellenOderAendern.ANZAHL_BERSERKER.scrollToElement("start");
         VorlangeErstellenOderAendern.ANZAHL_BERSERKER.clear();
         VorlangeErstellenOderAendern.ANZAHL_TREBUCHET.clear();
         VorlangeErstellenOderAendern.ANZAHL_ADELSGESCHLECHT.clear();

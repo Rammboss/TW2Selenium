@@ -9,6 +9,7 @@ import TB2.NewStructure.common.hibernate.model.Barbarendorf;
 import TB2.NewStructure.common.hibernate.model.DistanceCalculator;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.units.*;
+import TB2.TB2.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -211,6 +212,13 @@ public class FarmWithVillage implements AuftragInterface {
 
 
                     MainToolbar.OBERFLAECHE.sendText(1);
+                    if (Main.account.isWoodPC()) {
+                        if (!MainToolbar.ERROR_50_ANGRIFFE.isNOTPresent(Duration.ofMillis(2000))) {
+                            logger.info("Keine Truppen mehr vorhanden!");
+                            return counter;
+                        }
+                    }
+
 //                    long stop = System.nanoTime() + TimeUnit.SECONDS.toNanos(20);
 
 //                    if (isKav) {

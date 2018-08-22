@@ -47,7 +47,7 @@ public class Main {
 //        System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
 //        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
 
-        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true);
+        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true, true);
 
     }
 
