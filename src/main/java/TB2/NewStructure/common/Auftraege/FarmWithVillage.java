@@ -139,20 +139,20 @@ public class FarmWithVillage implements AuftragInterface {
                     HashMap<Units, Integer> kavUnits = new HashMap<>();
                     if (units.containsKey(Units.LKAV)) {
                         kavUnits.put(Units.LKAV, units.get(Units.LKAV) / attacksForKav);
-                        if ((units.get(Units.LKAV) / attacksForKav) < 50)
-                            kavUnits.put(Units.LKAV, 50);
+                        if ((units.get(Units.LKAV) / attacksForKav) < 20)
+                            kavUnits.put(Units.LKAV, 20);
                     }
 
                     if (units.containsKey(Units.SKAV)) {
                         kavUnits.put(Units.SKAV, units.get(Units.SKAV) / attacksForKav);
-                        if ((units.get(Units.SKAV) / attacksForKav) < 50)
-                            kavUnits.put(Units.SKAV, 50);
+                        if ((units.get(Units.SKAV) / attacksForKav) < 20)
+                            kavUnits.put(Units.SKAV, 20);
                     }
 
                     if (units.containsKey(Units.BERITTINER_BOGEN)) {
                         kavUnits.put(Units.BERITTINER_BOGEN, units.get(Units.BERITTINER_BOGEN) / attacksForKav);
-                        if ((units.get(Units.BERITTINER_BOGEN) / attacksForKav) < 50)
-                            kavUnits.put(Units.BERITTINER_BOGEN, 50);
+                        if ((units.get(Units.BERITTINER_BOGEN) / attacksForKav) < 20)
+                            kavUnits.put(Units.BERITTINER_BOGEN, 20);
                     }
 
                     new InitVorlagen(own, kavUnits);
@@ -172,8 +172,8 @@ public class FarmWithVillage implements AuftragInterface {
                     }
                     if (units.containsKey(Units.AXT)) {
                         restUnits.put(Units.AXT, units.get(Units.AXT) / remainingAttacks);
-                        if ((units.get(Units.AXT) / remainingAttacks) < 200)
-                            restUnits.put(Units.AXT, 200);
+                        if ((units.get(Units.AXT) / remainingAttacks) < 120)
+                            restUnits.put(Units.AXT, 120);
                     }
                     new InitVorlagen(own, restUnits);
                     remainingAttacks -= farmBabas(remainingAttacks, false);

@@ -10,10 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class RohstofflagerFarmen implements AuftragInterface {
     private static Logger logger = LoggerFactory.getLogger(RohstofflagerFarmen.class);
+
+    private static int neueAuftraege;
+
+    private static LocalDateTime neueAuftraegeTime;
 
     private EigenesDorf own;
     private boolean push;
@@ -34,6 +39,7 @@ public class RohstofflagerFarmen implements AuftragInterface {
 
         MainToolbar.OBERFLAECHE.sendText("d");
 
+
         if (Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.isPresent(Duration.ofMillis(2000))) {
             Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.click();
             Rohstofflager.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click(Duration.ofSeconds(5));
@@ -41,8 +47,13 @@ public class RohstofflagerFarmen implements AuftragInterface {
 
         }
         if (!Rohstofflager.AKTUELLE_PRODUKTION.getAttribute("innerHTML").contains("Aktuelle Produktion")) {
+            if (neueAuftraegeTime == null || neueAuftraegeTime.plusHours(20).isBefore(LocalDateTime.now())) {
+                neueAuftraegeTime = LocalDateTime.now();
+                neueAuftraege = Integer.parseInt(Rohstofflager.ANZAHL_NEUER_AUFGABEN.getText().replaceAll("[^\\d.]", ""));
+            }
 
-            if (isPush() && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%")) {
+
+            if (isPush() && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%") && neueAuftraege >= 11) {
                 if (!Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofSeconds(2))) {
                     Rohstofflager.ITEMS_VERWENDEN.click(Duration.ofSeconds(2));
                     Rohstofflager.BENUTZEN.click(Duration.ofSeconds(2));
@@ -55,7 +66,7 @@ public class RohstofflagerFarmen implements AuftragInterface {
 
                 String[] zeit = Rohstofflager.ROHSTOFFLAGER_STARTEN_ZEIT.getText().split(":");
                 ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
-                logger.info("Dauer von neuem Rohstofflage Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
+                logger.info("Dauer von neuem Rohstofflage Auftrag:" + " Studnen: " + zeit[0] + " Minuten: " + zeit[1] + " Sekunden: " + zeit[2]);
 
                 Rohstofflager.ROHSTOFFLAGER_STARTEN.click();
 
@@ -68,7 +79,7 @@ public class RohstofflagerFarmen implements AuftragInterface {
 
             String[] zeit = Rohstofflager.AKTUELLE_PRODUKTION_ZEIT.getText().split(":");
             ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
-            logger.info("Dauer von aktuellem Rohstofflager Auftrag:" + "\nStudnen: " + zeit[0] + "\nMinuten: " + zeit[1] + "\nSekunden: " + zeit[2]);
+            logger.info("Dauer von aktuellem Rohstofflager Auftrag:" + " Studnen: " + zeit[0] + " Minuten: " + zeit[1] + " Sekunden: " + zeit[2]);
             MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
 
             setDurationInSec(ges);

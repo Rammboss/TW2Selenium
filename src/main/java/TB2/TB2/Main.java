@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class Main {
+public class Main implements Runnable {
 
     private static Logger logger = LoggerFactory.getLogger(Main.class);
     public static Account account;
@@ -45,7 +45,7 @@ public class Main {
     public static WebDriver driver;
 
     static {
-        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true, true, true, true);
+        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true, false, true, true);
         if (account.isUseChrome()) {
             System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
             System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
@@ -70,29 +70,20 @@ public class Main {
     @Autowired
     private BarbarendorfDao barbarendorfDao;
 
-    public Main() {
-
-    }
-
-
     public List<Point> checkAndInitPoints() {
         List<Point> pointlist = new ArrayList<>();
 
         if (pointDao.count() == 0) {
             for (int x = 0; x <= 1000; x++) {
-
                 for (int y = 0; y <= 1000; y++) {
                     pointlist.add(new Point(x, y, false));
                 }
-
             }
-
             logger.info("Speichere Points....");
             pointDao.saveAll(pointlist);
         } else {
             pointlist = pointDao.findAll();
         }
-
         return pointlist;
     }
 
@@ -173,7 +164,7 @@ public class Main {
         GetOwnVillages getOwn = new GetOwnVillages(account);
         Main.ownVillages = getOwn.getOwnVillages();
 
-        findOwnVillage("Effi's A001").setBlockAttacks(true);
+//        findOwnVillage("Effi's A001").setBlockAttacks(true);
         findOwnVillage("Effi's A001").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's A001").setFarableUnits(farableUnitsONLYOFF);
 //        findOwnVillage("Effi's A001").setRekrutierungsEinheit(Units.SKAV);
@@ -181,10 +172,10 @@ public class Main {
 
         findOwnVillage("Effi's A002").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's A002").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A002").setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage("Effi's A002").setRekrutierungsAnzahl(1);
+//        findOwnVillage("Effi's A002").setRekrutierungsEinheit(Units.SKAV);
+//        findOwnVillage("Effi's A002").setRekrutierungsAnzahl(1);
 
-        findOwnVillage("Effi's A003").setBlockAttacks(true);
+//        findOwnVillage("Effi's A003").setBlockAttacks(true);
         findOwnVillage("Effi's A003").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's A003").setFarableUnits(farableUnitsONLYOFF);
 
@@ -203,7 +194,6 @@ public class Main {
         findOwnVillage("Effi's A008").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's A008").setAllowedMuenzenPraegen(true);
 
-
         findOwnVillage("Effi's A009").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's A009").setAllowedMuenzenPraegen(true);
 
@@ -211,22 +201,25 @@ public class Main {
         findOwnVillage("Effi's A010").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's B001").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's B001").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's B001").setAllowedMuenzenPraegen(false);
 
         findOwnVillage("Effi's C001").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's C001").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's C001").setAllowedMuenzenPraegen(false);
 
 
         while (true) {
+            new RohstofflagerFarmen(findOwnVillage("Effi's C001"), true);
+
             System.gc();
 
-            new RohstofflagerFarmen(Main.ownVillages.get(0), false);
 
             // mit den Eignenen Dörfer Farmen
             for (EigenesDorf own : Main.ownVillages) {
                 new MuenzePraegen(own);
                 new BuildUnits(own);
                 new FarmWithVillage(own, barbarendorfDao);
+                new RohstofflagerFarmen(findOwnVillage("Effi's C001"), true);
+
             }
             // Points vorbereiten
             List<Point> points = checkAndInitPoints();
@@ -235,11 +228,14 @@ public class Main {
             System.gc(); // um Arbeitsspeicher zu leeren (byte[] - Array)!!!
 
             // Punkte 10 minuten lang checken oder bis alle punkte durchlaufen sind
-            long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(10);
+            if (!account.isWoodPC()) {
+                long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(10);
 
-            for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
-                new CheckPoint(points.get(i), barbarendorfDao, provinzDao, pointDao, eigenesDorfDao, dorfDao, account);
+                for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
+                    new CheckPoint(points.get(i), barbarendorfDao, provinzDao, pointDao, eigenesDorfDao, dorfDao, account);
+                }
             }
+
             logger.info("Driver wird neugestartet!");
             restartDriver();
         }
@@ -392,4 +388,8 @@ public class Main {
     }
 
 
+    @Override
+    public void run() {
+
+    }
 }

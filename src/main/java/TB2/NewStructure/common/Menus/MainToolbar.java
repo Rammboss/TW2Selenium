@@ -4,6 +4,9 @@ import TB2.TB2.Element;
 
 public class MainToolbar extends AbstractMenue {
 
+    public static Element VERBINDUNGSFEHLER = new Element("Verbindungsfehler", "div", "class", "middle-wrapper", Element.BY_CSS_SELECTOR);
+
+
     public static Element LOADING_SCREEN = new Element("Loading Screen", "//*[@id=\"screen-loading\"]", Element.BY_XPATH);
 
     public static Element PROFIL = new Element("Profil", "a", "tooltip-content", "Profil", Element.BY_CSS_SELECTOR);
