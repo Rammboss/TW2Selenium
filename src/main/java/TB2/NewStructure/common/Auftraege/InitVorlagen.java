@@ -132,7 +132,7 @@ public class InitVorlagen implements AuftragInterface {
         VorlangeErstellenOderAendern.GLOBALE_VORLAGENLISTE_BEARBEITEN_HOTKEY_ANGRIFF.click();
         VorlangeErstellenOderAendern.SPEICHERN.click();
 
-        UebersichtVorlangenliste.FARM_STATUS.isPresent();
+        UebersichtVorlangenliste.FARM_STATUS.isPresent(Duration.ofSeconds(3));
 
         if (UebersichtVorlangenliste.FARM_STATUS.getCSSClass().equals("switch switch-56x28 switch-horizontal")) {
             UebersichtVorlangenliste.FARM_STATUS.click();

@@ -31,9 +31,9 @@ public class MuenzePraegen implements AuftragInterface {
         GetRessourcen ressourcen = new GetRessourcen(own);
         // wenn speicher mehr als 80% voll
         double capacityLimit = 0.8;
-        if ((double) ressourcen.getHolz() / ressourcen.getMaxSpeicher() > capacityLimit ||
-                (double) ressourcen.getLehm() / ressourcen.getMaxSpeicher() > capacityLimit ||
-                (double) ressourcen.getEisen() / ressourcen.getMaxSpeicher() > capacityLimit) {
+        if ((double) ressourcen.getHolz() / ressourcen.getMaxSpeicher() > capacityLimit && enoughRessourchenForCoin(ressourcen) ||
+                (double) ressourcen.getLehm() / ressourcen.getMaxSpeicher() > capacityLimit && enoughRessourchenForCoin(ressourcen) ||
+                (double) ressourcen.getEisen() / ressourcen.getMaxSpeicher() > capacityLimit && enoughRessourchenForCoin(ressourcen)) {
             MainToolbar.OBERFLAECHE.sendText("a");
 
             if (Akademie.BUILDING_NOT_ACTIVATERD.isPresent(Duration.ofSeconds(2))) {
@@ -49,6 +49,10 @@ public class MuenzePraegen implements AuftragInterface {
             MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
             MainToolbar.CURRENT_VILLAGE_NAME.isPresent(Duration.ofSeconds(1));
         }
+    }
+
+    private boolean enoughRessourchenForCoin(GetRessourcen ressourcen) {
+        return ressourcen.getHolz() > 28000 && ressourcen.getLehm() > 30000 && ressourcen.getEisen() > 25000;
     }
 
     @Override
