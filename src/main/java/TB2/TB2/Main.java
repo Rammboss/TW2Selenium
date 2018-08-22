@@ -15,6 +15,7 @@ import TB2.NewStructure.common.units.Units;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -39,23 +40,20 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     private static Logger logger = LoggerFactory.getLogger(Main.class);
-
-    static {
-        System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
-        System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
-
-//        System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
-//        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
-
-        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true, true);
-
-    }
-
+    public static Account account;
+    public static List<EigenesDorf> ownVillages;
     public static WebDriver driver;
 
-    public static Account account;
-
-    public static List<EigenesDorf> ownVillages;
+    static {
+        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true, true, true);
+        if (account.isUseChrome()) {
+            System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+            System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+        } else {
+            System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+            System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
+        }
+    }
 
     @Autowired
     private DorfDao dorfDao;
@@ -317,7 +315,7 @@ public class Main {
 
     public void restartDriver() throws ElementisNotClickable, AWTException {
 
-        if (driver != null) {
+        if (driver != null && !account.isUseChrome()) {
 
             Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
             String browserName = cap.getBrowserName();
@@ -342,10 +340,22 @@ public class Main {
 //            Login.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
 
             sleep(2);
+
+        } else {
+            if (driver != null)
+                driver.quit();
+            driver = null;
+            System.gc();
+            sleep(2);
+
         }
 
         if (driver == null) {
-            Main.driver = new FirefoxDriver();
+            if (account.isUseChrome()) {
+                Main.driver = new ChromeDriver();
+            } else {
+                Main.driver = new FirefoxDriver();
+            }
             if (account.isUseSecondMonitor())
                 driver.manage().window().setPosition(new org.openqa.selenium.Point(2100, 0));
             driver.get("https://de.tribalwars2.com/");

@@ -21,11 +21,14 @@ public class Account {
 
     private boolean woodPC;
 
-    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC) {
+    private boolean useChrome;
+
+    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC, boolean useChrome) {
         super();
         this.zoomOut = zoomOut;
         this.useSecondMonitor = useSecondMonitor;
         this.woodPC = woodPC;
+        this.useChrome = useChrome;
         if (performaceMultiplier < 1) {
             Account.performaceMultiplier = 1;
 
@@ -97,5 +100,13 @@ public class Account {
 
     public void setWoodPC(boolean woodPC) {
         this.woodPC = woodPC;
+    }
+
+    public boolean isUseChrome() {
+        return useChrome;
+    }
+
+    public void setUseChrome(boolean useChrome) {
+        this.useChrome = useChrome;
     }
 }
