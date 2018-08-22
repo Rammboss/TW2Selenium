@@ -23,12 +23,15 @@ public class Account {
 
     private boolean useChrome;
 
-    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC, boolean useChrome) {
+    private boolean useMYSQLDatabase;
+
+    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC, boolean useChrome, boolean useMYSQLDatabase) {
         super();
         this.zoomOut = zoomOut;
         this.useSecondMonitor = useSecondMonitor;
         this.woodPC = woodPC;
         this.useChrome = useChrome;
+        this.useMYSQLDatabase = useMYSQLDatabase;
         if (performaceMultiplier < 1) {
             Account.performaceMultiplier = 1;
 
@@ -108,5 +111,13 @@ public class Account {
 
     public void setUseChrome(boolean useChrome) {
         this.useChrome = useChrome;
+    }
+
+    public boolean isUseMYSQLDatabase() {
+        return useMYSQLDatabase;
+    }
+
+    public void setUseMYSQLDatabase(boolean useMYSQLDatabase) {
+        this.useMYSQLDatabase = useMYSQLDatabase;
     }
 }

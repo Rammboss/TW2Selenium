@@ -1,5 +1,6 @@
 package TB2.NewStructure.common.hibernate.configuration;
 
+import TB2.TB2.Main;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -19,7 +20,6 @@ import java.util.Properties;
 @EnableJpaRepositories("TB2.NewStructure.common.hibernate.dao")
 public class HibernateConfiguration {
 
-    public static boolean useMYSQLDatabase = true;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -41,7 +41,7 @@ public class HibernateConfiguration {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        if (useMYSQLDatabase) {
+        if (Main.account.isUseMYSQLDatabase()) {
             dataSource.setDriverClassName("com.mysql.jdbc.Driver");
             dataSource.setUrl("jdbc:mysql://192.168.0.220:3306/Bot2.0");
             dataSource.setUsername("bot");
@@ -58,7 +58,7 @@ public class HibernateConfiguration {
 
     private Properties jpaProperties() {
         Properties properties = new Properties();
-        if (useMYSQLDatabase) {
+        if (Main.account.isUseMYSQLDatabase()) {
             properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         } else {
             properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");

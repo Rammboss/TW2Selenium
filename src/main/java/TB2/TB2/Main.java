@@ -45,7 +45,7 @@ public class Main {
     public static WebDriver driver;
 
     static {
-        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true, true, true);
+        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true, true, true, true);
         if (account.isUseChrome()) {
             System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
             System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
