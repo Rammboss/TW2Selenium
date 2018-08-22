@@ -42,7 +42,7 @@ public class FarmWithVillage implements AuftragInterface {
 
     @Override
     public void run() throws NoElementTextFound, ElementisNotClickable {
-        if (own.isBlockAttacks()) return;
+        if (own.isBlockAttacks() || own.getFarableUnits() == null) return;
 
         new SelectOwnVillage(own);
 
