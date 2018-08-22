@@ -175,7 +175,7 @@ public class Main {
         GetOwnVillages getOwn = new GetOwnVillages(account);
         Main.ownVillages = getOwn.getOwnVillages();
 
-        findOwnVillage("Effi's A001").setBlockAttacks(true);
+        //findOwnVillage("Effi's A001").setBlockAttacks(true);
         findOwnVillage("Effi's A001").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's A001").setFarableUnits(farableUnitsONLYOFF);
 

@@ -72,55 +72,67 @@ public class InitVorlagen implements AuftragInterface {
             switch (key) {
 
                 case SPEER: {
-
+                    VorlangeErstellenOderAendern.ANZAHL_SPEER.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_SPEER.sendText(value);
                     break;
                 }
                 case SCHWERT: {
+                    VorlangeErstellenOderAendern.ANZAHL_SCHWERT.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_SCHWERT.sendText(value);
                     break;
                 }
                 case AXT: {
+                    VorlangeErstellenOderAendern.ANZAHL_AXT.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_AXT.sendText(value);
                     break;
                 }
                 case BOGEN: {
+                    VorlangeErstellenOderAendern.ANZAHL_BOGEN.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_BOGEN.sendText(value);
                     break;
                 }
                 case LKAV: {
+                    VorlangeErstellenOderAendern.ANZAHL_LKAV.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_LKAV.sendText(value);
                     break;
                 }
                 case BERITTINER_BOGEN: {
+                    VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_BERITTENER_BOGEN.sendText(value);
                     break;
                 }
                 case SKAV: {
+                    VorlangeErstellenOderAendern.ANZAHL_SKAV.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_SKAV.sendText(value);
                     break;
                 }
                 case RAMMEN: {
+                    VorlangeErstellenOderAendern.ANZAHL_RAMMEN.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_RAMMEN.sendText(value);
                     break;
                 }
                 case BERSERKER: {
+                    VorlangeErstellenOderAendern.ANZAHL_BERSERKER.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_BERSERKER.sendText(value);
                     break;
                 }
                 case TREBUCHET: {
+                    VorlangeErstellenOderAendern.ANZAHL_TREBUCHET.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_TREBUCHET.sendText(value);
                     break;
                 }
                 case ADELSGESCHLECHT: {
+                    VorlangeErstellenOderAendern.ANZAHL_ADELSGESCHLECHT.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_ADELSGESCHLECHT.sendText(value);
                     break;
                 }
                 case PALADIN: {
+                    VorlangeErstellenOderAendern.ANZAHL_PALADIN.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_PALADIN.sendText(value);
                     break;
                 }
                 case KATAPULT: {
+                    VorlangeErstellenOderAendern.ANZAHL_KATAPULT.scrollToElement("start");
                     VorlangeErstellenOderAendern.ANZAHL_KATAPULT.sendText(value);
                     break;
                 }
