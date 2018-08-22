@@ -55,7 +55,7 @@ public class BuildUnits implements AuftragInterface {
                     enoughProviant = true;
 
                 if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
-                    baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
+                    baueUnit(Kaserne.SCHWERT, Kaserne.SCHWERT_INPUT);
                 break;
             }
             case AXT: {
@@ -63,7 +63,7 @@ public class BuildUnits implements AuftragInterface {
                     enoughProviant = true;
 
                 if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
-                    baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
+                    baueUnit(Kaserne.AXTKAEMPFER, Kaserne.AXTKAEMPFER_INPUT);
                 break;
             }
             case BOGEN: {
@@ -71,7 +71,7 @@ public class BuildUnits implements AuftragInterface {
                     enoughProviant = true;
 
                 if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
-                    baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
+                    baueUnit(Kaserne.BOGEN, Kaserne.BOGEN_INPUT);
                 break;
             }
             case LKAV: {
@@ -79,7 +79,7 @@ public class BuildUnits implements AuftragInterface {
                     enoughProviant = true;
 
                 if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
-                    baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
+                    baueUnit(Kaserne.LKAV, Kaserne.LKAV_INPUT);
                 break;
             }
             case BERITTINER_BOGEN: {
@@ -87,7 +87,7 @@ public class BuildUnits implements AuftragInterface {
                     enoughProviant = true;
 
                 if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
-                    baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
+                    baueUnit(Kaserne.BERITTINER_BOGEN, Kaserne.BERITTINER_BOGEN_INPUT);
                 break;
             }
             case SKAV: {
@@ -95,7 +95,7 @@ public class BuildUnits implements AuftragInterface {
                     enoughProviant = true;
 
                 if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
-                    baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
+                    baueUnit(Kaserne.SKAV, Kaserne.SKAV_INPUT);
                 break;
             }
             case RAMMEN: {
@@ -103,7 +103,7 @@ public class BuildUnits implements AuftragInterface {
                     enoughProviant = true;
 
                 if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
-                    baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
+                    baueUnit(Kaserne.RAMMEN, Kaserne.RAMMEN_INPUT);
                 break;
             }
             case KATAPULT: {
@@ -111,7 +111,7 @@ public class BuildUnits implements AuftragInterface {
                     enoughProviant = true;
 
                 if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
-                    baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
+                    baueUnit(Kaserne.KATAPULT, Kaserne.KATAPULT_INPUT);
                 break;
             }
             default: {

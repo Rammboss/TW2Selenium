@@ -5,6 +5,7 @@ import TB2.NewStructure.common.Menus.Overview;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
+import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,7 @@ public class AnzahlBisherigeAngriffe implements AuftragInterface {
 
         if (Overview.SEITE2.isPresent()) {
             Overview.SEITE2.click();
-
+            Main.sleep(1);
             currentAttackCount += Overview.TABLE.getWebelements().size();
 
         }

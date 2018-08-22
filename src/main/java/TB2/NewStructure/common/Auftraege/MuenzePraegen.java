@@ -5,13 +5,10 @@ import TB2.NewStructure.common.Menus.MainToolbar;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
-import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
-import java.security.Key;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -32,7 +29,11 @@ public class MuenzePraegen implements AuftragInterface {
 
         new SelectOwnVillage(own);
         GetRessourcen ressourcen = new GetRessourcen(own);
-        if (ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || ressourcen.getEisen() >= ressourcen.getMaxSpeicher()) {
+        // wenn speicher mehr als 80% voll
+        double capacityLimit = 0.8;
+        if ((double) ressourcen.getHolz() / ressourcen.getMaxSpeicher() > capacityLimit ||
+                (double) ressourcen.getLehm() / ressourcen.getMaxSpeicher() > capacityLimit ||
+                (double) ressourcen.getEisen() / ressourcen.getMaxSpeicher() > capacityLimit) {
             MainToolbar.OBERFLAECHE.sendText("a");
 
             if (Akademie.BUILDING_NOT_ACTIVATERD.isPresent(Duration.ofSeconds(2))) {

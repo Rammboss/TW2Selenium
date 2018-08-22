@@ -17,9 +17,12 @@ public class Account {
 
     private String welt;
 
-    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt) {
+    private boolean useSecondMonitor;
+
+    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt, boolean useSecondMonitor) {
         super();
         this.zoomOut = zoomOut;
+        this.useSecondMonitor = useSecondMonitor;
         if (performaceMultiplier < 1) {
             Account.performaceMultiplier = 1;
 
@@ -75,5 +78,13 @@ public class Account {
 
     public void setZoomOut(boolean zoomOut) {
         this.zoomOut = zoomOut;
+    }
+
+    public boolean isUseSecondMonitor() {
+        return useSecondMonitor;
+    }
+
+    public void setUseSecondMonitor(boolean useSecondMonitor) {
+        this.useSecondMonitor = useSecondMonitor;
     }
 }

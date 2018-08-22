@@ -9,6 +9,7 @@ import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.dao.*;
 import TB2.NewStructure.common.hibernate.model.*;
 import TB2.TB2.Account;
+import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,9 @@ public class CheckPoint implements AuftragInterface {
 
                 Dorfoptionen.DORFINFORMATIONEN.click();
 
-                if (Dorfinformationen.DORFINFORMATIONEN_NAME.isPresent()) {
+                if (Dorfinformationen.DORFINFORMATIONEN_PUNKTE.isPresent()) {
+                    Main.sleep(1);
+
                     int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
 
                     Optional<EigenesDorf> eigenAltOptional = eigenesDorfDao.findByXAndY(point.getX(), point.getY());
@@ -86,6 +89,7 @@ public class CheckPoint implements AuftragInterface {
                 Dorfoptionen.DORFINFORMATIONEN.click();
 
                 if (Dorfinformationen.DORFINFORMATIONEN_PUNKTE.isPresent()) {
+                    Main.sleep(1);
 
                     int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
 
@@ -109,7 +113,9 @@ public class CheckPoint implements AuftragInterface {
 
                 Dorfoptionen.DORFINFORMATIONEN.click();
 
-                if (Dorfinformationen.DORFINFORMATIONEN_NAME.isPresent()) {
+                if (Dorfinformationen.DORFINFORMATIONEN_PUNKTE.isPresent()) {
+                    Main.sleep(1);
+
                     int dorfpunkte = Integer.parseInt(Dorfinformationen.DORFINFORMATIONEN_PUNKTE.getText().replace(".", ""));
 
                     Optional<Dorf> eigenALT = dorfDao.findByXAndY(point.getX(), point.getY());
@@ -132,6 +138,7 @@ public class CheckPoint implements AuftragInterface {
             MainToolbar.OBERFLAECHE.clickCoords(0, 0);
 
             if (Provinzansicht.PROVINZ_BUTTON_PROVINZDOERVER.isPresent()) {
+                Main.sleep(1);
 
                 Optional<Provinz> eigenALT = provinzDao.findByXAndY(point.getX(), point.getY());
 

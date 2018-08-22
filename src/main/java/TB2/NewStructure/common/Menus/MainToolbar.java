@@ -16,9 +16,10 @@ public class MainToolbar extends AbstractMenue {
     public static Element EISEN = new Element("Eisen", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]", Element.BY_XPATH);
     public static Element PROVIANT = new Element("Proviant", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[4]/div[2]/div[1]", Element.BY_XPATH);
 
-    public static Element KASERNENSLOT1 = new Element("Kaserne Slot 1", "li", "class", "ng-scope first", Element.BY_CSS_SELECTOR);
+    public static Element KASERNENSLOT1 = new Element("Kaserne Slot 1", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[1]", Element.BY_XPATH);
 
     public static Element KASERNENSLOT2 = new Element("Kaserne Slot 2", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[2]/div", Element.BY_XPATH);
+
     public static Element BAUSCHLEIFE = new Element("Bauschleife", "/html/body/div[2]/div[13]/div[1]/div[1]/div", Element.BY_XPATH);
     public static Element REKRUTIERUNGSSCHEIFE = new Element("Rekrutierungsschleife", "/html/body/div[2]/div[13]/div[1]/div[2]/div", Element.BY_XPATH);
     public static Element OBERFLAECHE = new Element("Spielfeld", "//*[@id=\"click-layer\"]", Element.BY_XPATH);

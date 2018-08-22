@@ -1,7 +1,9 @@
 package TB2.TB2;
 
 import TB2.NewStructure.common.Auftraege.*;
-import TB2.NewStructure.common.Menus.*;
+import TB2.NewStructure.common.Menus.Einstellungen;
+import TB2.NewStructure.common.Menus.EinstellungenSubSpiel;
+import TB2.NewStructure.common.Menus.MainToolbar;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.configuration.AppConfig;
@@ -10,7 +12,9 @@ import TB2.NewStructure.common.hibernate.model.DistanceCalculator;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.hibernate.model.Point;
 import TB2.NewStructure.common.units.Units;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
@@ -42,7 +46,7 @@ public class Main {
 //        System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
 //        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
 
-        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard");
+        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true);
 
     }
 
@@ -106,7 +110,6 @@ public class Main {
                     app = context.getBean(Main.class);
                 }
                 app.restartDriver();
-                MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
 
                 //Main.sleep(app.rohstofflagerCheck(true));
                 app.runTask();
@@ -172,34 +175,45 @@ public class Main {
         Main.ownVillages = getOwn.getOwnVillages();
 
         findOwnVillage("Effi's A001").setBlockAttacks(true);
+        findOwnVillage("Effi's A001").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's A001").setFarableUnits(farableUnitsONLYOFF);
 
         findOwnVillage("Effi's A002").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A002").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A002").setRekrutierungsEinheit(Units.SKAV);
+        findOwnVillage("Effi's A002").setRekrutierungsAnzahl(1);
 
         findOwnVillage("Effi's A003").setBlockAttacks(true);
+        findOwnVillage("Effi's A003").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's A003").setFarableUnits(farableUnitsONLYOFF);
 
         findOwnVillage("Effi's A004").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A004").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's A005").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A005").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's A006").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A006").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's A007").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A007").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's A008").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A008").setAllowedMuenzenPraegen(true);
+
 
         findOwnVillage("Effi's A009").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A009").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's A010").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A010").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's B001").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's B001").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's C001").setFarableUnits(farableUnitsONLYOFF);
-
-
-
-
+        findOwnVillage("Effi's C001").setAllowedMuenzenPraegen(true);
 
 
         while (true) {
@@ -212,10 +226,7 @@ public class Main {
                 new MuenzePraegen(own);
                 new BuildUnits(own);
                 new FarmWithVillage(own, barbarendorfDao);
-
             }
-
-
             // Points vorbereiten
             List<Point> points = checkAndInitPoints();
             points.sort(Comparator.comparingInt(o -> new DistanceCalculator(o, Main.ownVillages.get(0)).getDistance()));
@@ -228,38 +239,9 @@ public class Main {
             for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
                 new CheckPoint(points.get(i), barbarendorfDao, provinzDao, pointDao, eigenesDorfDao, dorfDao, account);
             }
-
             logger.info("Driver wird neugestartet!");
             restartDriver();
-
         }
-    }
-
-    private void rohstoffeCheckenUndAxtBauen() throws ElementisNotClickable, NoElementTextFound {
-
-
-    }
-
-    private void baueAxt(int anzahl) throws ElementisNotClickable {
-
-        MainToolbar.OBERFLAECHE.sendText("b");
-        sleep(1);
-        Kaserne.AXTKAEMPFER.scrollToElement("start");
-        sleep(1);
-        logger.info("" + Kaserne.AXTKAEMPFER.isPresent());
-
-        if (Kaserne.AXTKAEMPFER.isPresent()) {
-            Kaserne.AXTKAEMPFER.click();
-        }
-
-        MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-        MainToolbar.ZEITLEISTE.click();
-        sleep(1);
-
-        MainToolbar.ZEITLEISTE.click();
-        sleep(1);
-
     }
 
     private void disableSound() throws ElementisNotClickable {
@@ -342,12 +324,15 @@ public class Main {
 
         if (driver == null) {
             Main.driver = new FirefoxDriver();
-            driver.manage().window().setPosition(new org.openqa.selenium.Point(2100, 0));
+            if (account.isUseSecondMonitor())
+                driver.manage().window().setPosition(new org.openqa.selenium.Point(2100, 0));
             driver.get("https://de.tribalwars2.com/");
             driver.manage().window().maximize();
 
             System.gc();
             account.login();
+            MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
+
             disableSound();
         }
 
