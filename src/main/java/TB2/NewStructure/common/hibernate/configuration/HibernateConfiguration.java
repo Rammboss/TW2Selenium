@@ -60,7 +60,6 @@ public class HibernateConfiguration {
         Properties properties = new Properties();
         if (useMYSQLDatabase) {
             properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-            // properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         } else {
             properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         }

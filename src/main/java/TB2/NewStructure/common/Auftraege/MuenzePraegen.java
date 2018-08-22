@@ -39,7 +39,7 @@ public class MuenzePraegen implements AuftragInterface {
             if (Akademie.BUILDING_NOT_ACTIVATERD.isPresent(Duration.ofSeconds(2))) {
                 logger.info("Kein Adelshof vorhanden");
             } else {
-
+                Akademie.WERT_ENGEBEN.scrollToElement("end");
                 Akademie.WERT_ENGEBEN.click();
                 Akademie.WERT_ENGEBEN_INPUT.sendText(1);
                 Akademie.MUENZE_PRAEGEN.click();
