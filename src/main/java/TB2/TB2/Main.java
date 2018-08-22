@@ -25,6 +25,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -130,7 +131,7 @@ public class Main {
         }
     }
 
-    private void runTask() throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
+    private void runTask() throws ElementisNotClickable, NumberFormatException, NoElementTextFound, AWTException {
 
 
         // Angriff timen
@@ -247,16 +248,37 @@ public class Main {
     private void disableSound() throws ElementisNotClickable {
         MainToolbar.EINSTELLUNGEN.click();
         Einstellungen.EINSTELLUNGEN_SPIEL.click();
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_TIPPS_EINSCHALTEN.click();
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_ANNIMATION1.scrollToElement("start");
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_ANNIMATION1.click();
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.scrollToElement("start");
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_MUSIK_SOUND.click();
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.scrollToElement("start");
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.click();
+        EinstellungenSubSpiel.TIPPS_EINSCHALTEN.click();
+
+        EinstellungenSubSpiel.ANIMATIONEN_AKTIVIEREN.scrollToElement("start");
+        EinstellungenSubSpiel.ANIMATIONEN_AKTIVIEREN.click();
+
+        EinstellungenSubSpiel.ANNIMATION1.scrollToElement("start");
+        EinstellungenSubSpiel.ANNIMATION1.click();
+
+        EinstellungenSubSpiel.ZOOM_ANIMATIONEN_AKTIVIEREN.scrollToElement("start");
+        EinstellungenSubSpiel.ZOOM_ANIMATIONEN_AKTIVIEREN.click();
+
+        EinstellungenSubSpiel.NEBEL_AKTIVIEREN.scrollToElement("start");
+        EinstellungenSubSpiel.NEBEL_AKTIVIEREN.click();
+
+        EinstellungenSubSpiel.BAUM_AKTIVIEREN.scrollToElement("start");
+        EinstellungenSubSpiel.BAUM_AKTIVIEREN.click();
+
+        EinstellungenSubSpiel.AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("start");
+        EinstellungenSubSpiel.AUSGEHENDE_BEFEHLE_ANZEIGEN.click();
+
+        EinstellungenSubSpiel.HANDELSBEFEHLE_AKTIVIEREN.scrollToElement("start");
+        EinstellungenSubSpiel.HANDELSBEFEHLE_AKTIVIEREN.click();
+
+        EinstellungenSubSpiel.MUSIK_SOUND.scrollToElement("start");
+        EinstellungenSubSpiel.MUSIK_SOUND.click();
+
+        EinstellungenSubSpiel.EFFEKT_SOUND.scrollToElement("start");
+        EinstellungenSubSpiel.EFFEKT_SOUND.click();
 
         // um normale view wiederherzustellen
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_EFFEKT_SOUND.scrollToElement("end");
+        EinstellungenSubSpiel.EFFEKT_SOUND.scrollToElement("end");
 
         MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
 
@@ -266,11 +288,11 @@ public class Main {
         MainToolbar.EINSTELLUNGEN.click();
         Einstellungen.EINSTELLUNGEN_SPIEL.click();
 
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("start");
+        EinstellungenSubSpiel.AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("start");
 
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.click();
+        EinstellungenSubSpiel.AUSGEHENDE_BEFEHLE_ANZEIGEN.click();
 
-        EinstellungenSubSpiel.EINSTELLUNGEN_SPIEL_AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("end");
+        EinstellungenSubSpiel.AUSGEHENDE_BEFEHLE_ANZEIGEN.scrollToElement("end");
 
         MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
 
@@ -293,7 +315,7 @@ public class Main {
         }
     }
 
-    public void restartDriver() throws ElementisNotClickable {
+    public void restartDriver() throws ElementisNotClickable, AWTException {
 
         if (driver != null) {
 
@@ -331,6 +353,7 @@ public class Main {
 
             System.gc();
             account.login();
+
             MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
 
             disableSound();
