@@ -45,7 +45,7 @@ public class Main implements Runnable {
     public static WebDriver driver;
 
     static {
-        account = new Account(1, true, "Rammboss", "kalterhund", "Gaillard", true, false, true, true);
+        account = new Account(1, "Rammboss", "kalterhund", "Gaillard", false, true, false, true);
         if (account.isUseChrome()) {
             System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
             System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
@@ -164,11 +164,11 @@ public class Main implements Runnable {
         GetOwnVillages getOwn = new GetOwnVillages(account);
         Main.ownVillages = getOwn.getOwnVillages();
 
-//        findOwnVillage("Effi's A001").setBlockAttacks(true);
+        findOwnVillage("Effi's A001").setBlockAttacks(true);
         findOwnVillage("Effi's A001").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's A001").setFarableUnits(farableUnitsONLYOFF);
-//        findOwnVillage("Effi's A001").setRekrutierungsEinheit(Units.SKAV);
-//        findOwnVillage("Effi's A001").setRekrutierungsAnzahl(1);
+        findOwnVillage("Effi's A001").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's A001").setRekrutierungsAnzahl(1);
 
         findOwnVillage("Effi's A002").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's A002").setAllowedMuenzenPraegen(true);
@@ -201,7 +201,7 @@ public class Main implements Runnable {
         findOwnVillage("Effi's A010").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's B001").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's B001").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's B001").setAllowedMuenzenPraegen(true);
 
         findOwnVillage("Effi's C001").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's C001").setAllowedMuenzenPraegen(false);

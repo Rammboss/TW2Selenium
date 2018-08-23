@@ -9,8 +9,6 @@ public class Account {
 
     public static int performaceMultiplier;
 
-    private boolean zoomOut;
-
     private String spielername;
 
     private String passwort;
@@ -25,9 +23,8 @@ public class Account {
 
     private boolean useMYSQLDatabase;
 
-    public Account(int performaceMultiplier, boolean zoomOut, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC, boolean useChrome, boolean useMYSQLDatabase) {
+    public Account(int performaceMultiplier, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC, boolean useChrome, boolean useMYSQLDatabase) {
         super();
-        this.zoomOut = zoomOut;
         this.useSecondMonitor = useSecondMonitor;
         this.woodPC = woodPC;
         this.useChrome = useChrome;
@@ -79,14 +76,6 @@ public class Account {
 
     public int getPerformaceMultiplikator() {
         return performaceMultiplier;
-    }
-
-    public boolean isZoomOut() {
-        return zoomOut;
-    }
-
-    public void setZoomOut(boolean zoomOut) {
-        this.zoomOut = zoomOut;
     }
 
     public boolean isUseSecondMonitor() {

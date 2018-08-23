@@ -49,7 +49,8 @@ public class RohstofflagerFarmen implements AuftragInterface {
         if (!Rohstofflager.AKTUELLE_PRODUKTION.getAttribute("innerHTML").contains("Aktuelle Produktion")) {
             if (neueAuftraegeTime == null || neueAuftraegeTime.plusHours(20).isBefore(LocalDateTime.now())) {
                 neueAuftraegeTime = LocalDateTime.now();
-                neueAuftraege = Integer.parseInt(Rohstofflager.ANZAHL_NEUER_AUFGABEN.getText().replaceAll("[^\\d.]", ""));
+                if (Rohstofflager.ANZAHL_NEUER_AUFGABEN.isPresent())
+                    neueAuftraege = Integer.parseInt(Rohstofflager.ANZAHL_NEUER_AUFGABEN.getText().replaceAll("[^\\d.]", ""));
             }
 
 

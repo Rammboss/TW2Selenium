@@ -8,6 +8,7 @@ import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.units.Units;
+import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,20 +31,30 @@ public class InitVorlagen implements AuftragInterface {
     private static int successfulRuns;
     private static int failedRuns;
 
+    private boolean doFirstSteps;
+
     public InitVorlagen(EigenesDorf own, Map<Units, Integer> units) throws NoElementTextFound, ElementisNotClickable {
 
         this.priority = 1;
         this.own = own;
         this.units = units;
         this.startTime = LocalTime.now();
+        this.doFirstSteps = true;
         run();
 
     }
 
     public void run() throws ElementisNotClickable {
+        if (isDoFirstSteps()) {
+            MainToolbar.OBERFLAECHE.sendText("r");
+            Sammelplatz.GLOBALE_VORLAGENLISTE.click();
+        }
 
-        MainToolbar.OBERFLAECHE.sendText("r");
-        Sammelplatz.GLOBALE_VORLAGENLISTE.click();
+        if (!UebersichtVorlangenliste.FARM_EDIT.isPresent(Duration.ofSeconds(3))) {
+            erstelleVorlageFarm();
+            return;
+
+        }
         UebersichtVorlangenliste.FARM_EDIT.click();
 
 
@@ -144,6 +155,24 @@ public class InitVorlagen implements AuftragInterface {
 
     }
 
+    private void erstelleVorlageFarm() throws ElementisNotClickable {
+        UebersichtVorlangenliste.ERSTELLE_NEUE_VORLAGE.click();
+        if (UebersichtVorlangenliste.INPUT_NAME_DER_VORLAGE.isPresent(Duration.ofSeconds(2))) {
+            UebersichtVorlangenliste.INPUT_NAME_DER_VORLAGE.clear();
+            UebersichtVorlangenliste.INPUT_NAME_DER_VORLAGE.sendText("farm");
+            UebersichtVorlangenliste.NEUE_VORLAGE_SPEICHERN.click();
+            UebersichtVorlangenliste.NEUE_VORLAGE_SPEICHERN_OK.click();
+            VorlangeErstellenOderAendern.ANZAHL_LKAV.isPresent(Duration.ofSeconds(2));
+            VorlangeErstellenOderAendern.ANZAHL_LKAV.clear();
+            VorlangeErstellenOderAendern.ANZAHL_LKAV.sendText(1);
+            VorlangeErstellenOderAendern.HOTKEY_1.scrollToElement("end");
+            VorlangeErstellenOderAendern.SPEICHERN.click();
+            setDoFirstSteps(false);
+            run();
+
+        }
+    }
+
     public int getPriority() {
         return priority;
     }
@@ -185,5 +214,13 @@ public class InitVorlagen implements AuftragInterface {
 
         logger.info("Durchschnittliche Laufzeit(h:m:s): " + hours + ":" + minute + ":" + seconds);
 
+    }
+
+    public void setDoFirstSteps(boolean doFirstSteps) {
+        this.doFirstSteps = doFirstSteps;
+    }
+
+    public boolean isDoFirstSteps() {
+        return doFirstSteps;
     }
 }

@@ -1,5 +1,6 @@
 package TB2.TB2;
 
+import TB2.NewStructure.common.Menus.MainToolbar;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import org.openqa.selenium.*;
@@ -88,11 +89,18 @@ public class Element {
     }
 
     public boolean isPresent() {
+
+
         try {
 
             new FluentWait<>(Main.getDriver()).withTimeout(Duration.ofMillis(500 * Account.performaceMultiplier)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
                     .until(ExpectedConditions.visibilityOfElementLocated((getLocator())));
 
+            if (getWebelement(Main.getDriver()) == null) {
+                return false;
+            } else if (getElement() != null && getElement().getWebelement(Main.getDriver()) == null) {
+                return false;
+            }
             return true;
         } catch (TimeoutException e) {
             logger.debug("Element:" + getLabel() + " konnte nicht gefunden werden!", e);
@@ -102,11 +110,16 @@ public class Element {
 
     public boolean isPresent(Duration timeout) {
 
+
         try {
 
             new FluentWait<>(Main.getDriver()).withTimeout(Duration.ofSeconds(timeout.toSeconds() * Account.performaceMultiplier)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
                     .until(ExpectedConditions.visibilityOfElementLocated((getLocator())));
-
+            if (getWebelement(Main.getDriver()) == null) {
+                return false;
+            } else if (getElement() != null && getElement().getWebelement(Main.getDriver()) == null) {
+                return false;
+            }
             return true;
         } catch (TimeoutException e) {
             logger.debug("Element:" + getLabel() + " konnte nicht gefunden werden!", e);
@@ -308,8 +321,11 @@ public class Element {
         if (isPresent(Duration.ofSeconds(5))) {
             getWebelement(Main.getDriver()).click();
         } else {
-            throw new ElementisNotClickable("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
+            logger.info("##ACHTUNG##: Element \" + getLabel() + \" konnte nicht gelklickt werden!");
+//                throw new ElementisNotClickable("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
         }
+
+
     }
 
     public void click(Duration time) throws ElementisNotClickable {
