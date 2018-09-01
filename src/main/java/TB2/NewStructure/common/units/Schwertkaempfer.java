@@ -1,7 +1,7 @@
 package TB2.NewStructure.common.units;
 
 
-public class Schwertkaempfer {
+public class Schwertkaempfer implements RekrutableUnits{
     public static Units TYPE = Units.SCHWERT;
 
     private final int holzKosten = 30;

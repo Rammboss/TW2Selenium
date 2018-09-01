@@ -1,7 +1,7 @@
 package TB2.NewStructure.common.units;
 
 
-public class Rammbock {
+public class Rammbock implements RekrutableUnits{
     public static Units TYPE = Units.RAMMEN;
 
     private final int holzKosten = 300;

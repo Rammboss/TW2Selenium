@@ -1,0 +1,5 @@
+[0822/193404.466:ERROR:process_info.cc(329)] VirtualQueryEx: Zugriff verweigert (0x5)
+[0822/193404.467:ERROR:process_info.cc(550)] ReadMemoryInfo failed
+[0822/193404.473:ERROR:process_reader_win.cc(151)] SuspendThread: Zugriff verweigert (0x5)
+[0822/193404.473:ERROR:exception_snapshot_win.cc(88)] thread ID 14404 not found in process
+[0822/193404.473:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: Es wurde versucht, auf einen Prozess zuzugreifen, der gerade beendet wurde. (0xc000010a)

@@ -4,7 +4,7 @@ import TB2.TB2.Element;
 
 public class MainToolbar extends AbstractMenue {
 
-    public static Element VERBINDUNGSFEHLER = new Element("Verbindungsfehler", "div", "class", "middle-wrapper", Element.BY_CSS_SELECTOR);
+    public static Element VERBINDUNGSFEHLER = new Element("Verbindungsfehler", "div", "class", "middle-wrapper", "Verbindungsfehler", Element.BY_CSS_SELECTOR_WITH_CRITERIA);
 
 
     public static Element LOADING_SCREEN = new Element("Loading Screen", "//*[@id=\"screen-loading\"]", Element.BY_XPATH);
@@ -12,18 +12,32 @@ public class MainToolbar extends AbstractMenue {
     public static Element PROFIL = new Element("Profil", "a", "tooltip-content", "Profil", Element.BY_CSS_SELECTOR);
 
     public static Element CURRENT_VILLAGE_NAME = new Element("Aktuelles Dorf Name", "village-name", Element.BY_ID);
-    public static Element CURRENT_VILLAGE_KOORDS = new Element("Aktuelles Dorf Koordinaten", "/html/body/div[2]/div[11]/div[1]/div[2]/div[1]/div[2]/h4/span", Element.BY_XPATH);
+    public static Element CURRENT_VILLAGE_KOORDS = new Element("Aktuelles Dorf Koordinaten", "//*[@id=\"info-town\"]/h4/span", Element.BY_XPATH);
 
-    public static Element HOLZ = new Element("Holz", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[1]/div[2]/div[1]", Element.BY_XPATH);
-    public static Element LEHM = new Element("Lehm", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]/div[1]", Element.BY_XPATH);
-    public static Element EISEN = new Element("Eisen", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]", Element.BY_XPATH);
+
+    public static Element HOLZ = new Element("Holz", "div", "tooltip-before-show-args", "wood", Element.BY_CSS_SELECTOR);
+    public static Element LEHM = new Element("Lehm", "div", "tooltip-before-show-args", "clay", Element.BY_CSS_SELECTOR);
+    public static Element EISEN = new Element("Eisen", "div", "tooltip-before-show-args", "iron", Element.BY_CSS_SELECTOR);
+
+    public static Element HOLZ_PROGRESSBAR = new Element("Holz Bar", "div", "tooltip-before-show-args", "wood", Element.BY_CSS_SELECTOR);
+    public static Element LEHM_PROGRESSBAR = new Element("Lehm Bar", "div", "tooltip-before-show-args", "clay", Element.BY_CSS_SELECTOR);
+    public static Element EISEN_PROGRESSBAR = new Element("Eisen Bar", "div", "tooltip-before-show-args", "iron", Element.BY_CSS_SELECTOR);
+
+    public static Element EISEN_TOOLTIP = new Element("Eisen Tooltip", "div", "class", "tooltip-resource-info", Element.BY_CSS_SELECTOR);
+    public static Element PROVIANT_TOOLTIP = new Element("Eisen Tooltip", "div", "class", "tooltip-resource-info", Element.BY_CSS_SELECTOR);
+
+
     public static Element PROVIANT = new Element("Proviant", "/html/body/div[2]/div[11]/div[1]/div[2]/div[2]/div[2]/div[4]/div[2]/div[1]", Element.BY_XPATH);
 
     public static Element KASERNENSLOT1 = new Element("Kaserne Slot 1", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[1]", Element.BY_XPATH);
-
     public static Element KASERNENSLOT2 = new Element("Kaserne Slot 2", "/html/body/div[2]/div[13]/div[3]/div/div[1]/ul/li[2]/div", Element.BY_XPATH);
 
     public static Element BAUSCHLEIFE = new Element("Bauschleife", "/html/body/div[2]/div[13]/div[1]/div[1]/div", Element.BY_XPATH);
+    public static Element BAUSCHLEIFENSLOT1 = new Element("Bauschleifen Slot 1", "//*[@id=\"interface-building-queue\"]/div/div[1]/ul/li[1]/div", Element.BY_XPATH);
+                                                                                                //*[@id="interface-building-queue"]/div/div[1]/ul/li[1]/div/div[1]
+    public static Element BAUSCHLEIFENSLOT2 = new Element("Bauschleifen Slot 2", "//*[@id=\"interface-building-queue\"]/div/div[1]/ul/li[2]/div", Element.BY_XPATH);
+
+
     public static Element REKRUTIERUNGSSCHEIFE = new Element("Rekrutierungsschleife", "/html/body/div[2]/div[13]/div[1]/div[2]/div", Element.BY_XPATH);
     public static Element OBERFLAECHE = new Element("Spielfeld", "//*[@id=\"click-layer\"]", Element.BY_XPATH);
     public static Element ZEITLEISTE = new Element("Zeitleiste", "/html/body/div[2]/footer/div/div[2]/div[3]/a", Element.BY_XPATH);
@@ -72,6 +86,18 @@ public class MainToolbar extends AbstractMenue {
         ANZAHL_TREBUCHET.setElement(new Element("Anzahl Trebuchet", "div", "class", "clearfix amount", Element.BY_CSS_SELECTOR));
         ANZAHL_ADELSGESCHLECHT.setElement(new Element("Anzahl Adelsgeschlecht", "div", "class", "clearfix amount", Element.BY_CSS_SELECTOR));
         ANZAHL_PALADIN.setElement(new Element("Anzahl Paladin", "div", "class", "clearfix amount", Element.BY_CSS_SELECTOR));
+
+        HOLZ.setElement(new Element("Holz 2", "div", "class", "resource-text", Element.BY_CSS_SELECTOR));
+        LEHM.setElement(new Element("Lehm 2", "div", "class", "resource-text", Element.BY_CSS_SELECTOR));
+        EISEN.setElement(new Element("Eisen 2", "div", "class", "resource-text", Element.BY_CSS_SELECTOR));
+
+        HOLZ_PROGRESSBAR.setElement(new Element("Holz Bar 2", "div", "class", "progress-bar", Element.BY_CSS_SELECTOR));
+        LEHM_PROGRESSBAR.setElement(new Element("Lehm Bar 2", "div", "class", "progress-bar", Element.BY_CSS_SELECTOR));
+        EISEN_PROGRESSBAR.setElement(new Element("Eisen Bar 2", "div", "class", "progress-bar", Element.BY_CSS_SELECTOR));
+
+        EISEN_TOOLTIP.setElement(new Element("Eisen Tooltip 2", "/html/body/div[2]/div[2]/div/div/table/tbody/tr[2]/td[2]", Element.BY_XPATH));
+        PROVIANT_TOOLTIP.setElement(new Element("Proviant Tooltip 2", "//td[text()='Proviant insgesamt']//parent::tr//td[@class='res-value']", Element.BY_XPATH));
+
     }
 
     @Override

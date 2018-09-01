@@ -1,7 +1,7 @@
 package TB2.NewStructure.common.units;
 
 
-public class Katapult {
+public class Katapult implements RekrutableUnits{
     public static Units TYPE = Units.KATAPULT;
 
     private final int holzKosten = 320;

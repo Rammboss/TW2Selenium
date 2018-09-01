@@ -1,5 +1,7 @@
 package TB2.NewStructure.common.hibernate.model;
 
+import TB2.NewStructure.common.Auftraege.BuildingTask;
+import TB2.NewStructure.common.Gebaeude.Speicher;
 import TB2.NewStructure.common.units.Units;
 
 import javax.persistence.*;
@@ -46,6 +48,18 @@ public class EigenesDorf implements KoordinatenInterface {
     @Transient
     private boolean allowedMuenzenPraegen;
 
+    @Transient
+    private List<BuildingTask> buildingTask;
+
+    @Transient
+    private Speicher speicher;
+
+    @Transient
+    private boolean forceRekrutierung;
+
+    @Transient
+    private int rekrutierungsscheifenLimit;
+
     public EigenesDorf(int x, int y, String name, int punkte, String spieler) {
         this.x = x;
         this.y = y;
@@ -54,11 +68,13 @@ public class EigenesDorf implements KoordinatenInterface {
         this.spieler = spieler;
         this.blockAttacks = false;
         this.rekrutierungsEinheit = null;
+        this.buildingTask = null;
         this.rekrutierungsAnzahl = 0;
         this.allowedMuenzenPraegen = false;
-        farableUnits = null;
-
-
+        this.farableUnits = null;
+        this.speicher = new Speicher();
+        this.forceRekrutierung = false;
+        this.rekrutierungsscheifenLimit = 8;
     }
 
     public EigenesDorf() {
@@ -66,7 +82,11 @@ public class EigenesDorf implements KoordinatenInterface {
         this.rekrutierungsEinheit = null;
         this.rekrutierungsAnzahl = 0;
         this.allowedMuenzenPraegen = false;
-        farableUnits = null;
+        this.farableUnits = null;
+        this.buildingTask = null;
+        this.speicher = new Speicher();
+        this.forceRekrutierung = false;
+        this.rekrutierungsscheifenLimit = 8;
 
     }
 
@@ -187,5 +207,37 @@ public class EigenesDorf implements KoordinatenInterface {
 
     public void setFarableUnits(List<Units> farableUnits) {
         this.farableUnits = farableUnits;
+    }
+
+    public List<BuildingTask> getBuildingTask() {
+        return buildingTask;
+    }
+
+    public void setBuildingTask(List<BuildingTask> buildingTask) {
+        this.buildingTask = buildingTask;
+    }
+
+    public Speicher getSpeicher() {
+        return speicher;
+    }
+
+    public void setSpeicher(Speicher speicher) {
+        this.speicher = speicher;
+    }
+
+    public boolean isForceRekrutierung() {
+        return forceRekrutierung;
+    }
+
+    public void setForceRekrutierung(boolean forceRekrutierung) {
+        this.forceRekrutierung = forceRekrutierung;
+    }
+
+    public int getRekrutierungsscheifenLimit() {
+        return rekrutierungsscheifenLimit;
+    }
+
+    public void setRekrutierungsscheifenLimit(int rekrutierungsscheifenLimit) {
+        this.rekrutierungsscheifenLimit = rekrutierungsscheifenLimit;
     }
 }

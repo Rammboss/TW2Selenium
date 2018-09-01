@@ -1,7 +1,7 @@
 package TB2.NewStructure.common.units;
 
 
-public class SchwereKavalerie {
+public class SchwereKavalerie implements RekrutableUnits{
     public static Units TYPE = Units.SKAV;
 
     private final int holzKosten = 200;

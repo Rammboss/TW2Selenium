@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Element {
 
@@ -44,8 +45,6 @@ public class Element {
 
     private Element element;
 
-    private final int waitForClick = 5;
-
     public Element(String label, String xpath, int wayToSelect) {
         super();
         this.label = label;
@@ -76,18 +75,6 @@ public class Element {
 
     }
 
-    public boolean isClickable() {
-        try {
-            new FluentWait<>(Main.getDriver()).withTimeout(Duration.ofSeconds(2 * Account.performaceMultiplier)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
-                    .until(ExpectedConditions.elementToBeClickable(getWebelement(Main.getDriver())));
-
-            return true;
-        } catch (TimeoutException e) {
-            logger.debug("Element:" + getLabel() + " konnte nicht geklickt werden!", e);
-            return false;
-        }
-    }
-
     public boolean isPresent() {
 
 
@@ -102,6 +89,7 @@ public class Element {
                 return false;
             }
             return true;
+
         } catch (TimeoutException e) {
             logger.debug("Element:" + getLabel() + " konnte nicht gefunden werden!", e);
             return false;
@@ -130,12 +118,12 @@ public class Element {
     public void mouseOver() {
         Actions action = new Actions(Main.getDriver());
 
-        action.moveToElement(getWebelement(Main.getDriver())).moveToElement(Main.getDriver().findElement(By.xpath(this.getXpath()))).perform();
+        action.moveToElement(getWebelement(Main.getDriver())).perform();
 
     }
 
     public void clickCoords(int x, int y) {
-        Actions a = new Actions(Main.getDriver()).moveToElement(this.getWebelement(Main.getDriver()));
+        Actions a = new Actions(Main.getDriver()).moveToElement(getWebelement(Main.getDriver()));
         a.moveByOffset(x / 2, y / 2).click().perform();
     }
 
@@ -176,10 +164,6 @@ public class Element {
             getWebelement(Main.getDriver()).sendKeys(escape);
     }
 
-    public boolean isDisplayed() {
-        return getWebelement(Main.getDriver()).isDisplayed();
-    }
-
     public String getCSSClass() {
 
         return getWebelement(Main.getDriver()).getAttribute("class");
@@ -195,7 +179,7 @@ public class Element {
             case 1:
                 return driver.findElement(By.className(getXpath()));
             case 2:
-                // try {
+
                 list = driver.findElements(By.cssSelector("" + getType() + "[" + getAttribute() + "='" + getAttributeValue() + "']"));
 
                 for (WebElement webElement : list) {
@@ -291,6 +275,7 @@ public class Element {
         switch (getWayToSelect()) {
 
             case 1:
+
                 return By.className(getXpath());
             case 2:
                 return By.cssSelector("" + getType() + "[" + getAttribute() + "='" + getAttributeValue() + "']");
@@ -324,8 +309,6 @@ public class Element {
             logger.info("##ACHTUNG##: Element \" + getLabel() + \" konnte nicht gelklickt werden!");
 //                throw new ElementisNotClickable("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
         }
-
-
     }
 
     public void click(Duration time) throws ElementisNotClickable {
@@ -337,6 +320,7 @@ public class Element {
     public void scrollToElement(String topaligin) {
         ((JavascriptExecutor) Main.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", getWebelement(Main.getDriver()));
         isPresent(Duration.ofSeconds(5));
+        Main.sleep(500, TimeUnit.MILLISECONDS);
 
     }
 

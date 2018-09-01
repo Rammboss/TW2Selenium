@@ -1,7 +1,7 @@
 package TB2.NewStructure.common.units;
 
 
-public class Axtkaempfer {
+public class Axtkaempfer implements RekrutableUnits {
     public static Units TYPE = Units.AXT;
 
     private final int holzKosten = 60;

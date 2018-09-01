@@ -6,6 +6,9 @@ public class Kaserne extends AbstractMenue {
 
     public static Element KASERNE = new Element("Kasernen Fenster", "section", "class", "building-barracks twx-window screen left", Element.BY_CSS_SELECTOR);
 
+    public static Element DAUER_TRUPPEN_BAUSCHLEIFE = new Element("Truppen Bauschleife", "div", "class", "queue-info", Element.BY_CSS_SELECTOR);
+
+
     public static Element SPEER = new Element("Speer rekrutieren",
             "label", "for", "input-unit-recruit-spear", "Speerkämpfer", Element.BY_CSS_SELECTOR_WITH_CRITERIA);
     public static Element SPEER_INPUT = new Element("Speer rekrutieren",
@@ -62,7 +65,6 @@ public class Kaserne extends AbstractMenue {
         SKAV_INPUT.setElement(new Element("Input SKAV", "input", Element.BY_TAG_NAME));
         RAMMEN_INPUT.setElement(new Element("Input Rammen", "input", Element.BY_TAG_NAME));
         KATAPULT_INPUT.setElement(new Element("Input Katapult", "input", Element.BY_TAG_NAME));
-
 
 
     }

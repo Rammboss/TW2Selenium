@@ -1,7 +1,7 @@
 package TB2.NewStructure.common.units;
 
 
-public class BerittenerBogen {
+public class BerittenerBogen implements RekrutableUnits{
     public static Units TYPE = Units.BERITTINER_BOGEN;
 
     private final int holzKosten = 250;

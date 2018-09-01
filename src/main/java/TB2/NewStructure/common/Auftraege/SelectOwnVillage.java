@@ -6,6 +6,7 @@ import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.hibernate.model.KoordinatenInterface;
+import TB2.TB2.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,7 @@ public class SelectOwnVillage implements AuftragInterface {
     }
 
     public void run() throws ElementisNotClickable, NoElementTextFound {
+        MainToolbar.CURRENT_VILLAGE_KOORDS.isPresent();
         String tmp = MainToolbar.CURRENT_VILLAGE_KOORDS.getText().replace("(", "").replace(")", "");
         String[] coords = tmp.split("\\|");
         String currentName = MainToolbar.CURRENT_VILLAGE_NAME.getText();

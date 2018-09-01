@@ -29,88 +29,164 @@ public class BuildUnits implements AuftragInterface {
         if (own.getRekrutierungsEinheit() == null || own.getRekrutierungsAnzahl() <= 0) return;
 
         new SelectOwnVillage(own);
-        GetRessourcen ressourcen = new GetRessourcen(own);
+        new GetRessourcen(own);
+//        MainToolbar.PROVIANT.mouseOver();
+//        if (MainToolbar.PROVIANT_TOOLTIP.isPresent())
+//            MainToolbar.PROVIANT_TOOLTIP.getText();
+
         int proviant = Integer.parseInt(MainToolbar.PROVIANT.getText().replace(".", ""));
 
         MainToolbar.OBERFLAECHE.sendText("b");
         Kaserne.KASERNE.isPresent(Duration.ofSeconds(3));
 
+        Kaserne.RAMMEN.scrollToElement("start");
+
+        Kaserne.RAMMEN.isPresent(Duration.ofSeconds(3));
+
+        if (Kaserne.DAUER_TRUPPEN_BAUSCHLEIFE.isPresent()) {
+            if (Integer.parseInt(Kaserne.DAUER_TRUPPEN_BAUSCHLEIFE.getText().replace("Alle Einheiten abgeschlossen in: ", "").split(":")[0]) > own.getRekrutierungsscheifenLimit()) {
+                Kaserne.SPEER.scrollToElement("end");
+                MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
+                return;
+            }
+        }
+
         MainToolbar.REKRUTIERUNGSSCHEIFE.click();
 
-        boolean enoughProviant = false;
-
+        boolean enoughProviantAndRessourcen = false;
 
         switch (own.getRekrutierungsEinheit()) {
             case SPEER: {
-                if (proviant > new Speerkaempfer().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                Speerkaempfer unit = new Speerkaempfer();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.SPEER, Kaserne.SPEER_INPUT);
-
                 break;
             }
             case SCHWERT: {
-                if (proviant > new Schwertkaempfer().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                Schwertkaempfer unit = new Schwertkaempfer();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.SCHWERT, Kaserne.SCHWERT_INPUT);
                 break;
             }
             case AXT: {
-                if (proviant > new Axtkaempfer().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                Axtkaempfer unit = new Axtkaempfer();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.AXTKAEMPFER, Kaserne.AXTKAEMPFER_INPUT);
                 break;
             }
             case BOGEN: {
-                if (proviant > new Bogenschuetze().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                Bogenschuetze unit = new Bogenschuetze();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.BOGEN, Kaserne.BOGEN_INPUT);
                 break;
             }
             case LKAV: {
-                if (proviant > new LeichteKavallerie().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                LeichteKavallerie unit = new LeichteKavallerie();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.LKAV, Kaserne.LKAV_INPUT);
                 break;
             }
             case BERITTINER_BOGEN: {
-                if (proviant > new BerittenerBogen().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                BerittenerBogen unit = new BerittenerBogen();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.BERITTINER_BOGEN, Kaserne.BERITTINER_BOGEN_INPUT);
                 break;
             }
             case SKAV: {
-                if (proviant > new SchwereKavalerie().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                SchwereKavalerie unit = new SchwereKavalerie();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.SKAV, Kaserne.SKAV_INPUT);
                 break;
             }
             case RAMMEN: {
-                if (proviant > new Rammbock().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                Rammbock unit = new Rammbock();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.RAMMEN, Kaserne.RAMMEN_INPUT);
                 break;
             }
             case KATAPULT: {
-                if (proviant > new Katapult().getProviant() * own.getRekrutierungsAnzahl())
-                    enoughProviant = true;
+                Katapult unit = new Katapult();
 
-                if (enoughProviant && ressourcen.getHolz() >= ressourcen.getMaxSpeicher() || ressourcen.getLehm() >= ressourcen.getMaxSpeicher() || enoughProviant && MainToolbar.KASERNENSLOT1.getAttribute("innerHTML").contains("Kaserne öffnen"))
+                if (own.isForceRekrutierung()) {
+                    if (proviant > unit.getProviant() && enoughRessourchen(unit, 1))
+                        enoughProviantAndRessourcen = true;
+                } else {
+                    if (proviant > unit.getProviant() * own.getRekrutierungsAnzahl() && enoughRessourchen(unit, own.getRekrutierungsAnzahl()))
+                        enoughProviantAndRessourcen = true;
+                }
+
+                if (enoughProviantAndRessourcen)
                     baueUnit(Kaserne.KATAPULT, Kaserne.KATAPULT_INPUT);
                 break;
             }
@@ -127,6 +203,18 @@ public class BuildUnits implements AuftragInterface {
         MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
 
     }
+
+    private boolean enoughRessourchen(RekrutableUnits unit, int rekrutierungsAnzahl) {
+
+        int holzKosten = unit.getHolzKosten() * rekrutierungsAnzahl;
+        int lehmKosten = unit.getLehmKosten() * rekrutierungsAnzahl;
+        int eisenKosten = unit.getEisenKosten() * rekrutierungsAnzahl;
+
+        return holzKosten < own.getSpeicher().getHolz() && lehmKosten < own.getSpeicher().getLehm() && eisenKosten < own.getSpeicher().getEisen();
+
+
+    }
+
 
     private void baueUnit(Element unit, Element unitInput) throws ElementisNotClickable {
         unit.scrollToElement("start");

@@ -1,6 +1,7 @@
 package TB2.TB2;
 
 import TB2.NewStructure.common.Auftraege.*;
+import TB2.NewStructure.common.Gebaeude.Buildings;
 import TB2.NewStructure.common.Menus.Einstellungen;
 import TB2.NewStructure.common.Menus.EinstellungenSubSpiel;
 import TB2.NewStructure.common.Menus.MainToolbar;
@@ -30,9 +31,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +44,7 @@ public class Main implements Runnable {
     public static WebDriver driver;
 
     static {
-        account = new Account(1, "Rammboss", "kalterhund", "Gaillard", false, true, false, true);
+        account = new Account(1, "Rammboss", "kalterhund", "Gaillard", true, false, true, true);
         if (account.isUseChrome()) {
             System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
             System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
@@ -99,7 +98,7 @@ public class Main implements Runnable {
 
                     app = context.getBean(Main.class);
                 }
-                app.restartDriver();
+                restartDriver();
 
                 //Main.sleep(app.rohstofflagerCheck(true));
                 app.runTask();
@@ -119,6 +118,7 @@ public class Main implements Runnable {
             }
         }
     }
+
 
     private void runTask() throws ElementisNotClickable, NumberFormatException, NoElementTextFound, AWTException {
 
@@ -159,66 +159,173 @@ public class Main implements Runnable {
         // MainToolbar.OBERFLAECHE.clickCoords(0, 0);
 
         List<Units> farableUnitsONLYOFF = Arrays.asList(Units.AXT, Units.LKAV, Units.BERITTINER_BOGEN);
+        List<Units> farableUnitsONLYOFFandSKAV = Arrays.asList(Units.AXT, Units.LKAV, Units.BERITTINER_BOGEN, Units.SKAV);
         List<Units> farableUnitsBOTH = Arrays.asList(Units.SPEER, Units.AXT, Units.LKAV, Units.BERITTINER_BOGEN, Units.SKAV);
 
         GetOwnVillages getOwn = new GetOwnVillages(account);
         Main.ownVillages = getOwn.getOwnVillages();
 
-        findOwnVillage("Effi's A001").setBlockAttacks(true);
-        findOwnVillage("Effi's A001").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A001").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A001").setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage("Effi's A001").setRekrutierungsAnzahl(1);
+        //A001
+//        findOwnVillage(583, 567).setBlockAttacks(true);
+        findOwnVillage(583, 567).setAllowedMuenzenPraegen(true);
+        findOwnVillage(583, 567).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(583, 567).setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage(583, 567).setRekrutierungsAnzahl(30);
+        //example
+//        findOwnVillage(583, 567).setBuildingTask(Collections.singletonList(new BuildingTask(Buildings.BAUERNHOF, 30), new BuildingTask(Buildings.SPEICHER,30)));
 
-        findOwnVillage("Effi's A002").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A002").setAllowedMuenzenPraegen(true);
-//        findOwnVillage("Effi's A002").setRekrutierungsEinheit(Units.SKAV);
-//        findOwnVillage("Effi's A002").setRekrutierungsAnzahl(1);
+        //A002
+        findOwnVillage(583, 565).setFarableUnits(farableUnitsONLYOFFandSKAV);
+        findOwnVillage(583, 565).setAllowedMuenzenPraegen(true);
+        findOwnVillage(583, 565).setRekrutierungsEinheit(Units.SKAV);
+        findOwnVillage(583, 565).setRekrutierungsAnzahl(15);
 
-//        findOwnVillage("Effi's A003").setBlockAttacks(true);
-        findOwnVillage("Effi's A003").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A003").setFarableUnits(farableUnitsONLYOFF);
+        //A003
+//      findOwnVillage(585,562).setBlockAttacks(true);
+        findOwnVillage(585, 562).setAllowedMuenzenPraegen(true);
+        findOwnVillage(585, 562).setFarableUnits(farableUnitsBOTH);
+        findOwnVillage(585, 562).setRekrutierungsEinheit(Units.SKAV);
+        findOwnVillage(585, 562).setRekrutierungsAnzahl(15);
 
-        findOwnVillage("Effi's A004").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A004").setAllowedMuenzenPraegen(true);
+        //A004
+        findOwnVillage(583, 569).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(583, 569).setAllowedMuenzenPraegen(true);
+        findOwnVillage(583, 569).setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage(583, 569).setRekrutierungsAnzahl(20);
 
-        findOwnVillage("Effi's A005").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A005").setAllowedMuenzenPraegen(true);
+        //A005
+        findOwnVillage(584, 570).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(584, 570).setAllowedMuenzenPraegen(true);
+        findOwnVillage(584, 570).setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage(584, 570).setRekrutierungsAnzahl(15);
 
-        findOwnVillage("Effi's A006").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A006").setAllowedMuenzenPraegen(true);
+        //A006
+        findOwnVillage(584, 569).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(584, 569).setAllowedMuenzenPraegen(true);
+        findOwnVillage(584, 569).setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage(584, 569).setRekrutierungsAnzahl(20);
 
-        findOwnVillage("Effi's A007").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A007").setAllowedMuenzenPraegen(true);
+        //A007
+        findOwnVillage(585, 568).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(585, 568).setAllowedMuenzenPraegen(true);
+        findOwnVillage(585, 568).setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage(585, 568).setRekrutierungsAnzahl(50);
 
-        findOwnVillage("Effi's A008").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A008").setAllowedMuenzenPraegen(true);
+        //A008
+        findOwnVillage(586, 568).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(586, 568).setAllowedMuenzenPraegen(true);
+        findOwnVillage(586, 568).setRekrutierungsEinheit(Units.SKAV);
+        findOwnVillage(586, 568).setRekrutierungsAnzahl(15);
 
-        findOwnVillage("Effi's A009").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A009").setAllowedMuenzenPraegen(true);
+        //A009
+        findOwnVillage(582, 571).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(582, 571).setAllowedMuenzenPraegen(true);
+        findOwnVillage(582, 571).setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage(582, 571).setRekrutierungsAnzahl(20);
 
-        findOwnVillage("Effi's A010").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A010").setAllowedMuenzenPraegen(true);
+        //A010
+        findOwnVillage(582, 573).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(582, 573).setAllowedMuenzenPraegen(true);
+        findOwnVillage(582, 573).setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage(582, 573).setRekrutierungsAnzahl(20);
+
+        //A011
+        findOwnVillage(582, 572).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(582, 572).setAllowedMuenzenPraegen(true);
+        findOwnVillage(582, 572).setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage(582, 572).setRekrutierungsAnzahl(20);
+
+        //A012
+        findOwnVillage(581, 571).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(581, 571).setAllowedMuenzenPraegen(true);
+        findOwnVillage(581, 571).setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage(581, 571).setRekrutierungsAnzahl(50);
+
+        //A013
+        findOwnVillage(587, 565).setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage(587, 565).setAllowedMuenzenPraegen(true);
+        findOwnVillage(587, 565).setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage(587, 565).setRekrutierungsAnzahl(50);
+        findOwnVillage(587, 565).setForceRekrutierung(true);
+
+        findOwnVillage("Effi's A014").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A014").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A014").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's A014").setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's A014").setForceRekrutierung(true);
+        findOwnVillage("Effi's A014").setRekrutierungsscheifenLimit(24);
 
         findOwnVillage("Effi's B001").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's B001").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's B001").setRekrutierungsEinheit(Units.SKAV);
+        findOwnVillage("Effi's B001").setRekrutierungsAnzahl(15);
+
+        findOwnVillage("Effi's B002").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's B002").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's B002").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's B002").setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's B002").setForceRekrutierung(true);
 
         findOwnVillage("Effi's C001").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's C001").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's C001").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's C001").setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's C001").setForceRekrutierung(true);
+        findOwnVillage("Effi's C001").setRekrutierungsscheifenLimit(24);
+
+        findOwnVillage("Effi's D001").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's D001").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's D001").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's D001").setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's D001").setForceRekrutierung(true);
+        findOwnVillage("Effi's D001").setRekrutierungsscheifenLimit(24);
+
+        findOwnVillage("Effi's E001").setBlockAttacks(true);
+        findOwnVillage("Effi's E001").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's E001").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's E001").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's E001").setRekrutierungsAnzahl(20);
+
+        findOwnVillage("Effi's E002").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's E002").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's E002").setRekrutierungsEinheit(Units.SKAV);
+        findOwnVillage("Effi's E002").setRekrutierungsAnzahl(15);
+
+        findOwnVillage("Effi's E003").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's E003").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's E003").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's E003").setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's E003").setForceRekrutierung(true);
+
+        findOwnVillage("Effi's F001").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's F001").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's F001").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's F001").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's F001").setForceRekrutierung(true);
+
+        findOwnVillage("Effi's G001").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's G001").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's G001").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's G001").setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's G001").setForceRekrutierung(true);
+
+        findOwnVillage("Effi's G002").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's G002").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's G002").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's G002").setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's G002").setForceRekrutierung(true);
 
 
         while (true) {
-            new RohstofflagerFarmen(findOwnVillage("Effi's C001"), true);
 
             System.gc();
-
-
             // mit den Eignenen Dörfer Farmen
             for (EigenesDorf own : Main.ownVillages) {
-                new MuenzePraegen(own);
                 new BuildUnits(own);
+                new BuildBuildings(own);
                 new FarmWithVillage(own, barbarendorfDao);
-                new RohstofflagerFarmen(findOwnVillage("Effi's C001"), true);
+                new MuenzePraegen(own);
+                new RohstofflagerFarmen(own, true);
 
             }
             // Points vorbereiten
@@ -241,7 +348,7 @@ public class Main implements Runnable {
         }
     }
 
-    private void disableSound() throws ElementisNotClickable {
+    private static void disableSound() throws ElementisNotClickable {
         MainToolbar.EINSTELLUNGEN.click();
         Einstellungen.EINSTELLUNGEN_SPIEL.click();
         EinstellungenSubSpiel.TIPPS_EINSCHALTEN.click();
@@ -311,9 +418,9 @@ public class Main implements Runnable {
         }
     }
 
-    public void restartDriver() throws ElementisNotClickable, AWTException {
+    public static void restartDriver() throws ElementisNotClickable {
 
-        if (driver != null && !account.isUseChrome()) {
+        if (driver != null) {
 
             Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
             String browserName = cap.getBrowserName();
@@ -326,24 +433,19 @@ public class Main implements Runnable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else if (browserName.equals("chrome")) {
+                driver.navigate().refresh();
+                sleep(2);
+                MainToolbar.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
+                MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
+
+
             } else {
                 driver.quit();
                 driver = null;
                 System.gc();
             }
 
-//            driver.navigate().refresh();
-//            sleep(5);
-
-//            Login.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
-
-            sleep(2);
-
-        } else {
-            if (driver != null)
-                driver.quit();
-            driver = null;
-            System.gc();
             sleep(2);
 
         }
@@ -376,6 +478,20 @@ public class Main implements Runnable {
         for (EigenesDorf own : Main.ownVillages) {
 
             if (own.getName().equals(name)) {
+                return own;
+            }
+
+        }
+        return null;
+    }
+
+    public EigenesDorf findOwnVillage(int x, int y) {
+        if (Main.ownVillages.isEmpty())
+            return null;
+
+        for (EigenesDorf own : Main.ownVillages) {
+
+            if (own.getX() == x && own.getY() == y) {
                 return own;
             }
 

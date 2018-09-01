@@ -46,6 +46,11 @@ public class FarmWithVillage implements AuftragInterface {
 
         new SelectOwnVillage(own);
 
+        List<Barbarendorf> farmableBarb = getBabas().stream().filter(x -> x.isFarmable(own)).sorted(Comparator.comparingInt(o -> new DistanceCalculator(o, own).getDistance())).collect(Collectors.toList());
+        if (farmableBarb.size() <= 0)
+            return;
+
+
         logger.info("Farme mit: " + own.getName());
 
         AnzahlBisherigeAngriffe attackCountTask = new AnzahlBisherigeAngriffe(own);
@@ -261,14 +266,27 @@ public class FarmWithVillage implements AuftragInterface {
                     }
                 } else if (Dorfoptionen.NACHRICHT_SENDEN.isPresent()) {
                     Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
-                    barbarendorfDao.delete(tmp);
-                    logger.info("Lösche Barbarendorf(Spieler)");
+                    if (checkTwice(tmp)) {
+                        barbarendorfDao.delete(tmp);
+                        logger.info("Lösche Barbarendorf(Spieler)");
+                    }
+
+                } else if (Dorfoptionen.ACTIVE_VILLAGE.isPresent()) {
+                    Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
+                    if (checkTwice(tmp)) {
+                        barbarendorfDao.delete(tmp);
+                        logger.info("Lösche Barbarendorf(Eigenes Dorf)");
+                    }
+
                 }
 
             } else {
-//                Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
-//                barbarendorfDao.delete(tmp);
-//                logger.info("Lösche Barbarendorf, Dorf nicht vorhanden!!!");
+                Barbarendorf tmp = barbarendorfDao.findById(dorf.getId()).get();
+                if (checkTwice(tmp)) {
+                    barbarendorfDao.delete(tmp);
+                    logger.info("Lösche Barbarendorf, Dorf nicht vorhanden!!!");
+                }
+
 
             }
         }
@@ -278,6 +296,20 @@ public class FarmWithVillage implements AuftragInterface {
         } else {
             return counterStart;
         }
+    }
+
+    private boolean checkTwice(Barbarendorf tmp) throws ElementisNotClickable {
+
+        Main.restartDriver();
+
+        new EnterKoordinaten(tmp);
+        if (Dorfoptionen.MENUE_MITTE.isPresent(Duration.ofSeconds(10))) {
+            if (!Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2)))
+                return true;
+        }
+
+        return false;
+
     }
 
     @Override

@@ -5,7 +5,7 @@ import TB2.NewStructure.common.Menus.MainToolbar;
 
 public class Hauptgebaeude extends Building {
 
-    private final char shortkeyOpen = 'd';
+    private final char shortkeyOpen = 'h';
 
     private Kaserne kasernenMenu;
 
