@@ -166,9 +166,12 @@ public class BuildBuildings implements AuftragInterface {
         Map<Ressourcen, Integer> res = getRessourcen(info);
 
         int proviant = Integer.parseInt(MainToolbar.PROVIANT.getText().replace(".", ""));
-
-        if (res.get(Ressourcen.PROVIANT) > proviant && buildingLevels.get(Buildings.BAUERNHOF) < 30 || proviant < 1000){
-
+        if (checkRessourcen(res)) {
+            ausbauen.click();
+        } else if (!autoBuildNext) {
+            logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
+            logger.info("Auto Build nicht mehr aktiv!");
+        } else if (res.get(Ressourcen.PROVIANT) > proviant && buildingLevels.get(Buildings.BAUERNHOF) < 30 || proviant < 1000 && buildingLevels.get(Buildings.BAUERNHOF) < 30) {
             logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
             build(Buildings.BAUERNHOF, false);
 
@@ -178,13 +181,7 @@ public class BuildBuildings implements AuftragInterface {
             logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
             build(Buildings.SPEICHER, false);
 
-        }else if (checkRessourcen(res)) {
-            ausbauen.click();
-        } else if (!autoBuildNext) {
-            logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
-            logger.info("Auto Build nicht mehr aktiv!");
-
-        }  else {
+        } else {
             logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
             getBuildingLevels().put(nextBuildingTask, getBuildingLevels().get(nextBuildingTask) + 100);
             build(getNextBuildingTask(getBuildingOrder()), true);

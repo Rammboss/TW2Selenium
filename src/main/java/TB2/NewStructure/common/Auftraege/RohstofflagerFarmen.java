@@ -5,6 +5,7 @@ import TB2.NewStructure.common.Menus.Rohstofflager;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
+import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +55,12 @@ public class RohstofflagerFarmen implements AuftragInterface {
             }
 
 
-            if (isPush() && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%") && neueAuftraege >= 11) {
+            if (isPush() && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%") && neueAuftraege >= 5) {
                 if (!Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofSeconds(2))) {
                     Rohstofflager.ITEMS_VERWENDEN.click(Duration.ofSeconds(2));
                     Rohstofflager.BENUTZEN.click(Duration.ofSeconds(2));
                     Rohstofflager.GEGENSTAND_BENUTZEN.click(Duration.ofSeconds(2));
+                    Main.sleep(2);
                 }
             }
 

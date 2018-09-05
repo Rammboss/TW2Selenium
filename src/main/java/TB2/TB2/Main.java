@@ -1,7 +1,6 @@
 package TB2.TB2;
 
 import TB2.NewStructure.common.Auftraege.*;
-import TB2.NewStructure.common.Gebaeude.Buildings;
 import TB2.NewStructure.common.Menus.Einstellungen;
 import TB2.NewStructure.common.Menus.EinstellungenSubSpiel;
 import TB2.NewStructure.common.Menus.MainToolbar;
@@ -69,6 +68,8 @@ public class Main implements Runnable {
     @Autowired
     private BarbarendorfDao barbarendorfDao;
 
+    private EigenesDorf nextVillage;
+
     public List<Point> checkAndInitPoints() {
         List<Point> pointlist = new ArrayList<>();
 
@@ -100,19 +101,27 @@ public class Main implements Runnable {
                 }
                 restartDriver();
 
-                //Main.sleep(app.rohstofflagerCheck(true));
-                app.runTask();
+                Main.ownVillages = new GetOwnVillages(account).getOwnVillages();
+                Main.sleep(new RohstofflagerFarmen(app.findOwnVillage("Effi's A011"),true).getDurationInSec());
+
+
+//                app.runTask();
             } catch (BeanCreationException e) {
                 logger.info("Der Pi erstellt gerade ein Backup, warte 10 minuten!");
                 sleep(10, TimeUnit.MINUTES);
             } catch (Throwable e) {
+                EigenesDorf last = app.getNextVillage();
+
                 logger.info("Ein unerwarteter Fehler ist aufgetreten! Treiber wird neu gestartet!");
                 if (context != null) {
                     context.close();
                     context = new AnnotationConfigApplicationContext(AppConfig.class);
                 }
-                if (app != null)
+                if (app != null) {
                     app = context.getBean(Main.class);
+                    app.setNextVillage(last);
+                }
+
 
                 logger.error("main error", e);
             }
@@ -232,8 +241,9 @@ public class Main implements Runnable {
         //A011
         findOwnVillage(582, 572).setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage(582, 572).setAllowedMuenzenPraegen(true);
-        findOwnVillage(582, 572).setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage(582, 572).setRekrutierungsAnzahl(20);
+        findOwnVillage(582, 572).setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage(582, 572).setRekrutierungsAnzahl(50);
+        findOwnVillage(582, 572).setForceRekrutierung(true);
 
         //A012
         findOwnVillage(581, 571).setFarableUnits(farableUnitsONLYOFF);
@@ -251,7 +261,7 @@ public class Main implements Runnable {
         findOwnVillage("Effi's A014").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's A014").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's A014").setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage("Effi's A014").setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's A014").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's A014").setForceRekrutierung(true);
         findOwnVillage("Effi's A014").setRekrutierungsscheifenLimit(24);
 
@@ -263,7 +273,7 @@ public class Main implements Runnable {
         findOwnVillage("Effi's B002").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's B002").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's B002").setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage("Effi's B002").setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's B002").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's B002").setForceRekrutierung(true);
 
         findOwnVillage("Effi's C001").setFarableUnits(farableUnitsONLYOFF);
@@ -294,7 +304,7 @@ public class Main implements Runnable {
         findOwnVillage("Effi's E003").setFarableUnits(farableUnitsBOTH);
         findOwnVillage("Effi's E003").setAllowedMuenzenPraegen(false);
         findOwnVillage("Effi's E003").setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage("Effi's E003").setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's E003").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's E003").setForceRekrutierung(true);
 
         findOwnVillage("Effi's F001").setFarableUnits(farableUnitsBOTH);
@@ -320,12 +330,30 @@ public class Main implements Runnable {
 
             System.gc();
             // mit den Eignenen Dörfer Farmen
-            for (EigenesDorf own : Main.ownVillages) {
-                new BuildUnits(own);
-                new BuildBuildings(own);
-                new FarmWithVillage(own, barbarendorfDao);
-                new MuenzePraegen(own);
-                new RohstofflagerFarmen(own, true);
+
+            new RohstofflagerFarmen(findOwnVillage("Effi's G002"), true);
+
+            for (int i = 0; i < Main.ownVillages.size(); i++) {
+
+                EigenesDorf current = Main.ownVillages.get(i);
+
+                if (getNextVillage() == null || current.getX() == getNextVillage().getX() && current.getY() == getNextVillage().getY()) {
+
+                    new BuildUnits(current);
+                    new BuildBuildings(current);
+                    new MuenzePraegen(current);
+                    new FarmWithVillage(current, barbarendorfDao);
+//                    new RohstofflagerFarmen(current, true);
+                    if (i + 1 >= Main.ownVillages.size()) {
+                        setNextVillage(null);
+
+                    } else {
+                        setNextVillage(Main.ownVillages.get(i + 1));
+
+                    }
+
+
+                }
 
             }
             // Points vorbereiten
@@ -507,5 +535,13 @@ public class Main implements Runnable {
     @Override
     public void run() {
 
+    }
+
+    public EigenesDorf getNextVillage() {
+        return nextVillage;
+    }
+
+    public void setNextVillage(EigenesDorf nextVillage) {
+        this.nextVillage = nextVillage;
     }
 }

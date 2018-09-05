@@ -5,6 +5,7 @@ import TB2.NewStructure.common.Menus.MainToolbar;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
+import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,12 +29,12 @@ public class MuenzePraegen implements AuftragInterface {
         if (!own.isAllowedMuenzenPraegen()) return;
 
         new SelectOwnVillage(own);
-        GetRessourcen ressourcen = new GetRessourcen(own);
-        // wenn speicher mehr als 80% voll
-        double capacityLimit = 0.8;
-        if ((double) own.getSpeicher().getHolz() / own.getSpeicher().getCapacity() > capacityLimit &&
-                (double) own.getSpeicher().getLehm() / own.getSpeicher().getCapacity() > capacityLimit &&
-                (double) own.getSpeicher().getEisen() / own.getSpeicher().getCapacity() > capacityLimit &&
+        // wenn speicher mehr als 60% voll
+        int capacityLimit = 60;
+
+        if (Integer.parseInt(MainToolbar.HOLZ_PROGRESSBAR.getAttribute("style").replaceAll("[^\\d.]", "")) > capacityLimit &&
+                Integer.parseInt(MainToolbar.LEHM_PROGRESSBAR.getAttribute("style").replaceAll("[^\\d.]", "")) > capacityLimit &&
+                Integer.parseInt(MainToolbar.EISEN_PROGRESSBAR.getAttribute("style").replaceAll("[^\\d.]", "")) > capacityLimit &&
                 enoughRessourchenForCoin()) {
             MainToolbar.OBERFLAECHE.sendText("a");
 
@@ -44,6 +45,7 @@ public class MuenzePraegen implements AuftragInterface {
                 Akademie.WERT_ENGEBEN.click();
                 Akademie.WERT_ENGEBEN_INPUT.sendText(1);
                 Akademie.MUENZE_PRAEGEN.click();
+                logger.info("Münze wurde geprägt!");
 
 
             }
@@ -52,12 +54,14 @@ public class MuenzePraegen implements AuftragInterface {
         }
     }
 
-    private boolean enoughRessourchenForCoin() {
-        return own.getSpeicher().getHolz() > 28000 && own.getSpeicher().getLehm() > 30000 && own.getSpeicher().getEisen() > 25000;
+    private boolean enoughRessourchenForCoin() throws NoElementTextFound {
+        return Integer.parseInt(MainToolbar.HOLZ.getText().replace(".", "")) > 28000 &&
+                Integer.parseInt(MainToolbar.LEHM.getText().replace(".", "")) > 30000 &&
+                Integer.parseInt(MainToolbar.EISEN.getText().replace(".", "")) > 25000;
     }
 
     @Override
-    public boolean check() throws NoElementTextFound {
+    public boolean check() {
         return false;
     }
 
