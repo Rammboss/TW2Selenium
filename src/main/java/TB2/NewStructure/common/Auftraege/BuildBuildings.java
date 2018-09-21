@@ -40,6 +40,9 @@ public class BuildBuildings implements AuftragInterface {
     @Override
     public void run() throws ElementisNotClickable, NoElementTextFound {
 
+        if (own.getPunkte() >= 9564)
+            return;
+
         new SelectOwnVillage(own);
 
         MainToolbar.OBERFLAECHE.sendText("h");

@@ -55,7 +55,7 @@ public class RohstofflagerFarmen implements AuftragInterface {
             }
 
 
-            if (isPush() && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%") && neueAuftraege >= 5) {
+            if (isPush() && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%") && neueAuftraege >= 10) {
                 if (!Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofSeconds(2))) {
                     Rohstofflager.ITEMS_VERWENDEN.click(Duration.ofSeconds(2));
                     Rohstofflager.BENUTZEN.click(Duration.ofSeconds(2));

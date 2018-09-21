@@ -15,6 +15,7 @@ public class Dorf implements KoordinatenInterface {
 
     @Column(name = "X", nullable = false)
     private int x;
+    
     @Column(name = "Y", nullable = false)
     private int y;
 

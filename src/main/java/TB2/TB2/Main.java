@@ -101,11 +101,11 @@ public class Main implements Runnable {
                 }
                 restartDriver();
 
-                Main.ownVillages = new GetOwnVillages(account).getOwnVillages();
-                Main.sleep(new RohstofflagerFarmen(app.findOwnVillage("Effi's A011"),true).getDurationInSec());
+//                Main.ownVillages = new GetOwnVillages(account).getOwnVillages();
+//                Main.sleep(new RohstofflagerFarmen(app.findOwnVillage("Effi's A011"),true).getDurationInSec());
 
 
-//                app.runTask();
+                app.runTask();
             } catch (BeanCreationException e) {
                 logger.info("Der Pi erstellt gerade ein Backup, warte 10 minuten!");
                 sleep(10, TimeUnit.MINUTES);
@@ -175,155 +175,215 @@ public class Main implements Runnable {
         Main.ownVillages = getOwn.getOwnVillages();
 
         //A001
-//        findOwnVillage(583, 567).setBlockAttacks(true);
-        findOwnVillage(583, 567).setAllowedMuenzenPraegen(true);
-        findOwnVillage(583, 567).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(583, 567).setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage(583, 567).setRekrutierungsAnzahl(30);
-        //example
-//        findOwnVillage(583, 567).setBuildingTask(Collections.singletonList(new BuildingTask(Buildings.BAUERNHOF, 30), new BuildingTask(Buildings.SPEICHER,30)));
+//      findOwnVillage("Effi's A001").setBlockAttacks(true);
+        findOwnVillage("Effi's A001").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A001").setFarableUnits(farableUnitsONLYOFF);
+//        findOwnVillage("Effi's A001").setRekrutierungsEinheit(Units.LKAV);
+//        findOwnVillage("Effi's A001").setRekrutierungsAnzahl(50);
+//        findOwnVillage("Effi's A001").setForceRekrutierung(true);
+//        findOwnVillage("Effi's A001").setRekrutierungsscheifenLimit(24);
+
+//      findOwnVillage("Effi's A001").setBuildingTask(Collections.singletonList(new BuildingTask(Buildings.BAUERNHOF, 30), new BuildingTask(Buildings.SPEICHER,30)));
 
         //A002
-        findOwnVillage(583, 565).setFarableUnits(farableUnitsONLYOFFandSKAV);
-        findOwnVillage(583, 565).setAllowedMuenzenPraegen(true);
-        findOwnVillage(583, 565).setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage(583, 565).setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's A002").setFarableUnits(farableUnitsONLYOFFandSKAV);
+        findOwnVillage("Effi's A002").setAllowedMuenzenPraegen(true);
+//        findOwnVillage("Effi's A002").setRekrutierungsEinheit(Units.SKAV);
+//        findOwnVillage("Effi's A002").setRekrutierungsAnzahl(50);
+//        findOwnVillage("Effi's A002").setForceRekrutierung(true);
+//        findOwnVillage("Effi's A002").setRekrutierungsscheifenLimit(24);
 
         //A003
 //      findOwnVillage(585,562).setBlockAttacks(true);
-        findOwnVillage(585, 562).setAllowedMuenzenPraegen(true);
-        findOwnVillage(585, 562).setFarableUnits(farableUnitsBOTH);
-        findOwnVillage(585, 562).setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage(585, 562).setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's A003").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A003").setFarableUnits(farableUnitsBOTH);
+//        findOwnVillage("Effi's A003").setRekrutierungsEinheit(Units.SKAV);
+//        findOwnVillage("Effi's A003").setRekrutierungsAnzahl(50);
+//        findOwnVillage("Effi's A003").setForceRekrutierung(true);
+//        findOwnVillage("Effi's A003").setRekrutierungsscheifenLimit(24);
 
         //A004
-        findOwnVillage(583, 569).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(583, 569).setAllowedMuenzenPraegen(true);
-        findOwnVillage(583, 569).setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage(583, 569).setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's A004").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A004").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A004").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's A004").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A004").setForceRekrutierung(true);
+        findOwnVillage("Effi's A004").setRekrutierungsscheifenLimit(24);
 
         //A005
-        findOwnVillage(584, 570).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(584, 570).setAllowedMuenzenPraegen(true);
-        findOwnVillage(584, 570).setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage(584, 570).setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's A005").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A005").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A005").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's A005").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A005").setForceRekrutierung(true);
+        findOwnVillage("Effi's A005").setRekrutierungsscheifenLimit(24);
 
         //A006
-        findOwnVillage(584, 569).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(584, 569).setAllowedMuenzenPraegen(true);
-        findOwnVillage(584, 569).setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage(584, 569).setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's A006").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A006").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A006").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's A006").setRekrutierungsAnzahl(200);
+        findOwnVillage("Effi's A006").setForceRekrutierung(true);
+        findOwnVillage("Effi's A006").setRekrutierungsscheifenLimit(24);
 
         //A007
-        findOwnVillage(585, 568).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(585, 568).setAllowedMuenzenPraegen(true);
-        findOwnVillage(585, 568).setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage(585, 568).setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A007").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A007").setAllowedMuenzenPraegen(true);
+//        findOwnVillage("Effi's A007").setRekrutierungsEinheit(Units.LKAV);
+//        findOwnVillage("Effi's A007").setRekrutierungsAnzahl(50);
+//        findOwnVillage("Effi's A007").setForceRekrutierung(true);
+//        findOwnVillage("Effi's A007").setRekrutierungsscheifenLimit(24);
 
         //A008
-        findOwnVillage(586, 568).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(586, 568).setAllowedMuenzenPraegen(true);
-        findOwnVillage(586, 568).setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage(586, 568).setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's A008").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A008").setAllowedMuenzenPraegen(true);
+//        findOwnVillage("Effi's A008").setRekrutierungsEinheit(Units.SKAV);
+//        findOwnVillage("Effi's A008").setRekrutierungsAnzahl(50);
+//        findOwnVillage("Effi's A008").setForceRekrutierung(true);
+//        findOwnVillage("Effi's A008").setRekrutierungsscheifenLimit(24);
 
         //A009
-        findOwnVillage(582, 571).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(582, 571).setAllowedMuenzenPraegen(true);
-        findOwnVillage(582, 571).setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage(582, 571).setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's A009").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A009").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A009").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's A009").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A009").setForceRekrutierung(true);
+        findOwnVillage("Effi's A009").setRekrutierungsscheifenLimit(24);
 
         //A010
-        findOwnVillage(582, 573).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(582, 573).setAllowedMuenzenPraegen(true);
-        findOwnVillage(582, 573).setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage(582, 573).setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's A010").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A010").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A010").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's A010").setRekrutierungsAnzahl(200);
+        findOwnVillage("Effi's A010").setForceRekrutierung(true);
+        findOwnVillage("Effi's A010").setRekrutierungsscheifenLimit(24);
 
         //A011
-        findOwnVillage(582, 572).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(582, 572).setAllowedMuenzenPraegen(true);
-        findOwnVillage(582, 572).setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage(582, 572).setRekrutierungsAnzahl(50);
-        findOwnVillage(582, 572).setForceRekrutierung(true);
+        findOwnVillage("Effi's A011").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A011").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A011").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's A011").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A011").setForceRekrutierung(true);
+        findOwnVillage("Effi's A011").setRekrutierungsscheifenLimit(24);
 
         //A012
-        findOwnVillage(581, 571).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(581, 571).setAllowedMuenzenPraegen(true);
-        findOwnVillage(581, 571).setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage(581, 571).setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A012").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A012").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A012").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's A012").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A012").setForceRekrutierung(true);
+        findOwnVillage("Effi's A012").setRekrutierungsscheifenLimit(24);
 
         //A013
-        findOwnVillage(587, 565).setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage(587, 565).setAllowedMuenzenPraegen(true);
-        findOwnVillage(587, 565).setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage(587, 565).setRekrutierungsAnzahl(50);
-        findOwnVillage(587, 565).setForceRekrutierung(true);
+        findOwnVillage("Effi's A013").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A013").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A013").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's A013").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A013").setForceRekrutierung(true);
+        findOwnVillage("Effi's A013").setRekrutierungsscheifenLimit(24);
 
         findOwnVillage("Effi's A014").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's A014").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A014").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's A014").setRekrutierungsEinheit(Units.LKAV);
         findOwnVillage("Effi's A014").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's A014").setForceRekrutierung(true);
         findOwnVillage("Effi's A014").setRekrutierungsscheifenLimit(24);
 
+        findOwnVillage("Effi's A015").setFarableUnits(farableUnitsONLYOFF);
+        findOwnVillage("Effi's A015").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's A015").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's A015").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's A015").setForceRekrutierung(true);
+        findOwnVillage("Effi's A015").setRekrutierungsscheifenLimit(24);
+
         findOwnVillage("Effi's B001").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's B001").setAllowedMuenzenPraegen(true);
         findOwnVillage("Effi's B001").setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage("Effi's B001").setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's B001").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's B001").setForceRekrutierung(true);
 
         findOwnVillage("Effi's B002").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's B002").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's B002").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's B002").setRekrutierungsEinheit(Units.LKAV);
         findOwnVillage("Effi's B002").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's B002").setForceRekrutierung(true);
 
         findOwnVillage("Effi's C001").setFarableUnits(farableUnitsONLYOFF);
         findOwnVillage("Effi's C001").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's C001").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's C001").setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's C001").setRekrutierungsEinheit(Units.SKAV);
+        findOwnVillage("Effi's C001").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's C001").setForceRekrutierung(true);
         findOwnVillage("Effi's C001").setRekrutierungsscheifenLimit(24);
 
         findOwnVillage("Effi's D001").setFarableUnits(farableUnitsBOTH);
         findOwnVillage("Effi's D001").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's D001").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's D001").setRekrutierungsAnzahl(20);
-        findOwnVillage("Effi's D001").setForceRekrutierung(true);
-        findOwnVillage("Effi's D001").setRekrutierungsscheifenLimit(24);
+//        findOwnVillage("Effi's D001").setRekrutierungsEinheit(Units.SKAV);
+//        findOwnVillage("Effi's D001").setRekrutierungsAnzahl(50);
+//        findOwnVillage("Effi's D001").setForceRekrutierung(true);
+//        findOwnVillage("Effi's D001").setRekrutierungsscheifenLimit(24);
+
+        findOwnVillage("Effi's D002").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's D002").setAllowedMuenzenPraegen(true);
+//        findOwnVillage("Effi's D002").setRekrutierungsEinheit(Units.LKAV);
+//        findOwnVillage("Effi's D002").setRekrutierungsAnzahl(50);
+//        findOwnVillage("Effi's D002").setForceRekrutierung(true);
+//        findOwnVillage("Effi's D002").setRekrutierungsscheifenLimit(24);
+
+        findOwnVillage("Effi's D003").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's D003").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's D003").setRekrutierungsEinheit(Units.LKAV);
+        findOwnVillage("Effi's D003").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's D003").setForceRekrutierung(true);
+        findOwnVillage("Effi's D003").setRekrutierungsscheifenLimit(24);
+
+        findOwnVillage("Effi's D004").setFarableUnits(farableUnitsBOTH);
+        findOwnVillage("Effi's D004").setAllowedMuenzenPraegen(true);
+        findOwnVillage("Effi's D004").setRekrutierungsEinheit(Units.SPEER);
+        findOwnVillage("Effi's D004").setRekrutierungsAnzahl(100);
+        findOwnVillage("Effi's D004").setForceRekrutierung(true);
+        findOwnVillage("Effi's D004").setRekrutierungsscheifenLimit(24);
 
         findOwnVillage("Effi's E001").setBlockAttacks(true);
         findOwnVillage("Effi's E001").setFarableUnits(farableUnitsBOTH);
         findOwnVillage("Effi's E001").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's E001").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's E001").setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's E001").setRekrutierungsEinheit(Units.SKAV);
+        findOwnVillage("Effi's E001").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's E001").setForceRekrutierung(true);
+        findOwnVillage("Effi's E001").setRekrutierungsscheifenLimit(24);
 
         findOwnVillage("Effi's E002").setFarableUnits(farableUnitsBOTH);
         findOwnVillage("Effi's E002").setAllowedMuenzenPraegen(false);
         findOwnVillage("Effi's E002").setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage("Effi's E002").setRekrutierungsAnzahl(15);
+        findOwnVillage("Effi's E002").setRekrutierungsAnzahl(50);
+        findOwnVillage("Effi's E002").setForceRekrutierung(true);
+        findOwnVillage("Effi's E002").setRekrutierungsscheifenLimit(24);
 
         findOwnVillage("Effi's E003").setFarableUnits(farableUnitsBOTH);
         findOwnVillage("Effi's E003").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's E003").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's E003").setRekrutierungsEinheit(Units.LKAV);
         findOwnVillage("Effi's E003").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's E003").setForceRekrutierung(true);
+        findOwnVillage("Effi's E003").setRekrutierungsscheifenLimit(24);
 
         findOwnVillage("Effi's F001").setFarableUnits(farableUnitsBOTH);
         findOwnVillage("Effi's F001").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's F001").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's F001").setRekrutierungsEinheit(Units.LKAV);
         findOwnVillage("Effi's F001").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's F001").setForceRekrutierung(true);
 
         findOwnVillage("Effi's G001").setFarableUnits(farableUnitsBOTH);
         findOwnVillage("Effi's G001").setAllowedMuenzenPraegen(false);
         findOwnVillage("Effi's G001").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's G001").setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's G001").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's G001").setForceRekrutierung(true);
+        findOwnVillage("Effi's G001").setRekrutierungsscheifenLimit(6);
 
         findOwnVillage("Effi's G002").setFarableUnits(farableUnitsBOTH);
         findOwnVillage("Effi's G002").setAllowedMuenzenPraegen(false);
         findOwnVillage("Effi's G002").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's G002").setRekrutierungsAnzahl(20);
+        findOwnVillage("Effi's G002").setRekrutierungsAnzahl(50);
         findOwnVillage("Effi's G002").setForceRekrutierung(true);
+        findOwnVillage("Effi's G002").setRekrutierungsscheifenLimit(6);
 
 
         while (true) {
@@ -331,7 +391,6 @@ public class Main implements Runnable {
             System.gc();
             // mit den Eignenen Dörfer Farmen
 
-            new RohstofflagerFarmen(findOwnVillage("Effi's G002"), true);
 
             for (int i = 0; i < Main.ownVillages.size(); i++) {
 
@@ -343,7 +402,8 @@ public class Main implements Runnable {
                     new BuildBuildings(current);
                     new MuenzePraegen(current);
                     new FarmWithVillage(current, barbarendorfDao);
-//                    new RohstofflagerFarmen(current, true);
+                    //new RohstofflagerFarmen(current, true);
+
                     if (i + 1 >= Main.ownVillages.size()) {
                         setNextVillage(null);
 
@@ -356,6 +416,10 @@ public class Main implements Runnable {
                 }
 
             }
+
+
+            new RohstofflagerFarmen(findOwnVillage("Effi's G002"), true);
+
             // Points vorbereiten
             List<Point> points = checkAndInitPoints();
             points.sort(Comparator.comparingInt(o -> new DistanceCalculator(o, Main.ownVillages.get(0)).getDistance()));
@@ -364,7 +428,7 @@ public class Main implements Runnable {
 
             // Punkte 10 minuten lang checken oder bis alle punkte durchlaufen sind
             if (!account.isWoodPC()) {
-                long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(10);
+                long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(5);
 
                 for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
                     new CheckPoint(points.get(i), barbarendorfDao, provinzDao, pointDao, eigenesDorfDao, dorfDao, account);

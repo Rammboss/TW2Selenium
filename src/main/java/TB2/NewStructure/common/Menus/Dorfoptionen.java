@@ -4,7 +4,6 @@ import TB2.TB2.Element;
 
 public class Dorfoptionen extends AbstractMenue {
 
-	//public static Element MENUE_MITTE = new Element("Menu Mitte", "/html/body/div[2]/div[9]/div[4]/div/div[1]", Element.BY_XPATH);
 	public static Element MENUE_MITTE = new Element("Menue Mitte", "div","class", "menu-highlight", Element.BY_CSS_SELECTOR );
 
 	public static Element PRODUKTION_STEIGERN = new Element("Produktion steigern", "div", "tooltip-content", "Produktion steigern", Element.BY_CSS_SELECTOR);

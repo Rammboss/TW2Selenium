@@ -171,7 +171,6 @@ public class Element {
 
     public WebElement getWebelement(WebDriver driver) {
 
-
         List<WebElement> list;
 
         switch (getWayToSelect()) {
@@ -306,7 +305,7 @@ public class Element {
         if (isPresent(Duration.ofSeconds(5))) {
             getWebelement(Main.getDriver()).click();
         } else {
-            logger.info("##ACHTUNG##: Element \" + getLabel() + \" konnte nicht gelklickt werden!");
+            logger.info("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
 //                throw new ElementisNotClickable("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
         }
     }

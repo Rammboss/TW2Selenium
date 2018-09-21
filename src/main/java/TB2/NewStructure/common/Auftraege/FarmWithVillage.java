@@ -303,10 +303,9 @@ public class FarmWithVillage implements AuftragInterface {
         Main.restartDriver();
 
         new EnterKoordinaten(tmp);
-        if (Dorfoptionen.MENUE_MITTE.isPresent(Duration.ofSeconds(10))) {
-            if (!Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(2)))
-                return true;
-        }
+
+        if (!Dorfoptionen.PRODUKTION_STEIGERN.isPresent(Duration.ofSeconds(7)))
+            return true;
 
         return false;
 

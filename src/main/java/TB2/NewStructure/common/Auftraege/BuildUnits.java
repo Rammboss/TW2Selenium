@@ -11,6 +11,7 @@ import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -30,9 +31,6 @@ public class BuildUnits implements AuftragInterface {
 
         new SelectOwnVillage(own);
         new GetRessourcen(own);
-//        MainToolbar.PROVIANT.mouseOver();
-//        if (MainToolbar.PROVIANT_TOOLTIP.isPresent())
-//            MainToolbar.PROVIANT_TOOLTIP.getText();
 
         int proviant = Integer.parseInt(MainToolbar.PROVIANT.getText().replace(".", ""));
 
@@ -44,7 +42,7 @@ public class BuildUnits implements AuftragInterface {
         Kaserne.RAMMEN.isPresent(Duration.ofSeconds(3));
 
         if (Kaserne.DAUER_TRUPPEN_BAUSCHLEIFE.isPresent()) {
-            if (Integer.parseInt(Kaserne.DAUER_TRUPPEN_BAUSCHLEIFE.getText().replace("Alle Einheiten abgeschlossen in: ", "").split(":")[0]) > own.getRekrutierungsscheifenLimit()) {
+            if (checkTime()) {
                 Kaserne.SPEER.scrollToElement("end");
                 MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
                 return;
@@ -201,6 +199,35 @@ public class BuildUnits implements AuftragInterface {
         Kaserne.KASERNE.scrollToElement("end");
         MainToolbar.BAUSCHLEIFE.click();
         MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
+
+    }
+
+    private boolean checkTime() throws NoElementTextFound {
+
+        String[] times = Kaserne.DAUER_TRUPPEN_BAUSCHLEIFE.getText().replace("Alle Einheiten abgeschlossen in: ", "").split(":");
+        switch (times.length) {
+            case 1: {// sekunden (sollte unmöglich sein!)
+
+                return false;
+
+            }
+            case 2: { // min
+                return false;
+            }
+            case 3: { // stunden
+
+                return Integer.parseInt(times[0]) > own.getRekrutierungsscheifenLimit();
+            }
+            case 4: { // tage
+
+                return true;
+
+            }
+            default: {
+                return false;
+            }
+        }
+
 
     }
 

@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface DorfDao extends CrudRepository<Dorf, Integer> {
 
-	List<Dorf> findByName(String name);
+    List<Dorf> findByName(String name);
 
-	Optional<Dorf> findByXAndY(int x, int y);
+    Optional<Dorf> findByXAndY(int x, int y);
 
-	List<Dorf> findAll();
+    List<Dorf> findAll();
 }
