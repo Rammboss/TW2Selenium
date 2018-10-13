@@ -35,7 +35,7 @@ public class EnterKoordinaten implements AuftragInterface {
 
     }
 
-    public void run() throws ElementisNotClickable {
+    public void run() {
 
         if (Koordinaten.X_KOORDINATE.isNOTPresent(Duration.ofMillis(500)) & Koordinaten.Y_KOORDINATE.isNOTPresent(Duration.ofMillis(500))) {
             MainToolbar.AUF_WELTKARTE_SUCHEN.click();
@@ -64,7 +64,7 @@ public class EnterKoordinaten implements AuftragInterface {
         return ai.getPriority() - this.priority;
     }
 
-    public boolean check() throws NoElementTextFound {
+    public boolean check() {
         if (Dorfoptionen.MENUE_MITTE.isPresent() && Dorfoptionen.MENUE_MITTE.getText().equals(point.getName())) {
             EnterKoordinaten.successfulRuns++;
             EnterKoordinaten.avgRuntimeSEC += Duration.between(getStartTime(), LocalTime.now()).toSeconds() / successfulRuns;

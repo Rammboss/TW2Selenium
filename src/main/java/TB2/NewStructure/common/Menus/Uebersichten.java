@@ -2,9 +2,9 @@ package TB2.NewStructure.common.Menus;
 
 import TB2.TB2.Element;
 
-public class Overview extends AbstractMenue {
+public class Uebersichten extends AbstractMenue {
     public static Element BEFEHLE = new Element("Befehle", "div", "class", "tab", "Befehle", Element.BY_CSS_SELECTOR_WITH_CRITERIA);
-    public static Element DOERFER = new Element("Befehle", "div", "class", "tab", "Dörfer", Element.BY_CSS_SELECTOR_WITH_CRITERIA);
+    public static Element DOERFER = new Element("Befehle", ".//a[text()='Dörfer']", Element.BY_XPATH);
 
     public static Element NUR_AKTUELLES_DORF = new Element("Nur aktuelles Dorf", "div", "tooltip-content", "Nur aktuelles Dorf", Element.BY_CSS_SELECTOR);
     public static Element UNTERSTUETZUNG = new Element("Unterstützung ein-/ausblenden", "div", "tooltip-content", "Unterstützung", Element.BY_CSS_SELECTOR);

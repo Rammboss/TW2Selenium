@@ -4,23 +4,22 @@ import TB2.NewStructure.common.Menus.MainToolbar;
 import TB2.NewStructure.common.Menus.PlayerProfil;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
+import TB2.NewStructure.common.hibernate.model.Barbarendorf;
+import TB2.NewStructure.common.hibernate.model.DistanceCalculator;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.TB2.Account;
 import TB2.TB2.Main;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GetOwnVillages implements AuftragInterface {
     private static Logger logger = LoggerFactory.getLogger(GetOwnVillages.class);
@@ -55,10 +54,10 @@ public class GetOwnVillages implements AuftragInterface {
             Collection<WebElement> tds = e.findElements(By.tagName("td"));
 
             //scroll element into view
-            ((JavascriptExecutor) Main.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"start\", behavior: \"smooth\"});", e);
-            WebDriverWait wait = new WebDriverWait(Main.driver, 10);
+            ((JavascriptExecutor) Main.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"start\", behavior: \"instant\"});", e);
 
-            wait.until(ExpectedConditions.visibilityOf(e));
+//            new FluentWait<>(Main.getDriver())
+//                    .withTimeout(Duration.ofMillis(1000)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class).until(ExpectedConditions.visibilityOf(e));
 
 
             int counter = 0;
@@ -138,6 +137,7 @@ public class GetOwnVillages implements AuftragInterface {
     }
 
     public List<EigenesDorf> getOwnVillages() {
+        ownVillages.stream().sorted(Comparator.comparingInt(EigenesDorf::getPunkte)).collect(Collectors.toList());
         return ownVillages;
     }
 

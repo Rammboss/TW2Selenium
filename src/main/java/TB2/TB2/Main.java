@@ -1,6 +1,7 @@
 package TB2.TB2;
 
 import TB2.NewStructure.common.Auftraege.*;
+import TB2.NewStructure.common.Gebaeude.Buildings;
 import TB2.NewStructure.common.Menus.Einstellungen;
 import TB2.NewStructure.common.Menus.EinstellungenSubSpiel;
 import TB2.NewStructure.common.Menus.MainToolbar;
@@ -12,11 +13,15 @@ import TB2.NewStructure.common.hibernate.model.DistanceCalculator;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.hibernate.model.Point;
 import TB2.NewStructure.common.units.Units;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.GeckoDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +32,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -35,22 +41,18 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class Main implements Runnable {
+public class Main {
 
     private static Logger logger = LoggerFactory.getLogger(Main.class);
     public static Account account;
     public static List<EigenesDorf> ownVillages;
     public static WebDriver driver;
 
+    public static int screenshotCounter = 0;
+
     static {
-        account = new Account(1, "Rammboss", "kalterhund", "Gaillard", true, false, true, true);
-        if (account.isUseChrome()) {
-            System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
-            System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
-        } else {
-            System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
-            System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
-        }
+        account = new Account(1, "Rammboss", "kalterhund", "Jasenov", true, false, true, false, 7);
+
     }
 
     @Autowired
@@ -88,7 +90,7 @@ public class Main implements Runnable {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         AbstractApplicationContext context = null;
         Main app = null;
 
@@ -110,6 +112,12 @@ public class Main implements Runnable {
                 logger.info("Der Pi erstellt gerade ein Backup, warte 10 minuten!");
                 sleep(10, TimeUnit.MINUTES);
             } catch (Throwable e) {
+
+                File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+                // Now you can do whatever you need to do with it, for example copy somewhere
+                FileUtils.copyFile(scrFile, new File("C:\\Temp\\bot\\" + screenshotCounter++ + ".png"));
+
+
                 EigenesDorf last = app.getNextVillage();
 
                 logger.info("Ein unerwarteter Fehler ist aufgetreten! Treiber wird neu gestartet!");
@@ -129,7 +137,7 @@ public class Main implements Runnable {
     }
 
 
-    private void runTask() throws ElementisNotClickable, NumberFormatException, NoElementTextFound, AWTException {
+    private void runTask() throws ElementisNotClickable, NumberFormatException, NoElementTextFound {
 
 
         // Angriff timen
@@ -170,226 +178,31 @@ public class Main implements Runnable {
         List<Units> farableUnitsONLYOFF = Arrays.asList(Units.AXT, Units.LKAV, Units.BERITTINER_BOGEN);
         List<Units> farableUnitsONLYOFFandSKAV = Arrays.asList(Units.AXT, Units.LKAV, Units.BERITTINER_BOGEN, Units.SKAV);
         List<Units> farableUnitsBOTH = Arrays.asList(Units.SPEER, Units.AXT, Units.LKAV, Units.BERITTINER_BOGEN, Units.SKAV);
+        List<Units> farableUnitsALL = Arrays.asList(Units.SPEER, Units.AXT, Units.SCHWERT, Units.BOGEN, Units.LKAV, Units.BERITTINER_BOGEN, Units.SKAV, Units.PALADIN);
 
         GetOwnVillages getOwn = new GetOwnVillages(account);
         Main.ownVillages = getOwn.getOwnVillages();
 
         //A001
 //      findOwnVillage("Effi's A001").setBlockAttacks(true);
-        findOwnVillage("Effi's A001").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A001").setFarableUnits(farableUnitsONLYOFF);
-//        findOwnVillage("Effi's A001").setRekrutierungsEinheit(Units.LKAV);
-//        findOwnVillage("Effi's A001").setRekrutierungsAnzahl(50);
-//        findOwnVillage("Effi's A001").setForceRekrutierung(true);
-//        findOwnVillage("Effi's A001").setRekrutierungsscheifenLimit(24);
-
-//      findOwnVillage("Effi's A001").setBuildingTask(Collections.singletonList(new BuildingTask(Buildings.BAUERNHOF, 30), new BuildingTask(Buildings.SPEICHER,30)));
-
-        //A002
-        findOwnVillage("Effi's A002").setFarableUnits(farableUnitsONLYOFFandSKAV);
-        findOwnVillage("Effi's A002").setAllowedMuenzenPraegen(true);
-//        findOwnVillage("Effi's A002").setRekrutierungsEinheit(Units.SKAV);
-//        findOwnVillage("Effi's A002").setRekrutierungsAnzahl(50);
-//        findOwnVillage("Effi's A002").setForceRekrutierung(true);
-//        findOwnVillage("Effi's A002").setRekrutierungsscheifenLimit(24);
-
-        //A003
-//      findOwnVillage(585,562).setBlockAttacks(true);
-        findOwnVillage("Effi's A003").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A003").setFarableUnits(farableUnitsBOTH);
-//        findOwnVillage("Effi's A003").setRekrutierungsEinheit(Units.SKAV);
-//        findOwnVillage("Effi's A003").setRekrutierungsAnzahl(50);
-//        findOwnVillage("Effi's A003").setForceRekrutierung(true);
-//        findOwnVillage("Effi's A003").setRekrutierungsscheifenLimit(24);
-
-        //A004
-        findOwnVillage("Effi's A004").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A004").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A004").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's A004").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's A004").setForceRekrutierung(true);
-        findOwnVillage("Effi's A004").setRekrutierungsscheifenLimit(24);
-
-        //A005
-        findOwnVillage("Effi's A005").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A005").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A005").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's A005").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's A005").setForceRekrutierung(true);
-        findOwnVillage("Effi's A005").setRekrutierungsscheifenLimit(24);
-
-        //A006
-        findOwnVillage("Effi's A006").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A006").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A006").setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage("Effi's A006").setRekrutierungsAnzahl(200);
-        findOwnVillage("Effi's A006").setForceRekrutierung(true);
-        findOwnVillage("Effi's A006").setRekrutierungsscheifenLimit(24);
-
-        //A007
-        findOwnVillage("Effi's A007").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A007").setAllowedMuenzenPraegen(true);
-//        findOwnVillage("Effi's A007").setRekrutierungsEinheit(Units.LKAV);
-//        findOwnVillage("Effi's A007").setRekrutierungsAnzahl(50);
-//        findOwnVillage("Effi's A007").setForceRekrutierung(true);
-//        findOwnVillage("Effi's A007").setRekrutierungsscheifenLimit(24);
-
-        //A008
-        findOwnVillage("Effi's A008").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A008").setAllowedMuenzenPraegen(true);
-//        findOwnVillage("Effi's A008").setRekrutierungsEinheit(Units.SKAV);
-//        findOwnVillage("Effi's A008").setRekrutierungsAnzahl(50);
-//        findOwnVillage("Effi's A008").setForceRekrutierung(true);
-//        findOwnVillage("Effi's A008").setRekrutierungsscheifenLimit(24);
-
-        //A009
-        findOwnVillage("Effi's A009").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A009").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A009").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's A009").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's A009").setForceRekrutierung(true);
-        findOwnVillage("Effi's A009").setRekrutierungsscheifenLimit(24);
-
-        //A010
-        findOwnVillage("Effi's A010").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A010").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A010").setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage("Effi's A010").setRekrutierungsAnzahl(200);
-        findOwnVillage("Effi's A010").setForceRekrutierung(true);
-        findOwnVillage("Effi's A010").setRekrutierungsscheifenLimit(24);
-
-        //A011
-        findOwnVillage("Effi's A011").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A011").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A011").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's A011").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's A011").setForceRekrutierung(true);
-        findOwnVillage("Effi's A011").setRekrutierungsscheifenLimit(24);
-
-        //A012
-        findOwnVillage("Effi's A012").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A012").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A012").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's A012").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's A012").setForceRekrutierung(true);
-        findOwnVillage("Effi's A012").setRekrutierungsscheifenLimit(24);
-
-        //A013
-        findOwnVillage("Effi's A013").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A013").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A013").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's A013").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's A013").setForceRekrutierung(true);
-        findOwnVillage("Effi's A013").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's A014").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A014").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A014").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's A014").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's A014").setForceRekrutierung(true);
-        findOwnVillage("Effi's A014").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's A015").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's A015").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's A015").setRekrutierungsEinheit(Units.AXT);
-        findOwnVillage("Effi's A015").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's A015").setForceRekrutierung(true);
-        findOwnVillage("Effi's A015").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's B001").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's B001").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's B001").setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage("Effi's B001").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's B001").setForceRekrutierung(true);
-
-        findOwnVillage("Effi's B002").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's B002").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's B002").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's B002").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's B002").setForceRekrutierung(true);
-
-        findOwnVillage("Effi's C001").setFarableUnits(farableUnitsONLYOFF);
-        findOwnVillage("Effi's C001").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's C001").setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage("Effi's C001").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's C001").setForceRekrutierung(true);
-        findOwnVillage("Effi's C001").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's D001").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's D001").setAllowedMuenzenPraegen(false);
-//        findOwnVillage("Effi's D001").setRekrutierungsEinheit(Units.SKAV);
-//        findOwnVillage("Effi's D001").setRekrutierungsAnzahl(50);
-//        findOwnVillage("Effi's D001").setForceRekrutierung(true);
-//        findOwnVillage("Effi's D001").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's D002").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's D002").setAllowedMuenzenPraegen(true);
-//        findOwnVillage("Effi's D002").setRekrutierungsEinheit(Units.LKAV);
-//        findOwnVillage("Effi's D002").setRekrutierungsAnzahl(50);
-//        findOwnVillage("Effi's D002").setForceRekrutierung(true);
-//        findOwnVillage("Effi's D002").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's D003").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's D003").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's D003").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's D003").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's D003").setForceRekrutierung(true);
-        findOwnVillage("Effi's D003").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's D004").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's D004").setAllowedMuenzenPraegen(true);
-        findOwnVillage("Effi's D004").setRekrutierungsEinheit(Units.SPEER);
-        findOwnVillage("Effi's D004").setRekrutierungsAnzahl(100);
-        findOwnVillage("Effi's D004").setForceRekrutierung(true);
-        findOwnVillage("Effi's D004").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's E001").setBlockAttacks(true);
-        findOwnVillage("Effi's E001").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's E001").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's E001").setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage("Effi's E001").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's E001").setForceRekrutierung(true);
-        findOwnVillage("Effi's E001").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's E002").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's E002").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's E002").setRekrutierungsEinheit(Units.SKAV);
-        findOwnVillage("Effi's E002").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's E002").setForceRekrutierung(true);
-        findOwnVillage("Effi's E002").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's E003").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's E003").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's E003").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's E003").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's E003").setForceRekrutierung(true);
-        findOwnVillage("Effi's E003").setRekrutierungsscheifenLimit(24);
-
-        findOwnVillage("Effi's F001").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's F001").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's F001").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's F001").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's F001").setForceRekrutierung(true);
-
-        findOwnVillage("Effi's G001").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's G001").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's G001").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's G001").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's G001").setForceRekrutierung(true);
-        findOwnVillage("Effi's G001").setRekrutierungsscheifenLimit(6);
-
-        findOwnVillage("Effi's G002").setFarableUnits(farableUnitsBOTH);
-        findOwnVillage("Effi's G002").setAllowedMuenzenPraegen(false);
-        findOwnVillage("Effi's G002").setRekrutierungsEinheit(Units.LKAV);
-        findOwnVillage("Effi's G002").setRekrutierungsAnzahl(50);
-        findOwnVillage("Effi's G002").setForceRekrutierung(true);
-        findOwnVillage("Effi's G002").setRekrutierungsscheifenLimit(6);
+        findOwnVillage("Effi's A001").setAllowedMuenzenPraegen(false);
+        findOwnVillage("Effi's A001").setFarableUnits(farableUnitsALL);
+        findOwnVillage("Effi's A001").setRekrutierungsEinheit(Units.AXT);
+        findOwnVillage("Effi's A001").setRekrutierungsAnzahl(1);
+        findOwnVillage("Effi's A001").setForceRekrutierung(false);
+        findOwnVillage("Effi's A001").setRekrutierungsscheifenLimit(1);
+//        findOwnVillage("Effi's A001").setBuildingTask(List.of(
+//                new BuildingTask(Buildings.HOLZFAELLER, 15),
+//                new BuildingTask(Buildings.EISENMINE, 15),
+//                new BuildingTask(Buildings.LEHMGRUBE, 15)));
 
 
         while (true) {
 
             System.gc();
             // mit den Eignenen Dörfer Farmen
+
+//            new BuildBuildingNew();
 
 
             for (int i = 0; i < Main.ownVillages.size(); i++) {
@@ -398,43 +211,37 @@ public class Main implements Runnable {
 
                 if (getNextVillage() == null || current.getX() == getNextVillage().getX() && current.getY() == getNextVillage().getY()) {
 
-                    new BuildUnits(current);
+                    new RohstofflagerFarmen(current, false);
                     new BuildBuildings(current);
+                    new BuildUnits(current);
                     new MuenzePraegen(current);
                     new FarmWithVillage(current, barbarendorfDao);
-                    //new RohstofflagerFarmen(current, true);
 
                     if (i + 1 >= Main.ownVillages.size()) {
                         setNextVillage(null);
 
                     } else {
                         setNextVillage(Main.ownVillages.get(i + 1));
-
                     }
-
-
                 }
-
             }
 
-
-            new RohstofflagerFarmen(findOwnVillage("Effi's G002"), true);
+//            new RohstofflagerFarmen(findOwnVillage("Effi's G002"), true);
 
             // Points vorbereiten
             List<Point> points = checkAndInitPoints();
             points.sort(Comparator.comparingInt(o -> new DistanceCalculator(o, Main.ownVillages.get(0)).getDistance()));
-            points.removeIf(p -> p.isChecked() && p.getCheckedAt().plusDays(4).isAfter(LocalDateTime.now()));
+            points.removeIf(p -> p.isChecked() && p.getCheckedAt().plusDays(1).isAfter(LocalDateTime.now()));
             System.gc(); // um Arbeitsspeicher zu leeren (byte[] - Array)!!!
 
             // Punkte 10 minuten lang checken oder bis alle punkte durchlaufen sind
             if (!account.isWoodPC()) {
-                long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(5);
+                long stop = System.nanoTime() + TimeUnit.MINUTES.toNanos(account.getScoutWorldTime());
 
                 for (int i = 0; i < points.size() && stop > System.nanoTime(); i++) {
                     new CheckPoint(points.get(i), barbarendorfDao, provinzDao, pointDao, eigenesDorfDao, dorfDao, account);
                 }
             }
-
             logger.info("Driver wird neugestartet!");
             restartDriver();
         }
@@ -442,6 +249,8 @@ public class Main implements Runnable {
 
     private static void disableSound() throws ElementisNotClickable {
         MainToolbar.EINSTELLUNGEN.click();
+        Einstellungen.EINSTELLUNGEN_SPIEL.isPresent(Duration.ofSeconds(5));
+
         Einstellungen.EINSTELLUNGEN_SPIEL.click();
         EinstellungenSubSpiel.TIPPS_EINSCHALTEN.click();
 
@@ -479,7 +288,7 @@ public class Main implements Runnable {
 
     }
 
-    private void ausgehendenAngriffeVerbergen() throws ElementisNotClickable {
+    private void ausgehendenAngriffeVerbergen() {
         MainToolbar.EINSTELLUNGEN.click();
         Einstellungen.EINSTELLUNGEN_SPIEL.click();
 
@@ -516,26 +325,35 @@ public class Main implements Runnable {
 
             Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
             String browserName = cap.getBrowserName();
-            if (browserName.equals("firefox")) {
-                try {
-                    Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
-                    Runtime.getRuntime().exec("taskkill /F /IM plugin-container.exe");
-                    Runtime.getRuntime().exec("taskkill /F /IM firefox.exe");
+            switch (browserName) {
+                case "firefox":
+                    try {
+                        Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
+                        Runtime.getRuntime().exec("taskkill /F /IM plugin-container.exe");
+                        Runtime.getRuntime().exec("taskkill /F /IM firefox.exe");
+                        driver = null;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+//                    driver.navigate().refresh();
+//                    sleep(2);
+//                    MainToolbar.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
+//                    MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
+                    break;
+                case "chrome":
+                    driver.navigate().refresh();
+                    sleep(2);
+                    MainToolbar.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
+                    MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
+
+
+                    break;
+                default:
+                    driver.quit();
                     driver = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (browserName.equals("chrome")) {
-                driver.navigate().refresh();
-                sleep(2);
-                MainToolbar.LOADING_SCREEN.isNOTPresent(Duration.ofSeconds(30));
-                MainToolbar.BELOHNUNG_ANNEHMEN.click(Duration.ofSeconds(3));
-
-
-            } else {
-                driver.quit();
-                driver = null;
-                System.gc();
+                    System.gc();
+                    break;
             }
 
             sleep(2);
@@ -544,9 +362,23 @@ public class Main implements Runnable {
 
         if (driver == null) {
             if (account.isUseChrome()) {
+//                System.setProperty("webdriver.firefox.bin", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+                System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
                 Main.driver = new ChromeDriver();
             } else {
+//                System.setProperty("webdriver.firefox.bin", "C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+                System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
+                System.setProperty(FirefoxDriver.SystemProperty.DRIVER_USE_MARIONETTE, "true");
+                System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
+
+//                DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+//                capabilities.setCapability("marionette", true);
+
+//                FirefoxOptions options = new FirefoxOptions();
+//                options.setLogLevel(FirefoxDriverLogLevel.ERROR);
                 Main.driver = new FirefoxDriver();
+
+                driver.manage().deleteAllCookies();
             }
             if (account.isUseSecondMonitor())
                 driver.manage().window().setPosition(new org.openqa.selenium.Point(2100, 0));
@@ -593,12 +425,6 @@ public class Main implements Runnable {
 
     public static WebDriver getDriver() {
         return Main.driver;
-    }
-
-
-    @Override
-    public void run() {
-
     }
 
     public EigenesDorf getNextVillage() {

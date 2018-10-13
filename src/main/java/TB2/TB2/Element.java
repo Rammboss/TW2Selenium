@@ -1,8 +1,5 @@
 package TB2.TB2;
 
-import TB2.NewStructure.common.Menus.MainToolbar;
-import TB2.NewStructure.common.exceptions.ElementisNotClickable;
-import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Element {
 
@@ -45,8 +41,11 @@ public class Element {
 
     private Element element;
 
+    private Actions action;
+
     public Element(String label, String xpath, int wayToSelect) {
         super();
+        this.action = new Actions(Main.getDriver());
         this.label = label;
         this.xpath = xpath;
         this.wayToSelect = wayToSelect;
@@ -55,6 +54,7 @@ public class Element {
 
     public Element(String label, String type, String attribute, String attributeValue, String criteria, int wayToSelect) {
         super();
+        this.action = new Actions(Main.getDriver());
         this.xpath = null;
         this.label = label;
         this.type = type;
@@ -66,6 +66,7 @@ public class Element {
 
     public Element(String label, String type, String attribute, String attributeValue, int wayToSelect) {
         super();
+        this.action = new Actions(Main.getDriver());
         this.xpath = null;
         this.label = label;
         this.type = type;
@@ -116,21 +117,18 @@ public class Element {
     }
 
     public void mouseOver() {
-        Actions action = new Actions(Main.getDriver());
-
-        action.moveToElement(getWebelement(Main.getDriver())).perform();
-
+        action.moveToElement(getWebelement(Main.getDriver())).build().perform();
     }
 
     public void clickCoords(int x, int y) {
-        Actions a = new Actions(Main.getDriver()).moveToElement(getWebelement(Main.getDriver()));
+        Actions a = new Actions(Main.getDriver());
+        a.moveToElement(getWebelement(Main.getDriver()));
         a.moveByOffset(x / 2, y / 2).click().perform();
     }
 
     public boolean isNOTPresent(Duration timeout) {
 
         try {
-
             new FluentWait<>(Main.getDriver()).withTimeout(Duration.ofSeconds(timeout.toSeconds() * Account.performaceMultiplier)).pollingEvery(Duration.ofMillis(100)).ignoring(NoSuchElementException.class)
                     .until(ExpectedConditions.invisibilityOfElementLocated((getLocator())));
 
@@ -141,27 +139,20 @@ public class Element {
         }
     }
 
-    public String getText() throws NoElementTextFound {
-        if (isPresent(Duration.ofMillis(500)))
-            return getWebelement(Main.getDriver()).getText();
-
-        throw new NoElementTextFound();
-
+    public String getText() {
+        return getWebelement(Main.getDriver()).getText();
     }
 
     public void sendText(String text) {
-        if (isPresent(Duration.ofMillis(500)))
-            getWebelement(Main.getDriver()).sendKeys(text);
+        getWebelement(Main.getDriver()).sendKeys(text);
     }
 
     public void sendText(int text) {
-        if (isPresent(Duration.ofMillis(500)))
-            getWebelement(Main.getDriver()).sendKeys(text + "");
+        getWebelement(Main.getDriver()).sendKeys(text + "");
     }
 
     public void sendText(Keys escape) {
-        if (isPresent(Duration.ofMillis(500)))
-            getWebelement(Main.getDriver()).sendKeys(escape);
+        getWebelement(Main.getDriver()).sendKeys(escape);
     }
 
     public String getCSSClass() {
@@ -300,26 +291,21 @@ public class Element {
         return Main.getDriver().findElements(By.xpath(xpath));
     }
 
-    public void click() throws ElementisNotClickable, ElementClickInterceptedException {
+    public void click() {
 
-        if (isPresent(Duration.ofSeconds(5))) {
-            getWebelement(Main.getDriver()).click();
-        } else {
-            logger.info("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
-//                throw new ElementisNotClickable("##ACHTUNG##: Element " + getLabel() + " konnte nicht gelklickt werden!");
-        }
+        getWebelement(Main.getDriver()).click();
     }
 
-    public void click(Duration time) throws ElementisNotClickable {
+    public void click(Duration time) {
         if (isPresent(time)) {
             click();
         }
     }
 
     public void scrollToElement(String topaligin) {
-        ((JavascriptExecutor) Main.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"smooth\"});", getWebelement(Main.getDriver()));
-        isPresent(Duration.ofSeconds(5));
-        Main.sleep(500, TimeUnit.MILLISECONDS);
+        ((JavascriptExecutor) Main.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"" + topaligin + "\", behavior: \"instant\"});", getWebelement(Main.getDriver()));
+//        isPresent(Duration.ofSeconds(5));
+//        Main.sleep(500, TimeUnit.MILLISECONDS);
 
     }
 
@@ -330,10 +316,9 @@ public class Element {
     }
 
     public void clear() {
-        if (isPresent()) {
-            getWebelement(Main.getDriver()).clear();
+        getWebelement(Main.getDriver()).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+//        getWebelement(Main.getDriver()).clear();
 
-        }
 
     }
 

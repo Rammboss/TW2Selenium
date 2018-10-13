@@ -47,6 +47,7 @@ public class InitVorlagen implements AuftragInterface {
     public void run() throws ElementisNotClickable {
         if (isDoFirstSteps()) {
             MainToolbar.OBERFLAECHE.sendText("r");
+            Sammelplatz.GLOBALE_VORLAGENLISTE.isPresent(Duration.ofSeconds(2));
             Sammelplatz.GLOBALE_VORLAGENLISTE.click();
         }
 

@@ -1,7 +1,7 @@
 package TB2.NewStructure.common.Auftraege;
 
 import TB2.NewStructure.common.Menus.MainToolbar;
-import TB2.NewStructure.common.Menus.Overview;
+import TB2.NewStructure.common.Menus.Uebersichten;
 import TB2.NewStructure.common.exceptions.ElementisNotClickable;
 import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
@@ -42,26 +42,26 @@ public class AnzahlBisherigeAngriffe implements AuftragInterface {
 
         MainToolbar.UEBERSICHTEN.click();
 
-        if (!Overview.NUR_AKTUELLES_DORF.isPresent()) {
-            Overview.BEFEHLE.click();
+        if (!Uebersichten.NUR_AKTUELLES_DORF.isPresent()) {
+            Uebersichten.BEFEHLE.click();
         }
-        if (Overview.NUR_AKTUELLES_DORF.getAttribute("class").equals("box-border-dark")) {
-            Overview.NUR_AKTUELLES_DORF.click();
-        }
-
-        if (Overview.UNTERSTUETZUNG.getAttribute("class").equals("box-border-dark active")) {
-            Overview.UNTERSTUETZUNG.click();
-        }
-        if (Overview.UMSIEDELUNG.getAttribute("class").equals("box-border-dark active")) {
-            Overview.UMSIEDELUNG.click();
+        if (Uebersichten.NUR_AKTUELLES_DORF.getAttribute("class").equals("box-border-dark")) {
+            Uebersichten.NUR_AKTUELLES_DORF.click();
         }
 
-        int currentAttackCount = Overview.TABLE.getWebelements().size();
+        if (Uebersichten.UNTERSTUETZUNG.getAttribute("class").equals("box-border-dark active")) {
+            Uebersichten.UNTERSTUETZUNG.click();
+        }
+        if (Uebersichten.UMSIEDELUNG.getAttribute("class").equals("box-border-dark active")) {
+            Uebersichten.UMSIEDELUNG.click();
+        }
 
-        if (Overview.SEITE2.isPresent()) {
-            Overview.SEITE2.click();
+        int currentAttackCount = Uebersichten.TABLE.getWebelements().size();
+
+        if (Uebersichten.SEITE2.isPresent()) {
+            Uebersichten.SEITE2.click();
             Main.sleep(1);
-            currentAttackCount += Overview.TABLE.getWebelements().size();
+            currentAttackCount += Uebersichten.TABLE.getWebelements().size();
 
         }
 

@@ -21,13 +21,13 @@ public class GetRessourcen implements AuftragInterface {
 
     private EigenesDorf own;
 
-    public GetRessourcen(EigenesDorf own) throws NoElementTextFound, ElementisNotClickable {
+    public GetRessourcen(EigenesDorf own) {
         this.own = own;
         run();
     }
 
     @Override
-    public void run() throws ElementisNotClickable, NoElementTextFound {
+    public void run() {
 
         logger.info("Analysiere Ressourchen von: " + own.getName());
 
@@ -39,16 +39,17 @@ public class GetRessourcen implements AuftragInterface {
         own.getSpeicher().setLehm(lehm);
         int lehmBar = Integer.parseInt(MainToolbar.LEHM_PROGRESSBAR.getAttribute("style").replaceAll("[^\\d.]", ""));
 
-
         int eisen = Integer.parseInt(MainToolbar.EISEN.getText().replace(".", ""));
         own.getSpeicher().setEisen(eisen);
         int eisenBar = Integer.parseInt(MainToolbar.EISEN_PROGRESSBAR.getAttribute("style").replaceAll("[^\\d.]", ""));
 
-        MainToolbar.EISEN.mouseOver();
-        MainToolbar.EISEN_TOOLTIP.isPresent(Duration.ofSeconds(2));
-        int capacity = Integer.parseInt(MainToolbar.EISEN_TOOLTIP.getText().replace(".", ""));
 
-        own.getSpeicher().setCapacity(capacity);
+        // capacity
+//        MainToolbar.HOLZ.mouseOver();
+//        MainToolbar.EISEN_TOOLTIP.isPresent(Duration.ofSeconds(2));
+//        Main.sleep(1);
+//        int capacity = Integer.parseInt(MainToolbar.EISEN_TOOLTIP.getText().replace(".", ""));
+//        own.getSpeicher().setCapacity(capacity);
 
 
         // Rohstoffe checken

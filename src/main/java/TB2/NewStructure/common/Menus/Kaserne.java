@@ -8,6 +8,8 @@ public class Kaserne extends AbstractMenue {
 
     public static Element DAUER_TRUPPEN_BAUSCHLEIFE = new Element("Truppen Bauschleife", "div", "class", "queue-info", Element.BY_CSS_SELECTOR);
 
+    public static Element TECHNOLOGIE_FORTSCHRITT = new Element("Truppen Bauschleife", "/html/body/div[2]/section/div/div[2]/div[1]/div/div[5]/h5", Element.BY_XPATH);
+
 
     public static Element SPEER = new Element("Speer rekrutieren",
             "label", "for", "input-unit-recruit-spear", "Speerkämpfer", Element.BY_CSS_SELECTOR_WITH_CRITERIA);

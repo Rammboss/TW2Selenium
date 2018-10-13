@@ -142,23 +142,11 @@ public class FarmWithVillage implements AuftragInterface {
 
                 if (attacksForKav > 0 && proviantKavellerie > 0) {
                     HashMap<Units, Integer> kavUnits = new HashMap<>();
-                    if (units.containsKey(Units.LKAV)) {
-                        kavUnits.put(Units.LKAV, units.get(Units.LKAV) / attacksForKav);
-                        if ((units.get(Units.LKAV) / attacksForKav) < 20)
-                            kavUnits.put(Units.LKAV, 20);
-                    }
 
-                    if (units.containsKey(Units.SKAV)) {
-                        kavUnits.put(Units.SKAV, units.get(Units.SKAV) / attacksForKav);
-                        if ((units.get(Units.SKAV) / attacksForKav) < 20)
-                            kavUnits.put(Units.SKAV, 20);
-                    }
+                    setMinTroups(Units.LKAV, 5, units, kavUnits, attacksForKav);
+                    setMinTroups(Units.SKAV, 5, units, kavUnits, attacksForKav);
+                    setMinTroups(Units.BERITTINER_BOGEN, 5, units, kavUnits, attacksForKav);
 
-                    if (units.containsKey(Units.BERITTINER_BOGEN)) {
-                        kavUnits.put(Units.BERITTINER_BOGEN, units.get(Units.BERITTINER_BOGEN) / attacksForKav);
-                        if ((units.get(Units.BERITTINER_BOGEN) / attacksForKav) < 20)
-                            kavUnits.put(Units.BERITTINER_BOGEN, 20);
-                    }
 
                     new InitVorlagen(own, kavUnits);
                     remainingAttacks -= farmBabas(attacksForKav, true);
@@ -169,23 +157,30 @@ public class FarmWithVillage implements AuftragInterface {
                 // farme mit Restruppen
                 logger.info("Angriffe mit Resttruppen: " + remainingAttacks);
                 if (remainingAttacks > 0 && proviantRest > 0) {
+
                     HashMap<Units, Integer> restUnits = new HashMap<>();
-                    if (units.containsKey(Units.SPEER)) {
-                        restUnits.put(Units.SPEER, units.get(Units.SPEER) / remainingAttacks);
-                        if ((units.get(Units.SPEER) / remainingAttacks) < 200)
-                            restUnits.put(Units.SPEER, 200);
-                    }
-                    if (units.containsKey(Units.AXT)) {
-                        restUnits.put(Units.AXT, units.get(Units.AXT) / remainingAttacks);
-                        if ((units.get(Units.AXT) / remainingAttacks) < 120)
-                            restUnits.put(Units.AXT, 120);
-                    }
+
+                    setMinTroups(Units.SPEER, 10, units, restUnits, remainingAttacks);
+                    setMinTroups(Units.AXT, 10, units, restUnits, remainingAttacks);
+                    setMinTroups(Units.SCHWERT, 10, units, restUnits, remainingAttacks);
+                    setMinTroups(Units.BOGEN, 10, units, restUnits, remainingAttacks);
+                    setMinTroups(Units.PALADIN, 1, units, restUnits, remainingAttacks);
+
+
                     new InitVorlagen(own, restUnits);
                     remainingAttacks -= farmBabas(remainingAttacks, false);
                 }
                 logger.info("Verbleibende Angriffe: " + remainingAttacks);
             }
 
+        }
+    }
+
+    private void setMinTroups(Units unit, int min, HashMap<Units, Integer> units, HashMap<Units, Integer> restUnits, int remainingAttacks) {
+        if (units.containsKey(unit)) {
+            restUnits.put(unit, units.get(unit) / remainingAttacks);
+            if ((units.get(unit) / remainingAttacks) < min)
+                restUnits.put(unit, min);
         }
     }
 
@@ -260,7 +255,7 @@ public class FarmWithVillage implements AuftragInterface {
                     tmp.setAttackedAt(LocalDateTime.now());
                     barbarendorfDao.save(tmp);
 
-                    if (!MainToolbar.ERROR_50_ANGRIFFE.isNOTPresent(Duration.ofMillis(1000))) {
+                    if (MainToolbar.ERROR_50_ANGRIFFE.isPresent(Duration.ofMillis(200))) {
                         logger.info("Keine Truppen mehr vorhanden!");
                         return counter;
                     }

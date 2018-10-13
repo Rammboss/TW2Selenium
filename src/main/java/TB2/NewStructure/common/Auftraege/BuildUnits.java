@@ -7,11 +7,11 @@ import TB2.NewStructure.common.exceptions.NoElementTextFound;
 import TB2.NewStructure.common.hibernate.model.EigenesDorf;
 import TB2.NewStructure.common.units.*;
 import TB2.TB2.Element;
+import TB2.TB2.Main;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -49,6 +49,10 @@ public class BuildUnits implements AuftragInterface {
             }
         }
 
+        Kaserne.KASERNE.scrollToElement("end");
+
+
+        MainToolbar.REKRUTIERUNGSSCHEIFE.isPresent(Duration.ofSeconds(5));
         MainToolbar.REKRUTIERUNGSSCHEIFE.click();
 
         boolean enoughProviantAndRessourcen = false;
@@ -202,7 +206,7 @@ public class BuildUnits implements AuftragInterface {
 
     }
 
-    private boolean checkTime() throws NoElementTextFound {
+    private boolean checkTime() {
 
         String[] times = Kaserne.DAUER_TRUPPEN_BAUSCHLEIFE.getText().replace("Alle Einheiten abgeschlossen in: ", "").split(":");
         switch (times.length) {
@@ -243,7 +247,7 @@ public class BuildUnits implements AuftragInterface {
     }
 
 
-    private void baueUnit(Element unit, Element unitInput) throws ElementisNotClickable {
+    private void baueUnit(Element unit, Element unitInput) {
         unit.scrollToElement("start");
         unit.isPresent(Duration.ofSeconds(3));
         unit.click();

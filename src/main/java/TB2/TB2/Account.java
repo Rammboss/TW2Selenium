@@ -23,7 +23,9 @@ public class Account {
 
     private boolean useMYSQLDatabase;
 
-    public Account(int performaceMultiplier, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC, boolean useChrome, boolean useMYSQLDatabase) {
+    private int scoutWorldTime;
+
+    public Account(int performaceMultiplier, String spielername, String passwort, String welt, boolean useSecondMonitor, boolean woodPC, boolean useChrome, boolean useMYSQLDatabase, int scoutWorldTime) {
         super();
         this.useSecondMonitor = useSecondMonitor;
         this.woodPC = woodPC;
@@ -39,6 +41,7 @@ public class Account {
         this.spielername = spielername;
         this.passwort = passwort;
         this.welt = welt;
+        this.scoutWorldTime = scoutWorldTime;
     }
 
     public void login() throws ElementisNotClickable {
@@ -108,5 +111,13 @@ public class Account {
 
     public void setUseMYSQLDatabase(boolean useMYSQLDatabase) {
         this.useMYSQLDatabase = useMYSQLDatabase;
+    }
+
+    public int getScoutWorldTime() {
+        return scoutWorldTime;
+    }
+
+    public void setScoutWorldTime(int scoutWorldTime) {
+        this.scoutWorldTime = scoutWorldTime;
     }
 }

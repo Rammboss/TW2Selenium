@@ -174,16 +174,15 @@ public class BuildBuildings implements AuftragInterface {
         } else if (!autoBuildNext) {
             logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
             logger.info("Auto Build nicht mehr aktiv!");
-        } else if (res.get(Ressourcen.PROVIANT) > proviant && buildingLevels.get(Buildings.BAUERNHOF) < 30 || proviant < 1000 && buildingLevels.get(Buildings.BAUERNHOF) < 30) {
+        } else if (res.get(Ressourcen.PROVIANT) > proviant && buildingLevels.get(Buildings.BAUERNHOF) < 30 || proviant < 100 && buildingLevels.get(Buildings.BAUERNHOF) < 30) {
             logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
             build(Buildings.BAUERNHOF, false);
 
-        } else if (own.getSpeicher().getCapacity() < res.get(Ressourcen.HOLZ) ||
-                own.getSpeicher().getCapacity() < res.get(Ressourcen.LEHM) ||
-                own.getSpeicher().getCapacity() < res.get(Ressourcen.EISEN) && buildingLevels.get(Buildings.SPEICHER) < 30) {
-            logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
-            build(Buildings.SPEICHER, false);
-
+//        } else if (own.getSpeicher().getCapacity() < res.get(Ressourcen.HOLZ) ||
+//                own.getSpeicher().getCapacity() < res.get(Ressourcen.LEHM) ||
+//                own.getSpeicher().getCapacity() < res.get(Ressourcen.EISEN) && buildingLevels.get(Buildings.SPEICHER) < 30) {
+//            logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
+//            build(Buildings.SPEICHER, false);
         } else {
             logger.info("Nicht genug Ressourcen für: " + nextBuildingTask);
             getBuildingLevels().put(nextBuildingTask, getBuildingLevels().get(nextBuildingTask) + 100);

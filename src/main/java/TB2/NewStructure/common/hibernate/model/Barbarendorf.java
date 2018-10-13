@@ -29,8 +29,8 @@ public class Barbarendorf implements KoordinatenInterface {
     private LocalDateTime attackedAt;
 
 
-    private static final int FARM_INTERVALL = 90;
-
+    private static final int FARM_INTERVALL = 40;
+                                            //505955
     private static final int MAX_DISTANCE = 505955;
 
     public Barbarendorf(int x, int y, String name, int punkte, LocalDateTime attackedAt) {

@@ -34,18 +34,15 @@ public class RohstofflagerFarmen implements AuftragInterface {
 
     public void run() throws NoElementTextFound, ElementisNotClickable {
 
-        SelectOwnVillage select = new SelectOwnVillage(getOwn());
+        new SelectOwnVillage(getOwn());
 
         int ges = 0;
 
         MainToolbar.OBERFLAECHE.sendText("d");
 
-
         if (Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.isPresent(Duration.ofMillis(2000))) {
             Rohstofflager.ROHSTOFFLAGER_EINSAMMELN.click();
             Rohstofflager.ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN.click(Duration.ofSeconds(5));
-
-
         }
         if (!Rohstofflager.AKTUELLE_PRODUKTION.getAttribute("innerHTML").contains("Aktuelle Produktion")) {
             if (neueAuftraegeTime == null || neueAuftraegeTime.plusHours(20).isBefore(LocalDateTime.now())) {
@@ -53,7 +50,6 @@ public class RohstofflagerFarmen implements AuftragInterface {
                 if (Rohstofflager.ANZAHL_NEUER_AUFGABEN.isPresent())
                     neueAuftraege = Integer.parseInt(Rohstofflager.ANZAHL_NEUER_AUFGABEN.getText().replaceAll("[^\\d.]", ""));
             }
-
 
             if (isPush() && Rohstofflager.LETZTES_ITEM.getAttribute("tooltip-content").equals("Reiche Ernte - steigert den Proviant in einem Dorf um 10%") && neueAuftraege >= 10) {
                 if (!Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofSeconds(2))) {
@@ -64,33 +60,27 @@ public class RohstofflagerFarmen implements AuftragInterface {
                 }
             }
 
+            if (Rohstofflager.JOBS.isPresent())
+                Rohstofflager.JOBS.scrollToElement("start");
+
             if (Rohstofflager.ROHSTOFFLAGER_STARTEN.isPresent(Duration.ofMillis(1000))) {
-                Rohstofflager.ROHSTOFFLAGER_STARTEN.scrollToElement("end");
 
                 String[] zeit = Rohstofflager.ROHSTOFFLAGER_STARTEN_ZEIT.getText().split(":");
                 ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
                 logger.info("Dauer von neuem Rohstofflage Auftrag:" + " Studnen: " + zeit[0] + " Minuten: " + zeit[1] + " Sekunden: " + zeit[2]);
 
                 Rohstofflager.ROHSTOFFLAGER_STARTEN.click();
-
-                MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-                setDurationInSec(ges);
             }
 
         } else {
-
             String[] zeit = Rohstofflager.AKTUELLE_PRODUKTION_ZEIT.getText().split(":");
             ges += Integer.parseInt(zeit[0]) * 3600 + Integer.parseInt(zeit[1]) * 60 + Integer.parseInt(zeit[2]);
             logger.info("Dauer von aktuellem Rohstofflager Auftrag:" + " Studnen: " + zeit[0] + " Minuten: " + zeit[1] + " Sekunden: " + zeit[2]);
-            MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
-
-            setDurationInSec(ges);
         }
 
+        MainToolbar.PROFIL.scrollToElement("end");
         MainToolbar.OBERFLAECHE.sendText(Keys.ESCAPE);
         setDurationInSec(ges);
-
     }
 
     @Override

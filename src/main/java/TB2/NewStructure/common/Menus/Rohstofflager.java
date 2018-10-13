@@ -5,7 +5,9 @@ import TB2.TB2.Element;
 public class Rohstofflager extends AbstractMenue {
     public static Element ROHSTOFFLAGER_EINSAMMELN = new Element("Rohstofflager einsammeln", "/html/body/div[2]/section/div/div/div[1]/div/div[1]/div/div[3]/div[3]/div[1]/div/div[2]/div/a",
             Element.BY_XPATH);
-    public static Element ROHSTOFFLAGER_STARTEN = new Element("Rohstofflager starten", "/html/body/div[2]/section/div/div/div[1]/div/div[3]/table/tbody/tr[2]/td/a", Element.BY_XPATH);
+    public static Element ROHSTOFFLAGER_STARTEN = new Element("Rohstofflager starten", "div", "class", "available-jobs", Element.BY_CSS_SELECTOR);
+
+    public static Element JOBS = new Element("Rohstofflager starten", "div", "class", "available-jobs", Element.BY_CSS_SELECTOR);
     public static Element ROHSTOFFLAGER_TROTZDEM_ABSCHIESSEN = new Element("Rohstofflager trotzdem abschliessen", "/html/body/div[4]/div/div/div/div/footer/ul/li[2]/a", Element.BY_XPATH);
 
     public static Element ITEMS_VERWENDEN = new Element("Items verwenden", "/html/body/div[2]/section/div/div/div[1]/div/div[2]/a", Element.BY_XPATH);
@@ -27,6 +29,7 @@ public class Rohstofflager extends AbstractMenue {
 
     static {
         ANZAHL_NEUER_AUFGABEN.setElement(new Element("Anzahl der Items 2", "span", "class", "text", Element.BY_CSS_SELECTOR));
+        ROHSTOFFLAGER_STARTEN.setElement(new Element("First Job", "table", "class", "job-cell tbl-border-dark job-active", Element.BY_CSS_SELECTOR));
     }
 
     @Override
